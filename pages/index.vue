@@ -12,7 +12,6 @@ const formData = ref({
   password: "",
 });
 
-
 async function login() {
   try {
     const response = await $axios.post("/login", formData.value);
