@@ -7,7 +7,6 @@ const showModal = ref(false);
 const showModalAdd = ref(false);
 const editData = ref(null);
 const editId = ref(null);
-
 const formEdit = ref({
   student_name: "",
   student_email: "",
@@ -16,22 +15,20 @@ const formEdit = ref({
   student_phone: "",
   student_profile_image: "",
 });
-
 const formAdd = ref({
   student_email: "",
   student_password: "",
+  student_main_id: "",
 });
-
 async function fetchStudent() {
   try {
     const response = await $axios.get("/student");
     student.value = response.data;
-    console.log(student.value);
+    // console.log(student.value);
   } catch (err) {
     console.log(err);
   }
 }
-
 async function actionStudent(params, action) {
   try {
     if (action === "delete" && params) {
@@ -101,6 +98,7 @@ onMounted(() => {
       <div class="">
         <li>{{ item.student_name }}</li>
         <li>{{ item.student_email }}</li>
+        <li>{{ item.student_main_id || "ยังไม่ได้กรอก" }}</li>
       </div>
       <div class="">
         <button
@@ -111,7 +109,7 @@ onMounted(() => {
         </button>
         <button
           @click="actionStudent(item.student_id, 'edit')"
-          class="bg-red-500"
+          class="bg-amber-500"
         >
           แก้ไข
         </button>
@@ -181,6 +179,13 @@ onMounted(() => {
         <label>Password:</label>
         <input
           v-model="formAdd.student_password"
+          class="input input-bordered w-full"
+        />
+      </div>
+      <div class="py-2">
+        <label>id student:</label>
+        <input
+          v-model="formAdd.student_main_id"
           class="input input-bordered w-full"
         />
       </div>
