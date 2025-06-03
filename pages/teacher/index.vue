@@ -92,6 +92,7 @@ onMounted(() => {
 <template>
   <div>list member student</div>
   <button @click="actionStudent(0, 'add')" class="bg-red-500">เพิ่ม</button>
+  <NuxtLink to="/teacher/resume_list" class="bg-amber-400 p-2">list</NuxtLink>
 
   <ul v-for="(item, index) in student" :key="index + 1">
     <div class="flex gap-2">
