@@ -88,238 +88,457 @@ onMounted(() => {
   fetchStudent();
 });
 </script>
-
 <template>
-  <div class="min-h-screen bg-gray-50 py-8">
-    <div class="flex justify-center items-center p-4">
-      <h1 class="text-3xl font-bold text-gray-800">
-        หน้าเพิ่มรายการข้อมูลนักเรียน/นักศึกษา
-      </h1>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="flex justify-center items-center gap-4 mt-6">
-      <button
-        @click="actionStudent(0, 'add')"
-        class="flex bg-indigo-500 text-white hover:bg-indigo-600 transition duration-200 p-2 shadow-lg rounded-lg cursor-pointer gap-4"
-      >
-        เพิ่มนักเรียน/นักศึกษา
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-        >
-          <g fill="none" fill-rule="evenodd">
-            <path
-              d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"
-            />
-            <path
-              fill="currentColor"
-              d="M16 14a5 5 0 0 1 5 5v2a1 1 0 1 1-2 0v-2a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v2a1 1 0 1 1-2 0v-2a5 5 0 0 1 5-5zm4-6a1 1 0 0 1 1 1v1h1a1 1 0 1 1 0 2h-1v1a1 1 0 1 1-2 0v-1h-1a1 1 0 1 1 0-2h1V9a1 1 0 0 1 1-1m-8-6a5 5 0 1 1 0 10a5 5 0 0 1 0-10m0 2a3 3 0 1 0 0 6a3 3 0 0 0 0-6"
-            />
-          </g>
-        </svg>
-      </button>
-      <NuxtLink
-        to="/teacher/resume_list"
-        class="bg-indigo-500 p-2 rounded-lg text-white hover:bg-indigo-600 transitaion duration-200 flex gap-4"
-        >หน้ารายชื่อนักเรียนนักศึกษา
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-        >
-          <path
-            fill="currentColor"
-            fill-rule="evenodd"
-            d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10m.47-13.53a.75.75 0 0 1 1.06 0l3 3a.75.75 0 0 1 0 1.06l-3 3a.75.75 0 1 1-1.06-1.06l1.72-1.72H8a.75.75 0 0 1 0-1.5h6.19l-1.72-1.72a.75.75 0 0 1 0-1.06"
-            clip-rule="evenodd"
-          />
-        </svg>
-      </NuxtLink>
-    </div>
-    <!-- Student List -->
-    <div class="max-x-4xl mx-auto">
-      <div class="space-y-4">
-        <ul
-          v-for="(item, index) in student"
-          :key="index + 1"
-          class="bg-white p-6 roudned-lg shadow-md flex justify-between items-center gap-4"
-        >
-          <div class="flex gap-2">
-            <div class="">
-              <li class="text-lg font-semibold text-gray-800">
-                {{ item.student_name }}
-              </li>
-              <li class="text-gray-600">{{ item.student_email }}</li>
-              <li class="text-gray-500">
-                {{ item.student_main_id || "ยังไม่ได้กรอก" }}
-              </li>
-            </div>
-            <div class="">
-              <button
-                @click="actionStudent(item.student_id, 'delete')"
-                class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-200"
+  <div class="min-h-screen bg-gray-50">
+    <!-- Navbar -->
+    <nav class="bg-indigo-600 text-white shadow-md">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-8 w-8"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+              />
+            </svg>
+            <span class="ml-2 text-xl font-semibold"
+              >E-Resume จัดการข้อมูลนักเรียน/นักศึกษา</span
+            >
+          </div>
+          <div class="flex items-center">
+            <div class="flex items-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                ลบ
-              </button>
-              <button
-                @click="actionStudent(item.student_id, 'edit')"
-                class="bg-amber-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-200"
-              >
-                แก้ไข
-              </button>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+              <span class="ml-2">Username</span>
             </div>
           </div>
-        </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h1 class="text-2xl font-semibold text-gray-800">
+            รายการข้อมูลนักเรียน/นักศึกษา
+          </h1>
+          <div class="flex gap-4">
+            <button
+              @click="actionStudent(0, 'add')"
+              class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg flex items-center transition duration-200 cursor-pointer"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-5 w-5 mr-1"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+              เพิ่มนักเรียน/นักศึกษา
+            </button>
+            <NuxtLink
+              to="/teacher/resume_list"
+              class="flex items-center bg-violet-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-violet-700 transition duration-200 gap-2"
+            >
+              หน้ารายชื่อนักเรียน/นักศึกษา
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="currentColor"
+                  fill-rule="evenodd"
+                  d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10m.47-13.53a.75.75 0 0 1 1.06 0l3 3a.75.75 0 0 1 0 1.06l-3 3a.75.75 0 1 1-1.06-1.06l1.72-1.72H8a.75.75 0 0 1 0-1.5h6.19l-1.72-1.72a.75.75 0 0 1 0-1.06"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </NuxtLink>
+          </div>
+        </div>
+
+        <!-- Search and Filter -->
+        <div
+          class="flex flex-col md:flex-row md:items-center md:justify-between mb-6 space-y-4 md:space-y-0"
+        >
+          <div class="flex items-center">
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="ค้นหานักเรียน/นักศึกษา..."
+                class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 w-full md:w-64"
+              />
+              <div class="absolute left-3 top-2.5 text-gray-400">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white rounded-lg overflow-hidden">
+            <thead class="bg-gray-100 text-gray-700">
+              <tr>
+                <th class="py-3 px-4 text-left">รหัสนักศึกษา</th>
+                <th class="py-3 px-4 text-left">ชื่อ-นามสกุล</th>
+                <th class="py-3 px-4 text-left">อีเมล</th>
+                <th class="py-3 px-4 text-center">จัดการ</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr
+                v-for="(item, index) in student"
+                :key="index + 1"
+                class="hover:bg-gray-50"
+              >
+                <td class="py-3 px-4">
+                  {{ item.student_main_id || "ยังไม่ได้กรอก" }}
+                </td>
+                <td class="py-3 px-4">{{ item.student_name }}</td>
+                <td class="py-3 px-4">{{ item.student_email }}</td>
+                <td class="py-3 px-4 text-center">
+                  <button
+                    @click="actionStudent(item.student_id, 'edit')"
+                    class="text-indigo-600 hover:text-indigo-800 mx-1 cursor-pointer transition duration-700 ease-in-out"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    @click="actionStudent(item.student_id, 'delete')"
+                    class="text-red-600 hover:text-red-800 mx-1 cursor-pointer transition duration-700 ease-in-out"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
-    <!-- edit -->
-    <dialog v-if="showModal" class="modal" open>
-      <form
-        method="dialog"
-        class="modal-box max-w-lg bg-white p-6 rounded-lg shadow-xl"
-        @submit.prevent="saveEdit"
-      >
-        <h3 class="font-bold text-2xl text-gray-800 mb-4">
-          แก้ไขข้อมูลนักเรียน/นักศึกษา
-        </h3>
-        <div class="py-2">
-          <label
-            >ชื่อนักเรียน
-            <!-- svg pic -->
-          </label>
-          <input
-            v-model="formEdit.student_name"
-            class="input input-bordered w-full"
-          />
+    <!-- Edit Modal -->
+    <dialog
+      v-if="showModal"
+      class="fixed inset-0 bg-opacity-25 flex items-center justify-center z-50 w-full h-full"
+      :class="{ active: showModal }"
+      open
+    >
+      <div class="bg-white rounded-lg shadow-lg max-w-md w-full mx-4">
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold text-gray-800">
+              แก้ไขข้อมูลนักเรียน
+            </h3>
+            <button
+              class="text-gray-400 hover:text-gray-600 cursor-pointer"
+              @click.prevent="showModal = false"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+          <form method="dialog" class="space-y-4" @submit.prevent="saveEdit">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                ชื่อ-นามสกุล
+              </label>
+              <input
+                v-model="formEdit.student_name"
+                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="ชื่อ-นามสกุล"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                อีเมล
+              </label>
+              <input
+                v-model="formEdit.student_email"
+                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="youremail@gmail.com"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                รหัสผ่าน
+              </label>
+              <input
+                v-model="formEdit.student_password"
+                type="password"
+                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="รหัสผ่าน"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                รหัสผ่านใหม่
+              </label>
+              <input
+                v-model="formEdit.student_old_password"
+                type="password"
+                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="รหัสผ่านใหม่"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                เบอร์โทร
+              </label>
+              <input
+                v-model="formEdit.student_phone"
+                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="เบอร์โทรศัพท์"
+              />
+            </div>
+            <div class="flex justify-end space-x-3 pt-4">
+              <button
+                class="px-4 py-2 bg-amber-600 rounded-lg text-white hover:bg-amber-700 transition duration-200 cursor-pointer"
+                @click.prevent="showModal = false"
+              >
+                ปิด
+              </button>
+              <button
+                class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 cursor-pointer"
+                @click.prevent="handleSaveEdit"
+              >
+                บันทึก
+              </button>
+            </div>
+          </form>
         </div>
-        <div class="py-2">
-          <label>Email:</label>
-          <input
-            v-model="formEdit.student_email"
-            class="input input-bordered w-full"
-          />
-        </div>
-        <div class="py-2">
-          <label>password:</label>
-          <input
-            v-model="formEdit.student_password"
-            class="input input-bordered w-full"
-          />
-        </div>
-        <div class="py-2">
-          <label>new password:</label>
-          <input
-            v-model="formEdit.student_old_password"
-            class="input input-bordered w-full"
-          />
-        </div>
-        <div class="py-2">
-          <label>phone:</label>
-          <input
-            v-model="formEdit.student_phone"
-            class="input input-bordered w-full"
-          />
-        </div>
-        <div class="modal-action">
-          <button class="btn" @click.prevent="showModal = false">Close</button>
-          <button class="btn btn-primary" @click.prevent="saveEdit">
-            Save
-          </button>
-        </div>
-      </form>
+      </div>
     </dialog>
 
-    <!-- add -->
-    <dialog v-if="showModalAdd" class="modal fixed inset-0 flex justify-center items-center" open>
-      <form
-        method="dialog"
-        class="modal-box max-w-lg bg-white p-6 rounded-lg shadow-xl"
-        @submit.prevent="saveEdit"
-      >
-        <h3 class="font-bold text-lg text-gray-800 mb-4">กรอกข้อมูล</h3>
-        <div class="py-2">
-          <label class="text-sm text-gray-800 flex gap-2"
-            >อีเมล
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
+    <!-- Add Modal -->
+    <dialog
+      v-if="showModalAdd"
+      class="fixed inset-0 bg-opacity-25 flex items-center justify-center z-50 w-full h-full"
+      :class="{ active: showModalAdd }"
+      open
+    >
+      <div class="bg-white rounded-lg shadow-lg max-w-md w-full mx-4">
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-semibold text-gray-800">
+              เพิ่มนักเรียน/นักศึกษา
+            </h3>
+            <button
+              class="text-gray-400 hover:text-gray-600 cursor-pointer"
+              @click.prevent="showModalAdd = false"
             >
-              <path
-                fill="currentColor"
-                d="M21 12.13c-.15.01-.29.06-.39.17l-1 1l2.05 2l1-1c.22-.21.22-.56 0-.77l-1.24-1.23a.56.56 0 0 0-.38-.17m-2 1.75L13 19.94V22h2.06l6.06-6.07M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h7v-.89l8.24-8.22c.47-.49 1.12-.76 1.8-.76c.34 0 .68.06 1 .19V6c0-1.12-.92-2-2.04-2m0 4l-8 5l-8-5V6l8 5l8-5"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+          <form method="dialog" class="space-y-4" @submit.prevent="saveAdd">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                อีเมล
+              </label>
+              <input
+                v-model="formAdd.student_email"
+                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="youremail@gmail.com"
               />
-            </svg>
-          </label>
-          <input
-            v-model="formAdd.student_email"
-            class="input input-bordered w-full p-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-600 transition duration-200"
-            placeholder="youremail@gmail.com"
-          />
-        </div>
-        <div class="py-2">
-          <label class="text-sm text-gray-800 flex gap-2"
-            >รหัสผ่าน
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="currentColor"
-                d="M12 17a2 2 0 0 0 2-2a2 2 0 0 0-2-2a2 2 0 0 0-2 2a2 2 0 0 0 2 2m6-9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h1V6a5 5 0 0 1 5-5a5 5 0 0 1 5 5v2zm-6-5a3 3 0 0 0-3 3v2h6V6a3 3 0 0 0-3-3"
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                รหัสผ่าน
+              </label>
+              <input
+                v-model="formAdd.student_password"
+                type="password"
+                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="รหัสผ่าน"
               />
-            </svg>
-          </label>
-          <input
-            v-model="formAdd.student_password"
-            class="input input-bordered w-full p-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-600 transition duration-200"
-            placeholder="กรุณาระบุรหัสผ่าน"
-          />
-        </div>
-        <div class="py-2">
-          <label class="text-sm text-gray-800 flex gap-2"
-            >รหัสนักเรียน/นักศึกษา
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path
-                fill="currentColor"
-                d="M18 13q.425 0 .713-.288T19 12t-.288-.712T18 11h-3q-.425 0-.712.288T14 12t.288.713T15 13zm0-3q.425 0 .713-.288T19 9t-.288-.712T18 8h-3q-.425 0-.712.288T14 9t.288.713T15 10zm-9 3q-.9 0-1.625.163t-1.275.512q-.525.325-.8.738t-.275.887q0 .3.225.5t.55.2h6.4q.325 0 .55-.213t.225-.537q0-.425-.275-.825t-.8-.75q-.55-.35-1.275-.513T9 13m0-1q.825 0 1.412-.587T11 10t-.587-1.412T9 8t-1.412.588T7 10t.588 1.413T9 12m-5 8q-.825 0-1.412-.587T2 18V6q0-.825.588-1.412T4 4h16q.825 0 1.413.588T22 6v12q0 .825-.587 1.413T20 20z"
+              <p class="text-xs text-gray-500 mt-1">
+                รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร
+              </p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                รหัสนักเรียน/นักศึกษา
+              </label>
+              <input
+                v-model="formAdd.student_main_id"
+                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                placeholder="เช่น 6412345678"
               />
-            </svg>
-          </label>
-          <input
-            v-model="formAdd.student_main_id"
-            class="input input-bordered w-full p-2 rounded-md border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-600 transition duration-200"
-            placeholder="กรุณาระบุรหัสนักเรียน/นักศึกษา"
-          />
+            </div>
+
+            <div class="flex justify-end space-x-3 pt-4">
+              <button
+                class="px-4 py-2 bg-amber-500 rounded-lg text-white hover:bg-amber-600 transition duration-200 cursor-pointer"
+                @click.prevent="showModalAdd = false"
+              >
+                ปิด
+              </button>
+              <button
+                class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 cursor-pointer"
+                @click.prevent="handleSaveAdd"
+              >
+                บันทึก
+              </button>
+            </div>
+          </form>
         </div>
-        <div class="modal-action flex justify-center items-center gap-4">
-          <button
-            class="btn text-base bg-amber-600 hover:bg-amber-700 cursor-pointer transition duration-200 text-white p-2 rounded-md shadow-lg"
-            @click.prevent="showModalAdd = false"
-          >
-            ปิด
-          </button>
-          <button
-            class="btn btn-primary text-base bg-indigo-600 hover:bg-indigo-700 cursor-pointer duration-200 text-white p-2 rounded-md shadow-lg"
-            @click.prevent="saveAdd"
-          >
-            บันทึก
-          </button>
-        </div>
-      </form>
+      </div>
     </dialog>
   </div>
 </template>
+
+<script>
+// Toast handling logic with SweetAlert2
+import Swal from "sweetalert2";
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top",
+  showConfirmButton: false,
+  timer: 1000,
+  timerProgressBar: true,
+});
+
+function handleSaveEdit() {
+  saveEdit()
+    .then(() => {
+      Toast.fire({
+        icon: "success",
+        title: "บันทึกข้อมูลสำเร็จ",
+      });
+    })
+    .catch(() => {
+      Toast.fire({
+        icon: "error",
+        title: "เกิดข้อผิดพลาดในการบันทึก",
+      });
+    });
+}
+
+function handleSaveAdd() {
+  saveAdd()
+    .then(() => {
+      Toast.fire({
+        icon: "success",
+        title: "เพิ่มข้อมูลสำเร็จ",
+      });
+    })
+    .catch(() => {
+      Toast.fire({
+        icon: "error",
+        title: "เกิดข้อผิดพลาดในการเพิ่มข้อมูล",
+      });
+    });
+}
+</script>
+
+<style>
+body {
+  font-family: "Prompt", sans-serif;
+}
+.modal {
+  transition: opacity 0.25s ease;
+}
+.modal-container {
+  transition: transform 0.25s ease;
+}
+.modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal.active .modal-container {
+  transform: scale(1);
+}
+</style>
