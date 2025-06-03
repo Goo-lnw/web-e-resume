@@ -8,12 +8,14 @@ const formData = ref({
   resume_status: "",
   resume_teacher_comment: "",
 });
+
 async function fetchResume() {
   try {
     const res = await $axios.get("/resume");
     const data = res.data;
     data.map((item) => {
       item.resume_teacher_comment = "";
+      item.resume_status = "";
     });
     resume.value = res.data;
   } catch (err) {
@@ -26,8 +28,16 @@ async function updateComment(index) {
     // console.log(resume.value[index]);
     const resume_id = resume.value[index].resume_id;
     const comment = resume.value[index].resume_teacher_comment;
+    const status = resume.value[index].resume_status;
 
-    // const res = await $axios.put("/");
+    console.log(resume_id, comment, status);
+    const res = await $axios.put(`/resume/${resume_id}/edit`, {
+      resume_teacher_comment: comment,
+      resume_status: Number(status),
+    });
+    if (res.status === 200) {
+      fetchResume();
+    }
   } catch (err) {
     console.log(err);
   }
@@ -103,12 +113,19 @@ onMounted(() => {
       </div>
       <div class="border p-4">
         <form>
-          <input
+          <div class="">
+            <label for="">อนุมัติ</label>
+            <input v-model="item.resume_status" value="3" type="radio" />
+          </div>
+          <div class="">
+            <label for="">ปฏิเสธ</label>
+            <input v-model="item.resume_status" value="4" type="radio" />
+          </div>
+          <textarea
             type="text"
             class="border"
             v-model="item.resume_teacher_comment"
           />
-         
           <button
             @click="updateComment(index)"
             type="button"
