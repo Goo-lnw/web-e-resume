@@ -1,4 +1,7 @@
 <script setup>
+definePageMeta({
+  layout: "login"
+});
 const toast = useToast();
 const { $axios } = useNuxtApp();
 const router = useRouter();
@@ -31,28 +34,9 @@ async function login() {
   }
 }
 </script>
-<style>
-body {
-  font-family: "Prompt", sans-serif;
-}
-.bg-gradient {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-}
-.login-container {
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-</style>
+
 <template>
   <div class="">
-    <div class="flex justify-between items-center p-2">
-      <img
-        src="../assets/images/logo-it-bru-Photoroom.png"
-        alt="logo-bru"
-        class="w-20"
-      />
-      <img src="../assets/images/bru-web-logo-en.png" alt="" class="w-35" />
-    </div>
     <div class="min-h-screen bg-gray-100 flex justify-center items-center p-4">
       <div class="flex w-full max-w-4xl rounded-xl overflow-hidden shadow-md">
         <div

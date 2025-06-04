@@ -11,7 +11,7 @@ const resume = ref({});
 const { $axios } = useNuxtApp();
 const formComment = ref({
   resume_teacher_comment: "",
-  resume_status: null,
+  resume_status: "",
 });
 async function fetchResume() {
   try {
@@ -24,12 +24,12 @@ async function fetchResume() {
 
 async function updateComment() {
   try {
-    const payload = {
-      ...formComment.value,
-      resume_status: Number(formComment.value.resume_status),
-    };
+    console.log(formComment.value);
 
-    const res = await $axios.put(`/resume/${id}/edit`, payload);
+    const res = await $axios.put(`/resume/${id}/edit`, {
+      resume_teacher_comment: formComment.resume_teacher_comment,
+      resume_status: parseInt(formComment.resume_status),
+    });
     if (res.status === 200) {
       fetchResume();
     }
