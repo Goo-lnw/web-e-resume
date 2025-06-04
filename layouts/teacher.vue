@@ -23,6 +23,16 @@
             >
           </div>
           <div class="flex items-center">
+            <NuxtLink to="/teacher/resume_list" class="flex items-center">
+              รายการ resume
+            </NuxtLink>
+          </div>
+          <div class="flex items-center">
+            <NuxtLink to="/teacher" class="flex items-center">
+              หน้าแรก
+            </NuxtLink>
+          </div>
+          <div class="flex items-center">
             <div class="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

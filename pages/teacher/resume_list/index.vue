@@ -3,8 +3,8 @@ definePageMeta({
   layout: "teacher",
 });
 import { ref, onMounted } from "vue";
+const r = useRouter();
 const { $axios } = useNuxtApp();
-const { useAlert } = useAlert();
 const resume = ref([]);
 const formData = ref({
   resume_status: "",
@@ -15,6 +15,8 @@ async function fetchResume() {
   try {
     const res = await $axios.get("/resume");
     const data = res.data;
+    console.log(data);
+
     data.map((item) => {
       item.resume_teacher_comment = "";
       item.resume_status = "";
@@ -44,6 +46,12 @@ async function updateComment(index) {
   }
 }
 
+async function Resume(params) {
+  console.log(params);
+
+  r.push(`/teacher/resume_list/${params}`);
+}
+
 onMounted(() => {
   fetchResume();
 });
@@ -57,8 +65,10 @@ onMounted(() => {
         v-for="(item, index) in resume"
         :key="index"
       >
-        <!-- Header Section -->
-        <div class="resume-header text-white p-6 relative">
+        <div
+          class="resume-header text-white p-6 relative"
+          @click="Resume(item.resume_id)"
+        >
           <div class="flex flex-col md:flex-row items-center md:items-start">
             <div
               class="w-24 h-24 rounded-full bg-white p-1 mb-4 md:mb-0 md:mr-6 flex-shrink-0"
@@ -95,254 +105,6 @@ onMounted(() => {
                 <span>{{ item.student_email }}</span>
               </div>
             </div>
-          </div>
-        </div>
-
-        <!-- Main Content -->
-        <div class="p-6">
-          <!-- Education Section -->
-          <div class="card-bgmb-6">
-            <h2
-              class="text-xl text-white font-semibold text-navy section-title mb-4"
-            >
-              Education
-            </h2>
-            <div class="bg-white rounded-lg p-5 border-l-4 border-accent">
-              <div
-                class="flex flex-col md:flex-row md:justify-between md:items-start"
-              >
-                <div>
-                  <h3 class="text-lg font-medium text-deepPurple">
-                    {{ item.education_history_institution }}
-                  </h3>
-                  <p class="text-gray-700">
-                    {{ item.education_history_major }}
-                  </p>
-                </div>
-                <div class="mt-2 md:mt-0 md:text-right">
-                  <div
-                    class="inline-flex items-center bg-lightAccent bg-opacity-30 px-3 py-1 rounded-full"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        fill="currentColor"
-                        d="M10.6 13.25L8.45 11.1q-.275-.275-.7-.275t-.7.275t-.275.7t.275.7l2.85 2.85q.3.3.7.3t.7-.3l5.65-5.65q.275-.275.275-.7t-.275-.7t-.7-.275t-.7.275zM5 21q-.825 0-1.412-.587T3 19V5q0-.825.588-1.412T5 3h4.2q.325-.9 1.088-1.45T12 1t1.713.55T14.8 3H19q.825 0 1.413.588T21 5v14q0 .825-.587 1.413T19 21zm7-16.75q.325 0 .538-.213t.212-.537t-.213-.537T12 2.75t-.537.213t-.213.537t.213.538t.537.212"
-                      />
-                    </svg>
-                    <span class="text-purple font-medium"
-                      >GPA: {{ item.education_history_gpa }}</span
-                    >
-                  </div>
-                </div>
-              </div>
-              <div class="mt-3 flex items-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5 text-accent mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-                <span class="text-gray-700">{{
-                  item.education_history_notes
-                }}</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Internship Section -->
-          <div class="mb-6">
-            <h2
-              class="text-xl text-white font-semibold text-navy section-title mb-4"
-            >
-              Internship
-            </h2>
-            <div class="bg-gray-50 rounded-lg p-5 border-l-4 border-accent">
-              <div
-                class="flex flex-col md:flex-row md:justify-between md:items-start"
-              >
-                <div>
-                  <h3 class="text-lg font-medium text-deepPurple">
-                    {{ item.internship_company_name }}
-                  </h3>
-                  <p class="text-gray-700 font-medium">
-                    {{ item.internship_position }}
-                  </p>
-                </div>
-              </div>
-              <p class="mt-3 text-gray-700">
-                {{ item.internship_description }}
-              </p>
-              <div class="mt-4">
-                <a
-                  :href="item.internship_related_files"
-                  target="_blank"
-                  class="certificate-btn text-white px-4 py-2 rounded-md flex items-center hover:opacity-90 transition"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                  View Certificate
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Training Section -->
-          <div class="mb-6">
-            <h2
-              class="text-white text-xl font-semibold text-navy section-title mb-4"
-            >
-              Training
-            </h2>
-            <div class="bg-gray-50 rounded-lg p-5 border-l-4 border-accent">
-              <div
-                class="flex flex-col md:flex-row md:justify-between md:items-start"
-              >
-                <div>
-                  <h3 class="text-lg font-medium text-deepPurple">
-                    {{ item.training_history_course_name }}
-                  </h3>
-                  <p class="text-gray-700">
-                    {{ item.training_history_organization }}
-                  </p>
-                </div>
-              </div>
-              <div class="mt-4">
-                <a
-                  :href="item.training_history_certificate_file"
-                  target="_blank"
-                  class="certificate-btn text-white px-4 py-2 rounded-md flex items-center hover:opacity-90 transition"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-5 w-5 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    />
-                  </svg>
-                  View Certificate
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Work Experience Section -->
-          <div>
-            <h2
-              class="text-xl text-white font-semibold text-navy section-title mb-4"
-            >
-              Work Experience
-            </h2>
-            <div class="bg-gray-50 rounded-lg p-5 border-l-4 border-accent">
-              <div
-                class="flex flex-col md:flex-row md:justify-between md:items-start"
-              >
-                <div>
-                  <h3 class="text-lg font-medium text-deepPurple">
-                    {{ item.work_experience_company_name }}
-                  </h3>
-                  <p class="text-gray-700 font-medium">
-                    {{ item.work_experience_position }}
-                  </p>
-                </div>
-              </div>
-              <p class="mt-3 text-gray-700">
-                {{ item.work_experience_description }}
-              </p>
-              <div class="mt-4 bg-lightAccent bg-opacity-20 p-3 rounded-lg">
-                <div class="flex items-start">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6 text-accent mr-2 mt-0.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    />
-                  </svg>
-                  <div>
-                    <p class="font-medium text-deepPurple">Key Achievement:</p>
-                    <p class="text-gray-700">
-                      {{ item.work_experience_highlight }}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Form Section -->
-          <div class="mt-6 bg-gray-100 p-4 rounded-lg">
-            <form>
-              <div class="flex space-x-4 mb-4">
-                <div class="flex items-center">
-                  <input
-                    v-model="item.resume_status"
-                    value="3"
-                    type="radio"
-                    class="mr-2"
-                  />
-                  <label class="text-gray-700">อนุมัติ</label>
-                </div>
-                <div class="flex items-center">
-                  <input
-                    v-model="item.resume_status"
-                    value="4"
-                    type="radio"
-                    class="mr-2"
-                  />
-                  <label class="text-gray-700">ปฏิเสธ</label>
-                </div>
-              </div>
-              <textarea
-                type="text"
-                class="w-full border rounded-md p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-accent"
-                v-model="item.resume_teacher_comment"
-              />
-              <button
-                @click="updateComment(index)"
-                type="button"
-                class="bg-indigo-600 hover:bg-indigo-800 px-4 py-2 rounded-md text-white font-medium hover:opacity-90 transition cursor-pointer"
-              >
-                ยืนยัน
-              </button>
-            </form>
           </div>
         </div>
 
