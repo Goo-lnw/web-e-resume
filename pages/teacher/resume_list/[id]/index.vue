@@ -28,7 +28,7 @@ async function updateComment() {
 
     const res = await $axios.put(`/resume/${id}/edit`, {
       resume_teacher_comment: formComment.resume_teacher_comment,
-      resume_status: Number(formComment.resume_status),
+      resume_status: parseInt(formComment.resume_status),
     });
     if (res.status === 200) {
       fetchResume();
