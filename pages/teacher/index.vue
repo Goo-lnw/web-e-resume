@@ -218,7 +218,7 @@ onMounted(() => {
               <tr
                 v-for="(item, index) in student"
                 :key="index + 1"
-                class="hover:bg-gray-50 transition-all duration-200 "
+                class="hover:bg-gray-50 dtransition-all uration-200 "
               >
                 <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
                   {{ item.student_main_id }}

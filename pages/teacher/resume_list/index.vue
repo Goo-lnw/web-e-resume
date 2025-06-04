@@ -58,15 +58,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="">
+  <div class="flex justify-center items-center text-3xl">
+    <h1>รายการแสดง Resume นักศึกษา/นักเรียน</h1>
+  </div>
+  <div class="min-h-screen p-4 rounded ">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div
-        class="card-bg shadow-xl rounded-lg overflow-hidden border-l-4 border-accent"
+        class="shadow-xl bg-gradient-to-r from-blue-400 to-blue-200 rounded-lg overflow-hidden border-l-4 border-accent cursor-pointer truncate transition-transform duration-200 hover:scale-105 py-2"
         v-for="(item, index) in resume"
         :key="index"
       >
         <div
-          class="resume-header text-white p-6 relative"
+          class="resume-header text-gray-800 p-6 relative"
           @click="Resume(item.resume_id)"
         >
           <div class="flex flex-col md:flex-row items-center md:items-start">
@@ -117,48 +120,4 @@ onMounted(() => {
   </div>
 </template>
 
-<style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap");
-
-:global(body) {
-  font-family: "Prompt", sans-serif;
-  background-color: #f8f9fa;
-}
-
-.resume-header {
-  background: linear-gradient(135deg, #1a237e 0%, #4527a0 50%, #7b1fa2 100%);
-}
-
-.section-title::after {
-  content: "";
-  display: block;
-  width: 50px;
-  height: 3px;
-  background: linear-gradient(90deg, #4527a0, #7c4dff);
-  margin-top: 8px;
-}
-
-.certificate-btn {
-  background: linear-gradient(90deg, #4527a0, #7c4dff);
-}
-
-.action-btn-approve {
-  background: linear-gradient(90deg, #1565c0, #0288d1);
-}
-
-.action-btn-reject {
-  background: linear-gradient(90deg, #c62828, #e53935);
-}
-
-.card-bg {
-  background-color: #0d1642;
-  background-image: linear-gradient(
-    135deg,
-    rgba(26, 35, 126, 0.9) 0%,
-    rgba(13, 22, 66, 0.95) 100%
-  );
-}
-.highlight-bg {
-  background-color: rgba(124, 77, 255, 0.15);
-}
-</style>
+<style scoped></style>
