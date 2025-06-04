@@ -30,7 +30,7 @@ async function fetchStudent() {
   try {
     const response = await $axios.get("/student");
     student.value = response.data;
-    // console.log(student.value);
+    console.log(student.value);
   } catch (err) {
     console.log(err);
   }
@@ -48,7 +48,7 @@ async function actionStudent(params, action) {
       showModal.value = true;
       showModalAdd.value = false;
       const response_id = await $axios.get(`/student/${params}`);
-      // console.log(response_id.data);
+      console.log(response_id.data);
       formEdit.value.student_name = response_id.data.student_name;
       formEdit.value.student_email = response_id.data.student_email;
       formEdit.value.student_phone = response_id.data.student_phone;
@@ -195,7 +195,7 @@ onMounted(() => {
                 class="hover:bg-gray-50"
               >
                 <td class="py-3 px-4">
-                  {{ item.student_main_id || "ยังไม่ได้กรอก" }}
+                  {{ item.student_main_id }}
                 </td>
                 <td class="py-3 px-4">{{ item.student_name }}</td>
                 <td class="py-3 px-4">{{ item.student_email }}</td>
