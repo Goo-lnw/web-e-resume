@@ -13,15 +13,25 @@
 
           <!-- ลิงก์และตัวเลือก -->
         </div>
-        <div class="hidden md:flex items-center space-x-4">
+        <div class="hidden md:flex items-center space-x-4 animate-slide-in-right">
           <NuxtLink to="/" class="text-white hover:text-gray-200">
             ช่วยเหลือ</NuxtLink
           >
           <select
-            class="text-white border-none rounded px-2 py-1 cursor-pointer"
+            class=" text-white border-none rounded px-2 py-1 cursor-pointer"
           >
-            <option value="th" class="cursor-pointer bg-blue-500 text-gray-200">ไทย</option>
-            <option value="en" class="cursor-pointer bg-blue-500 text-gray-200">English</option>
+            <option
+              value="th"
+              class="cursor-pointer bg-blue-500 text-gray-200"
+            >
+              ไทย
+            </option>
+            <option
+              value="en"
+              class="cursor-pointer bg-blue-500 text-gray-200"
+            >
+              English
+            </option>
           </select>
         </div>
       </div>
@@ -107,5 +117,20 @@
 
 .animate-fade-up {
   animation: fade-up 1.5s;
+}
+
+/* มาจากทางขวา */
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px); 
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.animate-slide-in-right {
+  animation: slide-in-right 0.5s ease-out;
 }
 </style>
