@@ -24,7 +24,12 @@ async function fetchResume() {
 
 async function updateComment() {
   try {
-    console.log(formComment.value);
+
+    const payload = {
+      resume_status: Number(formComment.value.resume_status),
+      resume_teacher_comment: formComment.value.resume_teacher_comment,
+    };
+    console.log(payload);
 
     const res = await $axios.put(`/resume/${id}/edit`, {
       resume_teacher_comment: formComment.resume_teacher_comment,
