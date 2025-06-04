@@ -24,9 +24,12 @@ async function fetchResume() {
 
 async function updateComment() {
   try {
-    console.log(formComment.value);
+    const payload = {
+      ...formComment.value,
+      resume_status: Number(formComment.value.resume_status),
+    };
 
-    const res = await $axios.put(`/resume/${id}/edit`, formComment.value);
+    const res = await $axios.put(`/resume/${id}/edit`, payload);
     if (res.status === 200) {
       fetchResume();
     }
