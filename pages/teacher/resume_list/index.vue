@@ -4,7 +4,7 @@ definePageMeta({
 });
 import { ref, onMounted } from "vue";
 const { $axios } = useNuxtApp();
-const {useAlert} = useAlert();
+const { useAlert } = useAlert();
 const resume = ref([]);
 const formData = ref({
   resume_status: "",

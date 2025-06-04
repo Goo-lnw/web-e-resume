@@ -41,7 +41,7 @@ async function actionStudent(params, action) {
       console.log(params, action);
       const response = await $axios.delete(`/student/${params}/delete`);
       if (response.status === 200) {
-        showAlert("ลบเเล้ว", "success");
+        showAlert("ลบเเล้ว", "error");
         fetchStudent();
       }
     } else if (action === "edit" && params) {
