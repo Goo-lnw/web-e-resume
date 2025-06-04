@@ -1,6 +1,6 @@
 <script setup>
 definePageMeta({
-  layout: "login"
+  layout: "login",
 });
 const toast = useToast();
 const { $axios } = useNuxtApp();
@@ -36,25 +36,27 @@ async function login() {
 </script>
 
 <template>
-  <div class="">
-    <div class="min-h-screen bg-gray-100 flex justify-center items-center p-4">
-      <div class="flex w-full max-w-4xl rounded-xl overflow-hidden shadow-md">
+  <div class="font-[Mitr] min-h-screen bg-gray-100 flex flex-col">
+    <!-- Main Content -->
+    <div class="flex-grow flex justify-center items-center px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+      <div
+        class="flex flex-col md:flex-row w-full max-w-sm sm:max-w-md md:max-w-4xl rounded-xl overflow-hidden shadow-md animate-fade-up animate-once animate-ease-linear bg-white"
+      >
+        <!-- ส่วนข้อมูลด้านซ้าย -->
         <div
-          class="bg-gradient-to-r from-indigo-600 to-blue-500 md:block w-1/2 p-12 text-white flex flex-col justify-between"
+          class="bg-gradient-to-r from-indigo-600 to-blue-500 w-full md:w-1/2 p-4 sm:p-6 md:p-12 text-white flex flex-col justify-between"
         >
           <div class="mb-4">
-            <h1 class="text-3xl font-bold mb-6">ระบบ Resume อิเล็กทรอนิกส์</h1>
-            <p>
+            <h1 class="text-lg sm:text-xl md:text-3xl font-bold mb-3 sm:mb-4 md:mb-6">ระบบ Resume อิเล็กทรอนิกส์</h1>
+            <p class="text-xs sm:text-sm md:text-base">
               สร้างและจัดการประวัติการทำงานผลงานประสบการณ์ทำงานต่างๆของคุณอย่างมืออาชีพ
             </p>
           </div>
-          <div class="space-y-6">
-            <div class="flex justify-start">
+          <div class="space-y-3 sm:space-y-4 md:space-y-6">
+            <div  class="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="mr-2"
-                width="24"
-                height="24"
+                class="mr-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
                 viewBox="0 0 24 24"
               >
                 <g
@@ -68,14 +70,12 @@ async function login() {
                   <path d="m9 11l3 3L22 4" />
                 </g>
               </svg>
-              <p>สร้าง resume ที่น่าประทับใจ</p>
+              <p class="text-xs sm:text-sm md:text-base">สร้าง resume ที่น่าประทับใจ</p>
             </div>
-            <div class="flex justify-start">
+            <div  class="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="mr-2"
-                width="24"
-                height="24"
+                class="mr-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
                 viewBox="0 0 24 24"
               >
                 <g
@@ -89,14 +89,12 @@ async function login() {
                   <path d="m9 11l3 3L22 4" />
                 </g>
               </svg>
-              <p>สร้าง resume ที่น่าประทับใจ</p>
+              <p class="text-xs sm:text-sm md:text-base">สร้าง resume ที่น่าประทับใจ</p>
             </div>
-            <div class="flex justify-start">
+            <div  class="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="mr-2"
-                width="24"
-                height="24"
+                class="mr-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
                 viewBox="0 0 24 24"
               >
                 <g
@@ -110,14 +108,12 @@ async function login() {
                   <path d="m9 11l3 3L22 4" />
                 </g>
               </svg>
-              <p>สร้าง resume ที่น่าประทับใจ</p>
+              <p class="text-xs sm:text-sm md:text-base">สร้าง resume ที่น่าประทับใจ</p>
             </div>
-            <div class="flex justify-start">
+            <div  class="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                class="mr-2"
-                width="24"
-                height="24"
+                class="mr-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
                 viewBox="0 0 24 24"
               >
                 <g
@@ -131,26 +127,28 @@ async function login() {
                   <path d="m9 11l3 3L22 4" />
                 </g>
               </svg>
-              <p>สร้าง resume ที่น่าประทับใจ</p>
+              <p class="text-xs sm:text-sm md:text-base">สร้าง resume ที่น่าประทับใจ</p>
             </div>
           </div>
         </div>
-        <div class="w-full md:w-1/2 bg-gray-100 p-8 md:p-12">
-          <div class="mb-8">
-            <h3 class="text-2xl font-semibold text-gray-800">ยินดีตอนรับ</h3>
-            <p class="text-gray-600 mt-2">
+
+        <!-- ฟอร์มล็อกอินด้านขวา -->
+        <div class="w-full md:w-1/2 bg-gray-100 p-4 sm:p-6 md:p-12">
+          <div class="mb-4 sm:mb-6 md:mb-8">
+            <h3 class="text-base sm:text-lg md:text-2xl font-semibold text-gray-800">ยินดีต้อนรับ</h3>
+            <p class="text-gray-600 text-xs sm:text-sm md:text-base mt-1 sm:mt-2">
               กรุณาเข้าสู่ระบบเพื่อเข้าจัดการ Resume ของนักเรียน/นักศึกษา
             </p>
           </div>
-          <form action="" class="space-y-6" @submit.prevent="login">
+          <form action="" class="space-y-3 sm:space-y-4 md:space-y-6" @submit.prevent="login">
             <div>
               <label
-                class="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2"
+                class="flex items-center text-xs sm:text-sm font-medium text-gray-700 mb-1 gap-2"
               >
                 อีเมล
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="w-6 h-6"
+                  class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
                   viewBox="0 0 32 32"
                 >
                   <path
@@ -167,17 +165,17 @@ async function login() {
                 type="email"
                 v-model="formData.email"
                 placeholder="youremail@gmail.com"
-                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-600 transition duration-200"
+                class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-600 transition duration-200"
               />
             </div>
             <div>
               <label
-                class="flex items-center text-sm font-medium text-gray-700 mb-1 gap-2"
+                class="flex items-center text-xs sm:text-sm font-medium text-gray-700 mb-1 gap-2"
               >
                 รหัสผ่าน
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  class="w-6 h-6"
+                  class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
                   viewBox="0 0 24 24"
                 >
                   <path
@@ -190,19 +188,17 @@ async function login() {
                 type="password"
                 v-model="formData.password"
                 placeholder="Password"
-                class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-600 transition duration-200"
+                class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-600 transition duration-200"
               />
             </div>
             <button
               type="submit"
-              class="flex justify-center items-center py-2.5 w-full bg-indigo-500 hover:bg-indigo-700 text-gray-100 rounded-lg shadow-md transition duration-500 ease-in-out cursor-pointer"
+              class="flex justify-center items-center py-2 sm:py-2.5 w-full bg-indigo-500 hover:bg-indigo-700 text-gray-100 rounded-lg shadow-md transition duration-500 ease-in-out cursor-pointer"
             >
               เข้าสู่ระบบ
               <svg
-                class="w-5 h-5 ml-2"
+                class="w-4 h-4 sm:w-5 sm:h-5 ml-2"
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
                 viewBox="0 0 24 24"
               >
                 <g
@@ -219,7 +215,34 @@ async function login() {
             </button>
           </form>
         </div>
+        <!-- รูปภาพ teacher3d.png -->
+        <div class="w-full md:w-1/3 relative mt-4 md:mt-0">
+          <img
+            src="../assets/images/teacher3d.png"
+            alt="Teacher 3D"
+            class="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[250px] h-auto object-contain mx-auto md:absolute md:bottom-0 md:right-0"
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
+
+<script setup></script>
+<style scoped>
+/* อนิเมชันสำหรับ fade-up */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 1.5s;
+}
+</style>
