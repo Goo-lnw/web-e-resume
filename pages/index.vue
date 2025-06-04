@@ -1,8 +1,4 @@
 <script setup>
-definePageMeta({
-  layout: "auth",
-});
-
 const toast = useToast();
 const { $axios } = useNuxtApp();
 const router = useRouter();

@@ -1,13 +1,17 @@
 <script setup>
-useTeacherLayout();
+definePageMeta({
+  layout: "teacher",
+});
+
 import { ref, onMounted } from "vue";
-import Swal from "sweetalert2";
 const student = ref({});
 const { $axios } = useNuxtApp();
 const showModal = ref(false);
 const showModalAdd = ref(false);
 const editData = ref(null);
 const editId = ref(null);
+const { showAlert } = useAlert();
+
 const formEdit = ref({
   student_name: "",
   student_email: "",
@@ -22,13 +26,6 @@ const formAdd = ref({
   student_main_id: "",
 });
 
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top",
-  showConfirmButton: false,
-  timer: 1000,
-  timerProgressBar: true,
-});
 async function fetchStudent() {
   try {
     const response = await $axios.get("/student");
@@ -43,7 +40,8 @@ async function actionStudent(params, action) {
     if (action === "delete" && params) {
       console.log(params, action);
       const response = await $axios.delete(`/student/${params}/delete`);
-      if (response == 200) {
+      if (response.status === 200) {
+        showAlert("ลบเเล้ว", "success");
         fetchStudent();
       }
     } else if (action === "edit" && params) {
@@ -85,8 +83,9 @@ async function saveAdd() {
   try {
     console.log(formAdd.value);
     const res = await $axios.post("/student", formAdd.value);
-    if (res === 200) {
+    if (res.status === 200) {
       showModalAdd.value = false;
+      showAlert("เพิ่มเเล้ว", "success");
     }
     fetchStudent();
   } catch (err) {
@@ -94,95 +93,12 @@ async function saveAdd() {
   }
 }
 
-
-
-
-
-function handleSaveEdit() {
-  saveEdit()
-    .then(() => {
-      Toast.fire({
-        icon: "success",
-        title: "บันทึกข้อมูลสำเร็จ",
-      });
-    })
-    .catch(() => {
-      Toast.fire({
-        icon: "error",
-        title: "เกิดข้อผิดพลาดในการบันทึก",
-      });
-    });
-}
-
-function handleSaveAdd() {
-  saveAdd()
-    .then(() => {
-      Toast.fire({
-        icon: "success",
-        title: "เพิ่มข้อมูลสำเร็จ",
-      });
-    })
-    .catch(() => {
-      Toast.fire({
-        icon: "error",
-        title: "เกิดข้อผิดพลาดในการเพิ่มข้อมูล",
-      });
-    });
-}
-
 onMounted(() => {
   fetchStudent();
 });
 </script>
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <!-- Navbar -->
-    <nav class="bg-indigo-600 text-white shadow-md">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-          <div class="flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-8 w-8"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-              />
-            </svg>
-            <span class="ml-2 text-xl font-semibold"
-              >E-Resume จัดการข้อมูลนักเรียน/นักศึกษา</span
-            >
-          </div>
-          <div class="flex items-center">
-            <div class="flex items-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <span class="ml-2">Username</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Main Content -->
+  <div class="">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="bg-white rounded-lg shadow-md p-6">
         <div class="flex justify-between items-center mb-6">
@@ -424,8 +340,8 @@ onMounted(() => {
                 ปิด
               </button>
               <button
+                type="submit"
                 class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 cursor-pointer"
-                @click.prevent="handleSaveEdit"
               >
                 บันทึก
               </button>
@@ -438,99 +354,96 @@ onMounted(() => {
     <!-- Add Modal -->
     <dialog
       v-if="showModalAdd"
-      class="fixed inset-0 bg-opacity-25 flex items-center justify-center z-50 w-full h-full"
+      class="fixed inset-0 flex items-center justify-center z-50 w-full h-full"
       :class="{ active: showModalAdd }"
       open
     >
-      <div class="bg-white rounded-lg shadow-lg max-w-md w-full mx-4">
-        <div class="p-6">
-          <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-semibold text-gray-800">
-              เพิ่มนักเรียน/นักศึกษา
-            </h3>
-            <button
-              class="text-gray-400 hover:text-gray-600 cursor-pointer"
-              @click.prevent="showModalAdd = false"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-          <form method="dialog" class="space-y-4" @submit.prevent="saveAdd">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
-                อีเมล
-              </label>
-              <input
-                v-model="formAdd.student_email"
-                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="youremail@gmail.com"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
-                รหัสผ่าน
-              </label>
-              <input
-                v-model="formAdd.student_password"
-                type="password"
-                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="รหัสผ่าน"
-              />
-              <p class="text-xs text-gray-500 mt-1">
-                รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร
-              </p>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">
-                รหัสนักเรียน/นักศึกษา
-              </label>
-              <input
-                v-model="formAdd.student_main_id"
-                class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                placeholder="เช่น 6412345678"
-              />
-            </div>
-
-            <div class="flex justify-end space-x-3 pt-4">
+      <div class="">
+        <div class="bg-white rounded-lg shadow-lg max-w-md w-full mx-4">
+          <div class="p-6">
+            <div class="flex justify-between items-center mb-4">
+              <h3 class="text-xl font-semibold text-gray-800">
+                เพิ่มนักเรียน/นักศึกษา
+              </h3>
               <button
-                class="px-4 py-2 bg-amber-500 rounded-lg text-white hover:bg-amber-600 transition duration-200 cursor-pointer"
+                class="text-gray-400 hover:text-gray-600 cursor-pointer"
                 @click.prevent="showModalAdd = false"
               >
-                ปิด
-              </button>
-              <button
-                class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 cursor-pointer"
-                @click.prevent="handleSaveAdd"
-              >
-                บันทึก
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
               </button>
             </div>
-          </form>
+            <form method="dialog" class="space-y-4" @submit.prevent="saveAdd">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                  อีเมล
+                </label>
+                <input
+                  v-model="formAdd.student_email"
+                  class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="youremail@gmail.com"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                  รหัสผ่าน
+                </label>
+                <input
+                  v-model="formAdd.student_password"
+                  type="password"
+                  class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="รหัสผ่าน"
+                />
+                <p class="text-xs text-gray-500 mt-1">
+                  รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร
+                </p>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">
+                  รหัสนักเรียน/นักศึกษา
+                </label>
+                <input
+                  v-model="formAdd.student_main_id"
+                  class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  placeholder="เช่น 6412345678"
+                />
+              </div>
+
+              <div class="flex justify-end space-x-3 pt-4">
+                <button
+                  class="px-4 py-2 bg-amber-500 rounded-lg text-white hover:bg-amber-600 transition duration-200 cursor-pointer"
+                  @click.prevent="showModalAdd = false"
+                >
+                  ปิด
+                </button>
+                <button
+                  type="submit"
+                  class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 cursor-pointer"
+                >
+                  บันทึก
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </dialog>
   </div>
 </template>
 
-<script>
-// Toast handling logic with SweetAlert2
-
-</script>
-
-<style>
+<style scoped>
 body {
   font-family: "Prompt", sans-serif;
 }
