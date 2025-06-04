@@ -1,6 +1,7 @@
 <script setup>
 useTeacherLayout();
 import { ref, onMounted } from "vue";
+import Swal from "sweetalert2";
 const student = ref({});
 const { $axios } = useNuxtApp();
 const showModal = ref(false);
@@ -19,6 +20,14 @@ const formAdd = ref({
   student_email: "",
   student_password: "",
   student_main_id: "",
+});
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top",
+  showConfirmButton: false,
+  timer: 1000,
+  timerProgressBar: true,
 });
 async function fetchStudent() {
   try {
@@ -84,6 +93,43 @@ async function saveAdd() {
     console.log(err);
   }
 }
+
+
+
+
+
+function handleSaveEdit() {
+  saveEdit()
+    .then(() => {
+      Toast.fire({
+        icon: "success",
+        title: "บันทึกข้อมูลสำเร็จ",
+      });
+    })
+    .catch(() => {
+      Toast.fire({
+        icon: "error",
+        title: "เกิดข้อผิดพลาดในการบันทึก",
+      });
+    });
+}
+
+function handleSaveAdd() {
+  saveAdd()
+    .then(() => {
+      Toast.fire({
+        icon: "success",
+        title: "เพิ่มข้อมูลสำเร็จ",
+      });
+    })
+    .catch(() => {
+      Toast.fire({
+        icon: "error",
+        title: "เกิดข้อผิดพลาดในการเพิ่มข้อมูล",
+      });
+    });
+}
+
 onMounted(() => {
   fetchStudent();
 });
@@ -481,47 +527,7 @@ onMounted(() => {
 
 <script>
 // Toast handling logic with SweetAlert2
-import Swal from "sweetalert2";
 
-const Toast = Swal.mixin({
-  toast: true,
-  position: "top",
-  showConfirmButton: false,
-  timer: 1000,
-  timerProgressBar: true,
-});
-
-function handleSaveEdit() {
-  saveEdit()
-    .then(() => {
-      Toast.fire({
-        icon: "success",
-        title: "บันทึกข้อมูลสำเร็จ",
-      });
-    })
-    .catch(() => {
-      Toast.fire({
-        icon: "error",
-        title: "เกิดข้อผิดพลาดในการบันทึก",
-      });
-    });
-}
-
-function handleSaveAdd() {
-  saveAdd()
-    .then(() => {
-      Toast.fire({
-        icon: "success",
-        title: "เพิ่มข้อมูลสำเร็จ",
-      });
-    })
-    .catch(() => {
-      Toast.fire({
-        icon: "error",
-        title: "เกิดข้อผิดพลาดในการเพิ่มข้อมูล",
-      });
-    });
-}
 </script>
 
 <style>
