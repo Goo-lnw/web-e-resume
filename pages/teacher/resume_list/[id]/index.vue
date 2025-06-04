@@ -9,13 +9,32 @@ const r = useRoute();
 const id = r?.params?.id;
 const resume = ref({});
 const { $axios } = useNuxtApp();
-
+const formComment = ref({
+  resume_teacher_comment: "",
+  resume_status: "",
+});
 async function fetchResume() {
   try {
     const res = await $axios.get(`/resume/${id}`);
     resume.value = res.data;
   } catch (err) {
     console.error(err);
+  }
+}
+
+async function updateComment() {
+  try {
+    console.log(formComment.value);
+
+    const res = await $axios.put(`/resume/${id}/edit`, {
+      resume_teacher_comment: formComment.resume_teacher_comment,
+      resume_status: Number(formComment.resume_status),
+    });
+    if (res.status === 200) {
+      fetchResume();
+    }
+  } catch (err) {
+    console.log(err);
   }
 }
 
@@ -35,6 +54,39 @@ onMounted(() => {
 </script>
 <template>
   <div class="p-6 space-y-8 max-w-4xl mx-auto">
+    <div class="">
+      <form action="" class="space-y-6" @submit.prevent="updateComment">
+        <textarea
+          v-model="formComment.resume_teacher_comment"
+          type="text"
+          class="border"
+          placeholder="Comment"
+        />
+        <div class="flex gap-2 items-center justify-center">
+          <div class="">
+            <label for="status">ผ่าน</label>
+            <input
+              v-model="formComment.resume_status"
+              type="radio"
+              name="status"
+              value="3"
+            />
+          </div>
+          <div class="">
+            <label for="status">ไม่ผ่าน</label>
+            <input
+              v-model="formComment.resume_status"
+              type="radio"
+              name="status"
+              value="4"
+            />
+          </div>
+          <button type="submit" class="bg-indigo-600 p-2 rounded-2xl">
+            บันทึก
+          </button>
+        </div>
+      </form>
+    </div>
     <!-- Education -->
     <div class="bg-white shadow rounded-lg p-4">
       <h2 class="text-xl font-semibold mb-2 text-indigo-600">🎓 Education</h2>
