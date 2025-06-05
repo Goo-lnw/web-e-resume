@@ -1,78 +1,54 @@
 <template>
-  <div style="font-family: 'Mitr', sans-serif; min-height: 100vh" class="">
-    <nav class="bg-blue-600 p-4 shadow-lg sticky top-0 z-10">
-      <div class="flex justify-between items-center p-2 w-full">
-        <div class="flex justify-center items-center space-x-4">
-          <NuxtLink to="/">
+  <div style="font-family: 'Mitr', sans-serif; min-height: 100vh">
+    <nav class="animate-fade-down bg-blue-600 shadow-lg sticky top-0 z-10 min-h-16">
+      <div
+        class="container mx-auto px-4 flex justify-between items-center flex-wrap md:flex-nowrap "
+      >
+        <!-- โลโก้ -->
+        <div class="flex items-center gap-4 flex-shrink-0">
+          <NuxtLink to="/" class="flex items-center">
             <img
-              src="~/assets/images/logo-it-bru-Photoroom.png"
+              src="../assets/images/logo-it-bru-Photoroom.png"
               alt="logo-bru"
-              class="animate-fade-up w-20"
+              class="h-12 animate-fade-down"
             />
           </NuxtLink>
-
-          <!-- ลิงก์และตัวเลือก -->
+          <img
+            src="../assets/images/Eresumem-logo-removebg.png"
+            alt="logo-eresume"
+            class="h-18 w-28 filter brightness-0 invert animate-fade-down"
+          />
         </div>
-        <div class="hidden md:flex items-center space-x-4 animate-slide-in-right">
-          <NuxtLink to="/" class="text-white hover:text-gray-200">
-            ช่วยเหลือ</NuxtLink
-          >
-          <select
-            class=" text-white border-none rounded px-2 py-1 cursor-pointer"
-          >
-            <option
-              value="th"
-              class="cursor-pointer bg-blue-500 text-gray-200"
-            >
-              ไทย
-            </option>
-            <option
-              value="en"
-              class="cursor-pointer bg-blue-500 text-gray-200"
-            >
-              English
-            </option>
-          </select>
-        </div>
-      </div>
-      <!-- เมนู dropdown สำหรับหน้าจอเล็ก -->
-      <div class="md:hidden p-4 mt-2 rounded-b-lg">
-        <div>
+        <!-- เมนู -->
+        <div
+          class="flex flex-wrap gap-4 items-center justify-end w-full md:w-auto mt-2 md:mt-0 overflow-x-auto animate-slide-in-right"
+        >
           <NuxtLink
-            class="block text-gray-200 hover:text-white py-2 cursor-pointer pl-3"
-            >ช่วยเหลือ</NuxtLink
+            to="/"
+            class="text-gray-200 hover:text-white hover:scale-105 transition-all duration-200 ease-in-out"
           >
-        </div>
-        <div class="relative">
+            ช่วยเหลือ
+          </NuxtLink>
+          <!-- เพิ่มเมนูอื่น ๆ ที่คุณมีตรงนี้ -->
+          <NuxtLink
+            to="/"
+            class="text-gray-200 hover:text-white hover:scale-105 transition-all duration-200 ease-in-out"
+          >
+            เกี่ยวกับเรา
+          </NuxtLink>
+          <NuxtLink
+            to="/"
+            class="text-gray-200 hover:text-white hover:scale-105 transition-all duration-200 ease-in-out"
+          >
+            ติดต่อเรา
+          </NuxtLink>
+
           <select
-            class="w-full text-gray-200 hover:text-white rounded-lg px-3 py-2 pr-8 focus:ring-2 focus:ring-blue-400/50 focus:outline-none transition duration-200 appearance-none cursor-pointer hover:bg-indigo-800"
+            class=" text-white border-none rounded px-2 py-1 cursor-pointer focus:outline-none focus:ring "
           >
-            <option value="th" class="bg-blue-500 text-gray-200">
-              ภาษาไทย
-            </option>
-            <option value="en" class="bg-blue-500 text-gray-200">
-              English
-            </option>
+            <option value="th" class="bg-blue-500 text-white">ไทย</option>
+            <option value="en" class="bg-blue-500 text-white">English</option>
           </select>
-          <!-- ไอคอนลูกศร -->
-          <div
-            class="absolute inset-y-0 right-2 flex items-center pointer-events-none"
-          >
-            <svg
-              class="w-4 h-4 text-gray-200"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M19 9l-7 7-7-7"
-              ></path>
-            </svg>
-          </div>
         </div>
       </div>
     </nav>
@@ -100,9 +76,21 @@
 }
 </style>
 
-<script setup></script>
-
 <style scoped>
+/* อนิเมชันสำหรับ fade-down*/
+@keyframes fade-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-down {
+  animation: fade-down 1.5s;
+}
 /* อนิเมชันสำหรับ fade-up */
 @keyframes fade-up {
   from {
@@ -123,7 +111,7 @@
 @keyframes slide-in-right {
   from {
     opacity: 0;
-    transform: translateX(20px); 
+    transform: translateX(20px);
   }
   to {
     opacity: 1;
