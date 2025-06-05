@@ -65,7 +65,14 @@ onMounted(() => {
     >
       <div
         class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white text-2xl font-bold mb-4 md:mb-0 md:mr-6"
-      ></div>
+      >
+        <NuxtImg
+          :src="resume.student_profile_image"
+          alt="Student Profile Image"
+
+          class="w-full h-full rounded-full object-cover"
+        />
+      </div>
       {{ resume.student_name }}
     </div>
 
