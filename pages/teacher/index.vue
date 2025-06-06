@@ -70,6 +70,7 @@ async function saveEdit() {
     const response = await $axios.put(`/student/${editId.value}/edit`, {
       student_name: formEdit.value.student_name,
       student_email: formEdit.value.student_email,
+      student_phone: formEdit.value.student_phone,
     });
     if (response.status === 200) {
       showAlert("แก้ไขข้อมูลนักเรียนสำเร็จ", "info");
@@ -281,7 +282,7 @@ onMounted(() => {
     <!-- Edit Modal -->
     <dialog
       v-if="showModal"
-      class="fixed  inset-0 bg-opacity-25 flex items-center justify-center z-50 w-full h-full"
+      class="fixed  inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full"
       :class="{ active: showModal }"
       open
     >
@@ -402,7 +403,7 @@ onMounted(() => {
     <!-- Add Modal -->
     <dialog
       v-if="showModalAdd"
-      class="fixed inset-0 bg-opacity-25 flex items-center justify-center z-50 w-full h-full"
+      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full"
       :class="{ active: showModalAdd }"
       open
     >

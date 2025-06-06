@@ -49,7 +49,7 @@
             </NuxtLink>
 
             <NuxtLink
-              to=""
+              to="/student"
               class="group relative flex flex-col items-center justify-center p-2 lg:p-3 rounded-lg transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200 cursor-pointer"
             >
               <svg
@@ -71,10 +71,98 @@
               <!-- Tooltip -->
               <div
                 class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
+                @click="isDropdownOpen(true)"
               >
-                รายการ
+                แก้ไขรายการ
               </div>
             </NuxtLink>
+
+            <!-- Dropdown Menu -->
+            <div class="relative group hidden sm:flex">
+              <button
+                @click="isDropdownOpen = !isDropdownOpen"
+                class="flex flex-col items-center justify-center p-2 lg:p-3 rounded-lg transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200 cursor-pointer"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
+                >
+                  <path fill="currentColor" d="M12 16l-6-6h12z" />
+                </svg>
+                <span
+                  class="text-xs mt-1 text-gray-600 group-hover:text-blue-600"
+                  >Resume Sections</span
+                >
+              </button>
+
+              <div
+                class="absolute top-full mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-50"
+              >
+                <ul class="text-sm text-gray-800">
+                  <li>
+                    <button
+                      @click="showSkillModal = true"
+                      class="block px-4 py-2 w-full text-left hover:bg-gray-100"
+                    >
+                      Technical Skills
+                    </button>
+                  </li>
+
+                  <li>
+                    <NuxtLink
+                      to="/soft-skills"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Soft Skills</NuxtLink
+                    >
+                  </li>
+                  <li>
+                    <NuxtLink
+                      to="/education"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Education</NuxtLink
+                    >
+                  </li>
+                  <li>
+                    <NuxtLink
+                      to="/projects"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Projects</NuxtLink
+                    >
+                  </li>
+                  <li>
+                    <NuxtLink
+                      to="/work-experience"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Work Experience</NuxtLink
+                    >
+                  </li>
+                  <li>
+                    <NuxtLink
+                      to="/internships"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Internships</NuxtLink
+                    >
+                  </li>
+                  <li>
+                    <NuxtLink
+                      to="/training"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Training</NuxtLink
+                    >
+                  </li>
+                  <li>
+                    <NuxtLink
+                      to="/additional-info"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Additional Info</NuxtLink
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <!-- Mobile Navigation -->
@@ -114,6 +202,88 @@
                 />
               </svg>
             </NuxtLink>
+            <!-- Dropdown for Mobile -->
+            <div class="relative sm:hidden ">
+              <button
+                @click="isDropdownOpen = !isDropdownOpen"
+                class="flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  class="text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
+                >
+                  <path fill="currentColor" d="M12 16l-6-6h12z" />
+                </svg>
+              </button>
+
+              <div
+                v-if="isDropdownOpen"
+                class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-50"
+              >
+                <ul class="text-sm text-gray-800">
+                  <li>
+                    <button
+                      @click="showSkillModal = true"
+                      class="block px-4 py-2 w-full text-left hover:bg-gray-100"
+                    >
+                      Technical Skills
+                    </button>
+                  </li>
+                  <li>
+                    <NuxtLink
+                      to="/soft-skills"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Soft Skills</NuxtLink
+                    >
+                  </li>
+                  <li>
+                    <NuxtLink
+                      to="/education"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Education</NuxtLink
+                    >
+                  </li>
+                  <li>
+                    <NuxtLink
+                      to="/projects"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Projects</NuxtLink
+                    >
+                  </li>
+                  <li>
+                    <NuxtLink
+                      to="/work-experience"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Work Experience</NuxtLink
+                    >
+                  </li>
+                  <li>
+                    <NuxtLink
+                      to="/internships"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Internships</NuxtLink
+                    >
+                  </li>
+                  <li>
+                    <NuxtLink
+                      to="/training"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Training</NuxtLink
+                    >
+                  </li>
+                  <li>
+                    <NuxtLink
+                      to="/additional-info"
+                      class="block px-4 py-2 hover:bg-gray-100"
+                      >Additional Info</NuxtLink
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
 
           <!-- Right Side Controls -->
@@ -178,13 +348,21 @@
         </div>
       </div>
     </nav>
-    <div class="w-full pt-16 ">
+    <div class="w-full pt-16">
       <Alert />
       <slot />
     </div>
   </div>
+  <SkillModal v-if="showSkillModal" @close="showSkillModal = false" />
 </template>
+<script setup>
+import { ref } from "vue";
+import SkillModal from '../components/modal/skillModal.vue';
 
+const showSkillModal = ref(false)
+
+const isDropdownOpen = ref(false);
+</script>
 <style scoped>
 /* อนิเมชันสำหรับ fade-down */
 @keyframes fade-down {
