@@ -122,7 +122,7 @@ onMounted(() => {
               <input
                 type="text"
                 placeholder="ค้นหานักเรียน/นักศึกษา..."
-                class="pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 w-full text-sm sm:text-base"
+                class="pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg shadow-lg w-full text-sm sm:text-base"
               />
               <div
                 class="absolute left-2 sm:left-3 top-2 sm:top-2.5 text-gray-400"
