@@ -112,18 +112,20 @@
                   </li>
 
                   <li>
-                    <NuxtLink
-                      to="/soft-skills"
-                      class="block px-4 py-2 hover:bg-gray-100"
-                      >Soft Skills</NuxtLink
+                    <button
+                      @click="showSoftSkillModal = true"
+                      class="block px-4 py-2 w-full text-left hover:bg-gray-100"
                     >
+                       Soft Skill
+                    </button>
                   </li>
                   <li>
-                    <NuxtLink
-                      to="/education"
-                      class="block px-4 py-2 hover:bg-gray-100"
-                      >Education</NuxtLink
+                    <button
+                      @click="showEducationModal = true"
+                      class="block px-4 py-2 w-full text-left hover:bg-gray-100"
                     >
+                      Education
+                    </button>
                   </li>
                   <li>
                     <NuxtLink
@@ -233,18 +235,20 @@
                     </button>
                   </li>
                   <li>
-                    <NuxtLink
-                      to="/soft-skills"
-                      class="block px-4 py-2 hover:bg-gray-100"
-                      >Soft Skills</NuxtLink
+                    <button
+                      @click="showSoftSkillModal = true"
+                      class="block px-4 py-2 w-full text-left hover:bg-gray-100"
                     >
+                      Soft Skill
+                    </button>
                   </li>
                   <li>
-                    <NuxtLink
-                      to="/education"
-                      class="block px-4 py-2 hover:bg-gray-100"
-                      >Education</NuxtLink
+                    <button
+                      @click="showEducationModal = true"
+                      class="block px-4 py-2 w-full text-left hover:bg-gray-100"
                     >
+                      Education
+                    </button>
                   </li>
                   <li>
                     <NuxtLink
@@ -354,12 +358,18 @@
     </div>
   </div>
   <SkillModal v-if="showSkillModal" @close="showSkillModal = false" />
+  <SoftSkillModal v-if="showSoftSkillModal" @close="showSoftSkillModal = false" />
+  <educationModal v-if="showEducationModal" @close="showEducationModal = false" />
 </template>
 <script setup>
 import { ref } from "vue";
 import SkillModal from '../components/modal/skillModal.vue';
+import SoftSkillModal from '../components/modal/softSkillModal.vue';
+import educationModal from '../components/modal/educationModal.vue';
 
 const showSkillModal = ref(false)
+const showSoftSkillModal = ref(false)
+const showEducationModal = ref(false)
 
 const isDropdownOpen = ref(false);
 </script>
