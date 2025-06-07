@@ -1,46 +1,11 @@
 <script setup>
-const { $axios } = useNuxtApp();
+import { useResumeStore } from '../../stores/resumeStore'
+
+const resumeStore = useResumeStore();
+
 definePageMeta({
   layout: "student",
 });
-const additionalInfo = ref([]);
-const education = ref([]);
-const internships = ref([]);
-const projects = ref([]);
-const resume = ref({});
-const skills = ref([]);
-const softSkills = ref([]);
-const student = ref({});
-const training = ref([]);
-const workExperience = ref([]);
-
-const loading = ref(true);
-const error = ref(null);
-
-async function fetchResume() {
-  try {
-    loading.value = true;
-    const res = await $axios.get(`/student/protected`);
-
-    additionalInfo.value = res.data.additionalInfo || [];
-    education.value = res.data.education || [];
-    internships.value = res.data.internships || [];
-    projects.value = res.data.projects || [];
-    resume.value = res.data.resume || {};
-    skills.value = res.data.skills || [];
-    softSkills.value = res.data.softSkills || [];
-    student.value = res.data.student || {};
-    training.value = res.data.training || [];
-    workExperience.value = res.data.workExperience || [];
-
-    console.log();
-  } catch (err) {
-    console.error("Error fetching resume data:", err);
-    error.value = err.message || "เกิดข้อผิดพลาดในการโหลดข้อมูล";
-  } finally {
-    loading.value = false;
-  }
-}
 
 function formatDate(dateString) {
   if (!dateString) return "Present";
@@ -52,8 +17,11 @@ function formatDate(dateString) {
 }
 
 onMounted(() => {
-  fetchResume();
+  resumeStore.fetchResume()
+  console.log("this is pinia", resumeStore.student)
+  console.log("student name:", resumeStore.student.student_name)
 });
+
 </script>
 
 <template>
@@ -77,20 +45,20 @@ onMounted(() => {
       <div class="bg-white rounded-lg shadow-lg mb-6 overflow-hidden">
         <div class="bg-gradient-to-r from-blue-600 to-blue-800 px-8 py-6">
           <div class="flex items-center space-x-6">
-            <div v-if="student.student_profile_image" class="flex-shrink-0">
+            <div v-if="resumeStore.student.student_profile_image" class="flex-shrink-0">
               <img
-                :src="student.student_profile_image"
-                :alt="student.student_name"
+                :src="resumeStore.student.student_profile_image"
+                :alt="resumeStore.student.student_name"
                 class="w-24 h-24 rounded-full border-4 border-white object-cover"
               />
             </div>
             <div class="text-white">
               <h1 class="text-3xl font-bold mb-2">
-                {{ student.student_name || "N/A" }}
+                {{ resumeStore.student.student_name || "N/A" }}
               </h1>
               <p class="text-blue-100 text-lg mb-2">Full Stack Developer</p>
               <div class="flex flex-wrap gap-4 text-sm">
-                <div v-if="student.student_email" class="flex items-center">
+                <div v-if="resumeStore.student.student_email" class="flex items-center">
                   <svg
                     class="w-4 h-4 mr-2"
                     fill="currentColor"
@@ -103,9 +71,9 @@ onMounted(() => {
                       d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
                     ></path>
                   </svg>
-                  {{ student.student_email }}
+                  {{ resumeStore.student.student_email }}
                 </div>
-                <div v-if="student.student_phone" class="flex items-center">
+                <div v-if="resumeStore.student.student_phone" class="flex items-center">
                   <svg
                     class="w-4 h-4 mr-2"
                     fill="currentColor"
@@ -115,9 +83,9 @@ onMounted(() => {
                       d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
                     ></path>
                   </svg>
-                  {{ student.student_phone }}
+                  {{ resumeStore.student.student_phone }}
                 </div>
-                <div v-if="student.student_main_id" class="flex items-center">
+                <div v-if="resumeStore.student.student_main_id" class="flex items-center">
                   <svg
                     class="w-4 h-4 mr-2"
                     fill="currentColor"
@@ -129,7 +97,7 @@ onMounted(() => {
                       clip-rule="evenodd"
                     ></path>
                   </svg>
-                  ID: {{ student.student_main_id }}
+                  ID: {{ resumeStore.student.student_main_id }}
                 </div>
               </div>
             </div>
@@ -149,7 +117,7 @@ onMounted(() => {
             </h2>
             <div class="space-y-4">
               <div
-                v-for="skill in skills"
+                v-for="skill in resumeStore.skills"
                 :key="skill.skill_name"
                 class="flex lg:flex-col items-start gap-3"
               >
@@ -196,7 +164,7 @@ onMounted(() => {
             </h2>
             <div class="space-y-4">
               <div
-                v-for="softSkill in softSkills"
+                v-for="softSkill in resumeStore.softSkills"
                 :key="softSkill.soft_skill_name"
                 class="border-l-4 border-blue-500 pl-4"
               >
@@ -219,7 +187,7 @@ onMounted(() => {
             </h2>
             <div class="space-y-4">
               <div
-                v-for="edu in education"
+                v-for="edu in resumeStore.education"
                 :key="edu.education_history_institution"
                 class="border-l-4 border-green-500 pl-4"
               >
@@ -261,7 +229,7 @@ onMounted(() => {
             </h2>
             <div class="grid gap-6">
               <div
-                v-for="project in projects"
+                v-for="project in resumeStore.projects"
                 :key="project.project_name"
                 class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
               >
@@ -303,7 +271,7 @@ onMounted(() => {
             </h2>
             <div class="space-y-6">
               <div
-                v-for="work in workExperience"
+                v-for="work in resumeStore.workExperience"
                 :key="work.work_experience_company_name"
                 class="border-l-4 border-purple-500 pl-4"
               >
@@ -350,7 +318,7 @@ onMounted(() => {
             </h2>
             <div class="space-y-6">
               <div
-                v-for="internship in internships"
+                v-for="internship in resumeStore.internships"
                 :key="internship.internship_company_name"
                 class="border-l-4 border-orange-500 pl-4"
               >
@@ -394,7 +362,7 @@ onMounted(() => {
             </h2>
             <div class="space-y-6">
               <div
-                v-for="trainings in training"
+                v-for="trainings in resumeStore.training"
                 :key="trainings.training_history_course_id"
                 class="border-l-4 border-yellow-500 pl-4"
               >
@@ -443,7 +411,7 @@ onMounted(() => {
             </h2>
             <div class="space-y-6">
               <div
-                v-for="additionalInfos in additionalInfo"
+                v-for="additionalInfos in resumeStore.additionalInfo"
                 :key="additionalInfos.additional_info_id"
                 class="border-l-4 border-indigo-500 pl-4"
               >
@@ -488,27 +456,27 @@ onMounted(() => {
                     class="ml-2 px-3 py-1 rounded-full text-sm font-medium"
                     :class="{
                       'bg-yellow-100 text-yellow-800':
-                        resume.resume_status === 'draft',
+                        resumeStore.resume.resume_status === 'draft',
                       'bg-green-100 text-green-800':
-                        resume.resume_status === 'approved',
+                        resumeStore.resume.resume_status === 'approved',
                       'bg-blue-100 text-blue-800':
-                        resume.resume_status === 'submitted',
+                        resumeStore.resume.resume_status === 'submitted',
                     }"
                   >
                     {{
-                      resume.resume_status?.charAt(0).toUpperCase() +
-                      resume.resume_status?.slice(1)
+                      resumeStore.resume.resume_status?.charAt(0).toUpperCase() +
+                      resumeStore.resume.resume_status?.slice(1)
                     }}
                   </span>
                 </p>
                 <p class="text-gray-600 text-sm mt-1">
-                  Submitted: {{ formatDate(resume.submitted_at) }}
+                  Submitted: {{ formatDate(resumeStore.resume.submitted_at) }}
                 </p>
               </div>
-              <div v-if="resume.resume_teacher_comment" class="max-w-md">
+              <div v-if="resumeStore.resume.resume_teacher_comment" class="max-w-md">
                 <p class="text-sm text-gray-600 bg-gray-50 p-3 rounded">
                   <span class="font-medium">Teacher Comment:</span><br />
-                  {{ resume.resume_teacher_comment }}
+                  {{ resumeStore.resume.resume_teacher_comment }}
                 </p>
               </div>
             </div>

@@ -165,6 +165,8 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useResumeStore } from '../../stores/resumeStore'
+const resumeStore = useResumeStore()
 
 const emit = defineEmits(['close', 'save'])
 
@@ -251,6 +253,7 @@ const saveEducation = async () => {
 
 function close() {
   emit('close')
+  resumeStore.fetchResume()
 }
 
 onMounted(() => {
