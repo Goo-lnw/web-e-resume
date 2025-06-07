@@ -54,7 +54,12 @@ onMounted(() => {
             <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 tracking-wide">
               {{ resumeStore.student.student_name || "N/A" }}
             </h1>
-            <p class="text-lg lg:text-xl text-gray-600 mb-3 lg:mb-4">Full Stack Developer</p>
+            <p v-if="resumeStore.student.student_name_thai" class="text-lg text-gray-600 mb-2">
+              {{ resumeStore.student.student_name_thai }}
+            </p>
+            <p class="text-lg lg:text-xl text-gray-600 mb-3 lg:mb-4">
+              {{ resumeStore.student.position || "Full Stack Developer" }}
+            </p>
             <div class="flex flex-col sm:flex-row justify-center sm:space-x-6 lg:space-x-8 space-y-2 sm:space-y-0 text-xs sm:text-sm text-gray-700">
               <div v-if="resumeStore.student.student_email" class="flex items-center">
                 <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
@@ -69,11 +74,21 @@ onMounted(() => {
                 </svg>
                 {{ resumeStore.student.student_phone }}
               </div>
+            </div>
+            <div class="flex flex-col sm:flex-row justify-center sm:space-x-6 lg:space-x-8 space-y-2 sm:space-y-0 text-xs sm:text-sm text-gray-600 mt-2">
               <div v-if="resumeStore.student.student_main_id" class="flex items-center">
                 <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
                 </svg>
                 ID: {{ resumeStore.student.student_main_id }}
+              </div>
+              <div v-if="resumeStore.student.github" class="flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                <a :href="resumeStore.student.github" target="_blank" class="hover:text-gray-800 underline">
+                  GitHub
+                </a>
               </div>
             </div>
           </div>
@@ -82,6 +97,68 @@ onMounted(() => {
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             <!-- Left Column (1/3 width on desktop, full width on mobile) -->
             <div class="lg:col-span-1 space-y-4 lg:space-y-6">
+              <!-- Personal Information -->
+              <div>
+                <h2 class="text-base lg:text-lg font-bold text-gray-900 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide">
+                  Personal Information
+                </h2>
+                <div class="space-y-2 text-xs sm:text-sm">
+                  <div v-if="resumeStore.student.nationality" class="flex justify-between">
+                    <span class="text-gray-600">Nationality:</span>
+                    <span class="text-gray-800 font-medium">{{ resumeStore.student.nationality }}</span>
+                  </div>
+                  <div v-if="resumeStore.student.ethnicity" class="flex justify-between">
+                    <span class="text-gray-600">Ethnicity:</span>
+                    <span class="text-gray-800 font-medium">{{ resumeStore.student.ethnicity }}</span>
+                  </div>
+                  <div v-if="resumeStore.student.religion" class="flex justify-between">
+                    <span class="text-gray-600">Religion:</span>
+                    <span class="text-gray-800 font-medium">{{ resumeStore.student.religion }}</span>
+                  </div>
+                  <div v-if="resumeStore.student.height" class="flex justify-between">
+                    <span class="text-gray-600">Height:</span>
+                    <span class="text-gray-800 font-medium">{{ resumeStore.student.height }} cm</span>
+                  </div>
+                  <div v-if="resumeStore.student.weight" class="flex justify-between">
+                    <span class="text-gray-600">Weight:</span>
+                    <span class="text-gray-800 font-medium">{{ resumeStore.student.weight }} kg</span>
+                  </div>
+                  <div v-if="resumeStore.student.address" class="mt-3">
+                    <span class="text-gray-600 block mb-1">Address:</span>
+                    <span class="text-gray-800 text-xs leading-relaxed">{{ resumeStore.student.address }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Contact & Social -->
+              <div v-if="resumeStore.student.facebook || resumeStore.student.line">
+                <h2 class="text-base lg:text-lg font-bold text-gray-900 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide">
+                  Social Media
+                </h2>
+                <div class="space-y-2 text-xs sm:text-sm">
+                  <div v-if="resumeStore.student.facebook" class="flex items-center">
+                    <svg class="w-4 h-4 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    <span class="text-gray-800">{{ resumeStore.student.facebook }}</span>
+                  </div>
+                  <div v-if="resumeStore.student.line" class="flex items-center">
+                    <svg class="w-4 h-4 mr-2 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771z"/>
+                    </svg>
+                    <span class="text-gray-800">{{ resumeStore.student.line }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hobbies & Interests -->
+              <div v-if="resumeStore.student.hobby">
+                <h2 class="text-base lg:text-lg font-bold text-gray-900 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide">
+                  Hobbies & Interests
+                </h2>
+                <p class="text-xs sm:text-sm text-gray-700 leading-relaxed">{{ resumeStore.student.hobby }}</p>
+              </div>
+
               <!-- Technical Skills -->
               <div>
                 <h2 class="text-base lg:text-lg font-bold text-gray-900 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide">
@@ -119,7 +196,7 @@ onMounted(() => {
                 <div class="space-y-2 lg:space-y-3">
                   <div v-for="softSkill in resumeStore.softSkills" :key="softSkill.soft_skill_name">
                     <h3 class="text-xs sm:text-sm font-semibold text-gray-800">{{ softSkill.soft_skill_name }}</h3>
-                    <p class="text-xs text-gray-600 leading-relaxed">{{ softSkill.soft_skill_description }}</p>
+                    <p v-if="softSkill.soft_skill_description" class="text-xs text-gray-600 leading-relaxed">{{ softSkill.soft_skill_description }}</p>
                   </div>
                 </div>
               </div>
@@ -205,9 +282,9 @@ onMounted(() => {
                         v-if="project.project_attachment_link"
                         :href="project.project_attachment_link"
                         target="_blank"
-                        class="text-xs text-gray-600 underline hover:text-gray-800 self-start sm:self-auto"
+                        class="text-xs text-blue-600 underline hover:text-blue-800 self-start sm:self-auto"
                       >
-                        View Project
+                        View Project →
                       </a>
                     </div>
                     <p class="text-xs lg:text-sm font-semibold text-gray-700 mb-1">{{ project.project_technology_used }}</p>
@@ -234,6 +311,15 @@ onMounted(() => {
                         {{ formatDate(training.training_history_date) }}
                       </span>
                     </div>
+                    <div v-if="training.training_history_certificate_file" class="mt-1">
+                      <a 
+                        :href="training.training_history_certificate_file" 
+                        target="_blank" 
+                        class="text-xs text-blue-600 underline hover:text-blue-800"
+                      >
+                        View Certificate →
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -247,6 +333,15 @@ onMounted(() => {
                   <div v-for="info in resumeStore.additionalInfo" :key="info.additional_info_id">
                     <h3 class="text-xs lg:text-sm font-bold text-gray-900">{{ info.additional_info_title }}</h3>
                     <p class="text-xs lg:text-sm text-gray-700 leading-relaxed">{{ info.additional_info_description }}</p>
+                    <div v-if="info.additional_info_file_attachment" class="mt-1">
+                      <a 
+                        :href="info.additional_info_file_attachment" 
+                        target="_blank" 
+                        class="text-xs text-blue-600 underline hover:text-blue-800"
+                      >
+                        View Resource →
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -262,8 +357,11 @@ onMounted(() => {
                   {{ resumeStore.resume.resume_status || 'Draft' }}
                 </span>
               </div>
-              <div>
-                Submitted: {{ formatDate(resumeStore.resume.submitted_at) }}
+              <div class="flex space-x-4">
+                <span>Submitted: {{ formatDate(resumeStore.resume.submitted_at) }}</span>
+                <span v-if="resumeStore.resume.approved_at">
+                  Approved: {{ formatDate(resumeStore.resume.approved_at) }}
+                </span>
               </div>
             </div>
             <div v-if="resumeStore.resume.resume_teacher_comment" class="mt-2">

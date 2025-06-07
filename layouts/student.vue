@@ -64,6 +64,8 @@
                   d="M4 13c.55 0 1-.45 1-1s-.45-1-1-1s-1 .45-1 1s.45 1 1 1m0 4c.55 0 1-.45 1-1s-.45-1-1-1s-1 .45-1 1s.45 1 1 1m0-8c.55 0 1-.45 1-1s-.45-1-1-1s-1 .45-1 1s.45 1 1 1m4 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1m0 4h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1s.45 1 1 1M7 8c0 .55.45 1 1 1h12c.55 0 1-.45 1-1s-.45-1-1-1H8c-.55 0-1 .45-1 1"
                 />
               </svg>
+
+              
               <!-- bottom indicator -->
               <div
                 class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300 ease-out"
@@ -317,11 +319,10 @@
                 ช่วยเหลือ
               </div>
             </NuxtLink>
-
+            <p class="text-black">{{ resumeStore.student?.student_name }}</p>
             <!-- Profile Button -->
             <div class="group relative"
-            
-            @click.prevent="logout()">
+            >
               <span
                 class="flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200 cursor-pointer"
               >
@@ -342,13 +343,30 @@
                   />
                 </svg>
               </span>
-              <!-- Tooltip -->
-              <div
-              
-                class="absolute -bottom-9 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
+                 <div
+                class="absolute top-full mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-50"
               >
-                โปรไฟล์
+                <ul class="text-sm text-gray-800">
+                  <li>
+                    <NuxtLink
+                      to="/student/edit_profile"
+                      class="block px-4 py-2 w-full text-left hover:bg-gray-100"
+                    >
+                      แก้ไขโปรไฟล์
+                    </NuxtLink>
+                  </li>
+
+                  <li>
+                    <button
+                      @click.prevent="logout()"
+                      class="block px-4 py-2 w-full text-left hover:bg-gray-100 cursor-pointer"
+                    >
+                       ออกจากระบบ
+                    </button>
+                  </li>
+                </ul>
               </div>
+               
             </div>
           </div>
         </div>
@@ -369,7 +387,6 @@ import SkillModal from '../components/modal/skillModal.vue';
 import SoftSkillModal from '../components/modal/softSkillModal.vue';
 import educationModal from '../components/modal/educationModal.vue';
 
-
 const showSkillModal = ref(false)
 const showSoftSkillModal = ref(false)
 const showEducationModal = ref(false)
@@ -378,6 +395,9 @@ const isDropdownOpen = ref(false);
 const { $axios } = useNuxtApp();
 
 const router = useRouter();
+
+import { useResumeStore } from '../stores/resumeStore'
+const resumeStore = useResumeStore()
 
 async function logout() {
   try {
@@ -399,6 +419,7 @@ async function logout() {
     console.log(err);
   }
 }
+
 </script>
 <style scoped>
 /* อนิเมชันสำหรับ fade-down */
