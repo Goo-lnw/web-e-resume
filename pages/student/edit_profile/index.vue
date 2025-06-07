@@ -28,7 +28,7 @@
             <div class="flex items-center space-x-6">
               <div class="shrink-0">
                 <img 
-                  :src="studentData.student_profile_image || '/default-avatar.png'" 
+                  :src="studentData.student_profile_image || 'https://static-00.iconduck.com/assets.00/avatar-default-icon-1975x2048-2mpk4u9k.png'" 
                   :alt="studentData.student_name"
                   class="h-20 w-20 rounded-full object-cover ring-4 ring-gray-100"
                 />
@@ -51,7 +51,7 @@
             <div class="flex items-center space-x-6">
               <div class="shrink-0">
                 <img 
-                  :src="studentData.graduation_gown || '/default-avatar.png'" 
+                  :src="studentData.graduation_gown || 'https://static-00.iconduck.com/assets.00/avatar-default-icon-1975x2048-2mpk4u9k.png'" 
                   :alt="studentData.student_name"
                   class="h-20 w-20 rounded-full object-cover ring-4 ring-gray-100"
                 />
@@ -74,7 +74,7 @@
             <div class="flex items-center space-x-6">
               <div class="shrink-0">
                 <img 
-                  :src="studentData.suit || '/default-avatar.png'" 
+                  :src="studentData.suit || 'https://static-00.iconduck.com/assets.00/avatar-default-icon-1975x2048-2mpk4u9k.png'" 
                   :alt="studentData.student_name"
                   class="h-20 w-20 rounded-full object-cover ring-4 ring-gray-100"
                 />
