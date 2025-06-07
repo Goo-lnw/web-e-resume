@@ -80,7 +80,6 @@
             <!-- Dropdown Menu -->
             <div class="relative group hidden sm:flex">
               <button
-                @click="isDropdownOpen = !isDropdownOpen"
                 class="flex flex-col items-center justify-center p-2 lg:p-3 rounded-lg transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200 cursor-pointer"
               >
                 <svg
@@ -320,7 +319,9 @@
             </NuxtLink>
 
             <!-- Profile Button -->
-            <div class="group relative">
+            <div class="group relative"
+            
+            @click.prevent="logout()">
               <span
                 class="flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200 cursor-pointer"
               >
@@ -343,6 +344,7 @@
               </span>
               <!-- Tooltip -->
               <div
+              
                 class="absolute -bottom-9 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
               >
                 โปรไฟล์
@@ -367,11 +369,36 @@ import SkillModal from '../components/modal/skillModal.vue';
 import SoftSkillModal from '../components/modal/softSkillModal.vue';
 import educationModal from '../components/modal/educationModal.vue';
 
+
 const showSkillModal = ref(false)
 const showSoftSkillModal = ref(false)
 const showEducationModal = ref(false)
 
 const isDropdownOpen = ref(false);
+const { $axios } = useNuxtApp();
+
+const router = useRouter();
+
+async function logout() {
+  try {
+    // Remove token from cookie
+    const tokenCookie = useCookie("token");
+    tokenCookie.value = null;
+
+    // Remove token from localStorage if exists
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+    }
+
+    // Optionally call logout API
+    await $axios.post("/logout"); // Uncomment if you want to notify backend
+
+    // Redirect to home page
+    router.push("/");
+  } catch (err) {
+    console.log(err);
+  }
+}
 </script>
 <style scoped>
 /* อนิเมชันสำหรับ fade-down */

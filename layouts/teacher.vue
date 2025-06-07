@@ -147,7 +147,9 @@
             </NuxtLink>
 
             <!-- Profile Button -->
-            <div class="group relative">
+            <div class="group relative"
+            @click.prevent="logout()""
+            >
               <span
                 class="flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200 cursor-pointer"
               >
@@ -265,3 +267,29 @@ select::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
 </style>
+
+<script setup>
+const { $axios } = useNuxtApp();
+
+const router = useRouter();
+
+async function logout() {
+  try {
+    // Remove token from cookie
+    const tokenCookie = useCookie("token");
+    tokenCookie.value = null;
+
+    // Remove token from localStorage if exists
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+    }
+
+    // Optionally call logout API
+    await $axios.post("/logout"); // Uncomment if you want to notify backend
+
+    // Redirect to home page
+    router.push("/");
+  } catch (err) {
+    console.log(err);
+  }
+}</script>
