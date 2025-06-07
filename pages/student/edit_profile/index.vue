@@ -175,7 +175,7 @@
                 </label>
                 <input
                   id="date_of_birth"
-                  v-model="studentData.date_of_birth"
+                  v-model="formattedDateOfBirth"
                   type="date"
                   class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
@@ -493,6 +493,16 @@ const saveStudent = async () => {
     isSaving.value = false
   }
 }
+
+const formattedDateOfBirth = computed({
+  get() {
+    return studentData.value.date_of_birth?.split(' ')[0] || ''
+  },
+  set(value) {
+    // Keep full datetime format if needed
+    studentData.value.date_of_birth = value ? `${value} 00:00:00` : ''
+  }
+})
 
 const resetForm = () => {
   studentData.value = { ...originalData.value }
