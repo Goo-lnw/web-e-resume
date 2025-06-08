@@ -38,7 +38,9 @@ async function login() {
 <template>
   <div class="font-[Mitr] min-h-screen bg-gray-100 flex flex-col">
     <!-- Main Content -->
-    <div class="flex-grow flex justify-center items-center px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+    <div
+      class="flex-grow flex justify-center items-center px-4 sm:px-6 lg:px-8 py-6 sm:py-8"
+    >
       <div
         class="flex flex-col md:flex-row w-full max-w-sm sm:max-w-md md:max-w-4xl rounded-xl overflow-hidden shadow-md animate-fade-up animate-once animate-ease-linear bg-white"
       >
@@ -47,13 +49,17 @@ async function login() {
           class="bg-gradient-to-r from-indigo-600 to-blue-500 w-full md:w-1/2 p-4 sm:p-6 md:p-12 text-white flex flex-col justify-between"
         >
           <div class="mb-4">
-            <h1 class="text-lg sm:text-xl md:text-3xl font-bold mb-3 sm:mb-4 md:mb-6">ระบบ Resume อิเล็กทรอนิกส์</h1>
+            <h1
+              class="text-lg sm:text-xl md:text-3xl font-bold mb-3 sm:mb-4 md:mb-6"
+            >
+              ระบบ Resume อิเล็กทรอนิกส์
+            </h1>
             <p class="text-xs sm:text-sm md:text-base">
               สร้างและจัดการประวัติการทำงานผลงานประสบการณ์ทำงานต่างๆของคุณอย่างมืออาชีพ
             </p>
           </div>
           <div class="space-y-3 sm:space-y-4 md:space-y-6">
-            <div  class="flex items-center">
+            <div class="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="mr-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
@@ -70,9 +76,11 @@ async function login() {
                   <path d="m9 11l3 3L22 4" />
                 </g>
               </svg>
-              <p class="text-xs sm:text-sm md:text-base">สร้าง resume ที่น่าประทับใจ</p>
+              <p class="text-xs sm:text-sm md:text-base">
+                สร้าง resume ที่น่าประทับใจ
+              </p>
             </div>
-            <div  class="flex items-center">
+            <div class="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="mr-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
@@ -89,9 +97,11 @@ async function login() {
                   <path d="m9 11l3 3L22 4" />
                 </g>
               </svg>
-              <p class="text-xs sm:text-sm md:text-base">สร้าง resume ที่น่าประทับใจ</p>
+              <p class="text-xs sm:text-sm md:text-base">
+                สร้าง resume ที่น่าประทับใจ
+              </p>
             </div>
-            <div  class="flex items-center">
+            <div class="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="mr-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
@@ -108,9 +118,11 @@ async function login() {
                   <path d="m9 11l3 3L22 4" />
                 </g>
               </svg>
-              <p class="text-xs sm:text-sm md:text-base">สร้าง resume ที่น่าประทับใจ</p>
+              <p class="text-xs sm:text-sm md:text-base">
+                สร้าง resume ที่น่าประทับใจ
+              </p>
             </div>
-            <div  class="flex items-center">
+            <div class="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="mr-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
@@ -127,7 +139,9 @@ async function login() {
                   <path d="m9 11l3 3L22 4" />
                 </g>
               </svg>
-              <p class="text-xs sm:text-sm md:text-base">สร้าง resume ที่น่าประทับใจ</p>
+              <p class="text-xs sm:text-sm md:text-base">
+                สร้าง resume ที่น่าประทับใจ
+              </p>
             </div>
           </div>
         </div>
@@ -135,12 +149,22 @@ async function login() {
         <!-- ฟอร์มล็อกอินด้านขวา -->
         <div class="w-full md:w-1/2 bg-gray-100 p-4 sm:p-6 md:p-12">
           <div class="mb-4 sm:mb-6 md:mb-8">
-            <h3 class="text-base sm:text-lg md:text-2xl font-semibold text-gray-800">ยินดีต้อนรับ</h3>
-            <p class="text-gray-600 text-xs sm:text-sm md:text-base mt-1 sm:mt-2">
+            <h3
+              class="text-base sm:text-lg md:text-2xl font-semibold text-gray-800"
+            >
+              ยินดีต้อนรับ
+            </h3>
+            <p
+              class="text-gray-600 text-xs sm:text-sm md:text-base mt-1 sm:mt-2"
+            >
               กรุณาเข้าสู่ระบบเพื่อเข้าจัดการ Resume ของนักเรียน/นักศึกษา
             </p>
           </div>
-          <form action="" class="space-y-3 sm:space-y-4 md:space-y-6" @submit.prevent="login">
+          <form
+            action=""
+            class="space-y-3 sm:space-y-4 md:space-y-6"
+            @submit.prevent="login"
+          >
             <div>
               <label
                 class="flex items-center text-xs sm:text-sm font-medium text-gray-700 mb-1 gap-2"
