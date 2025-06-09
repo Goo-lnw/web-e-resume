@@ -27,10 +27,23 @@ onMounted(() => {
   console.log("this is pinia", resumeStore.student);
   console.log("student name:", resumeStore.student.student_name);
 });
+
+function getProficiencyColor(proficiency) {
+  switch (proficiency) {
+    case "advanced":
+      return "bg-green-500 w-4/5";
+    case "intermediate":
+      return "bg-yellow-500 w-3/5";
+    case "beginner":
+      return "bg-red-500 w-2/5";
+    default:
+      return "bg-gray-300 w-1/5";
+  }
+}
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-100 py-8">
+  <div class="min-h-screen bg-slate-100 py-8">
     <div v-if="loading" class="flex justify-center items-center min-h-screen">
       <div
         class="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-800"
@@ -46,113 +59,110 @@ onMounted(() => {
     </div>
 
     <!-- Resume Paper Container -->
-    <div v-else class="max-w-4xl mx-auto px-2 sm:px-4">
-      <div
-        class="bg-white shadow-lg lg:shadow-2xl rounded-sm"
-        style="min-height: 11in"
-      >
+    <div v-else class="max-w-7xl mx-auto px-2 sm:px-4">
+      <div class="" style="min-height: 11in">
         <!-- Paper Content -->
         <div class="p-4 sm:p-6 lg:p-12">
           <!-- Header Section -->
           <div
-            class="text-center border-b-2 border-gray-800 pb-4 lg:pb-6 mb-6 lg:mb-8"
+            class="h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-t-lg"
+          ></div>
+          <div
+            class="text-center bg-white border-gray-800 pb-4 lg:pb-2 mb-2 lg:mb-4 shadow-lg rounded p-4"
           >
-            <div class="flex justify-center mb-3 lg:mb-4">
+            <div class="flex items-center mb-3 lg:mb-4 gap-4">
               <img
                 v-if="resumeStore.student.student_profile_image"
                 :src="resumeStore.student.student_profile_image"
                 :alt="resumeStore.student.student_name"
-                class="w-20 h-20 lg:w-24 lg:h-24 rounded-full border-2 border-gray-300 object-cover"
+                class="w-24 h-24 sm:w-32 md:w-40 lg:w-46 lg:h-64 border-2 border-gray-300 object-cover justify-self-start"
               />
-            </div>
-            <h1
-              class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 tracking-wide"
-            >
-              {{ resumeStore.student.student_name || "N/A" }}
-            </h1>
-            <p
-              v-if="resumeStore.student.student_name_thai"
-              class="text-lg text-gray-600 mb-2"
-            >
-              {{ resumeStore.student.student_name_thai }}
-            </p>
-            <p class="text-lg lg:text-xl text-gray-600 mb-3 lg:mb-4">
-              {{ resumeStore.student.position || "Full Stack Developer" }}
-            </p>
-            <div
-              class="flex flex-col sm:flex-row justify-center sm:space-x-6 lg:space-x-8 space-y-2 sm:space-y-0 text-xs sm:text-sm text-gray-700"
-            >
-              <div
-                v-if="resumeStore.student.student_email"
-                class="flex items-center"
-              >
-                <svg
-                  class="w-4 h-4 mr-2"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
+              <div class="text-start ">
+                <h1
+                  class="text-4xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 tracking-wide"
                 >
-                  <path
-                    d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
-                  ></path>
-                  <path
-                    d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
-                  ></path>
-                </svg>
-                {{ resumeStore.student.student_email }}
-              </div>
-              <div
-                v-if="resumeStore.student.student_phone"
-                class="flex items-center"
-              >
-                <svg
-                  class="w-4 h-4 mr-2"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
+                  {{ resumeStore.student.student_name }}
+                </h1>
+                <p
+                  v-if="resumeStore.student.student_name_thai"
+                  class="text-2xl sm:text-2xl lg:text-2xl text-gray-600 mb-3"
                 >
-                  <path
-                    d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
-                  ></path>
-                </svg>
-                {{ resumeStore.student.student_phone }}
-              </div>
-            </div>
-            <div
-              class="flex flex-col sm:flex-row justify-center sm:space-x-6 lg:space-x-8 space-y-2 sm:space-y-0 text-xs sm:text-sm text-gray-600 mt-2"
-            >
-              <div
-                v-if="resumeStore.student.student_main_id"
-                class="flex items-center"
-              >
-                <svg
-                  class="w-4 h-4 mr-2"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
+                  {{ resumeStore.student.student_name_thai }}
+                </p>
+                <p class="text-2xl lg:text-xl text-gray-600 mb-3 lg:mb-4">
+                  {{ resumeStore.student.position || "Full Stack Developer" }}
+                </p>
+                <div
+                  v-if="resumeStore.student.student_email"
+                  class="flex items-center text-sm lg:text-sm text-gray-900 mb-3 lg:mb-4"
                 >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-                ID: {{ resumeStore.student.student_main_id }}
-              </div>
-              <div v-if="resumeStore.student.github" class="flex items-center">
-                <svg
-                  class="w-4 h-4 mr-2"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
+                  <svg
+                    class="w-4 h-4 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"
+                    ></path>
+                    <path
+                      d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"
+                    ></path>
+                  </svg>
+                  {{ resumeStore.student.student_email }}
+                </div>
+                <div
+                  v-if="resumeStore.student.student_phone"
+                  class="flex items-center text-sm lg:text-sm text-gray-900 mb-3 lg:mb-4"
                 >
-                  <path
-                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
-                  />
-                </svg>
-                <a
-                  :href="resumeStore.student.github"
-                  target="_blank"
-                  class="hover:text-gray-800 underline"
+                  <svg
+                    class="w-4 h-4 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"
+                    ></path>
+                  </svg>
+                  {{ resumeStore.student.student_phone }}
+                </div>
+                <div
+                  v-if="resumeStore.student.student_main_id"
+                  class="flex items-center text-sm lg:text-sm text-gray-900 mb-3 lg:mb-4"
                 >
-                  {{ githubUsername }}
-                </a>
+                  <svg
+                    class="w-4 h-4 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                      clip-rule="evenodd"
+                    ></path>
+                  </svg>
+                  ID: {{ resumeStore.student.student_main_id }}
+                </div>
+                <div
+                  v-if="resumeStore.student.github"
+                  class="flex items-center text-sm lg:text-sm text-gray-900 mb-3 lg:mb-4"
+                >
+                  <svg
+                    class="w-4 h-4 mr-2"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                    />
+                  </svg>
+                  <a
+                    :href="resumeStore.student.github"
+                    target="_blank"
+                    class="hover:text-gray-800 underline"
+                  >
+                    {{ githubUsername }}
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -162,16 +172,18 @@ onMounted(() => {
             <!-- Left Column (1/3 width on desktop, full width on mobile) -->
             <div class="lg:col-span-1 space-y-4 lg:space-y-6">
               <!-- Personal Information -->
-              <div>
+              <div class="bg-white shadow-lg rounded-lg p-6">
                 <h2
-                  class="text-base lg:text-lg font-bold text-gray-900 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
+                  class="text-base text-shadow-sm text-blue-800 lg:text-lg font-bold mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
                   Personal Information
                 </h2>
-                <div class="space-y-2 text-xs sm:text-sm">
+                <div
+                  class="border-l-4 border-blue-600 pl-4 space-y-2 text-xs sm:text-sm"
+                >
                   <div
                     v-if="resumeStore.student.nationality"
-                    class="flex justify-between"
+                    class="flex justify-between font-bold"
                   >
                     <span class="text-gray-600">Nationality:</span>
                     <span class="text-gray-800 font-medium">{{
@@ -180,7 +192,7 @@ onMounted(() => {
                   </div>
                   <div
                     v-if="resumeStore.student.ethnicity"
-                    class="flex justify-between"
+                    class="flex justify-between font-bold"
                   >
                     <span class="text-gray-600">Ethnicity:</span>
                     <span class="text-gray-800 font-medium">{{
@@ -189,7 +201,7 @@ onMounted(() => {
                   </div>
                   <div
                     v-if="resumeStore.student.religion"
-                    class="flex justify-between"
+                    class="flex justify-between font-bold"
                   >
                     <span class="text-gray-600">Religion:</span>
                     <span class="text-gray-800 font-medium">{{
@@ -198,7 +210,7 @@ onMounted(() => {
                   </div>
                   <div
                     v-if="resumeStore.student.height"
-                    class="flex justify-between"
+                    class="flex justify-between font-bold"
                   >
                     <span class="text-gray-600">Height:</span>
                     <span class="text-gray-800 font-medium"
@@ -207,7 +219,7 @@ onMounted(() => {
                   </div>
                   <div
                     v-if="resumeStore.student.weight"
-                    class="flex justify-between"
+                    class="flex justify-between font-bold"
                   >
                     <span class="text-gray-600">Weight:</span>
                     <span class="text-gray-800 font-medium"
@@ -215,7 +227,9 @@ onMounted(() => {
                     >
                   </div>
                   <div v-if="resumeStore.student.address" class="mt-3">
-                    <span class="text-gray-600 block mb-1">Address:</span>
+                    <span class="text-gray-600 block mb-1 font-bold"
+                      >Address:</span
+                    >
                     <span class="text-gray-800 text-xs leading-relaxed">{{
                       resumeStore.student.address
                     }}</span>
@@ -226,13 +240,16 @@ onMounted(() => {
               <!-- Contact & Social -->
               <div
                 v-if="resumeStore.student.facebook || resumeStore.student.line"
+                class="bg-white shadow-lg rounded-lg p-6"
               >
                 <h2
-                  class="text-base lg:text-lg font-bold text-gray-900 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
+                  class="text-base lg:text-lg text-shadow-sm font-bold text-green-600 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
                   Social Media
                 </h2>
-                <div class="space-y-2 text-xs sm:text-sm">
+                <div
+                  class="border-l-4 border-green-600 pl-4 space-y-2 text-xs sm:text-sm"
+                >
                   <div
                     v-if="resumeStore.student.facebook"
                     class="flex items-center"
@@ -271,21 +288,26 @@ onMounted(() => {
               </div>
 
               <!-- Hobbies & Interests -->
-              <div v-if="resumeStore.student.hobby">
+              <div
+                v-if="resumeStore.student.hobby"
+                class="bg-white shadow-lg rounded-lg p-6"
+              >
                 <h2
-                  class="text-base lg:text-lg font-bold text-gray-900 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
+                  class="text-base lg:text-lg font-bold text-yellow-500 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
                   Hobbies & Interests
                 </h2>
-                <p class="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                <p
+                  class="border-l-4 border-yellow-500 pl-4 text-xs sm:text-sm text-gray-700 leading-relaxed"
+                >
                   {{ resumeStore.student.hobby }}
                 </p>
               </div>
 
               <!-- Technical Skills -->
-              <div>
+              <div class="bg-white shadow-lg rounded-lg p-6">
                 <h2
-                  class="text-base lg:text-lg font-bold text-gray-900 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
+                  class="text-base lg:text-lg font-bold text-shadow-sm text-blue-800 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
                   Technical Skills
                 </h2>
@@ -294,50 +316,47 @@ onMounted(() => {
                     v-for="skill in resumeStore.skills"
                     :key="skill.skill_name"
                   >
-                    <div
-                      class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-1 space-y-1 sm:space-y-0"
-                    >
+                    <div class="flex justify-between items-center">
+                      <span class="font-medium text-gray-700">{{
+                        skill.skill_name
+                      }}</span>
                       <span
-                        class="text-xs sm:text-sm font-medium text-gray-800"
-                        >{{ skill.skill_name }}</span
-                      >
-                      <span
-                        class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded self-start sm:self-auto"
+                        class="text-xs px-2 py-1 bg-gray-100 rounded-full text-gray-600"
                       >
                         {{ skill.skill_type }}
                       </span>
                     </div>
-                    <div class="flex items-center">
-                      <div class="flex-1 bg-gray-200 rounded-full h-1.5 mr-2">
+                    <div class="flex items-center gap-2">
+                      <div class="flex-1 bg-gray-200 rounded-full h-2">
                         <div
-                          class="h-1.5 rounded-full bg-gray-800 transition-all duration-300"
-                          :style="{
-                            width:
-                              skill.skill_proficiency === 'advanced'
-                                ? '90%'
-                                : skill.skill_proficiency === 'intermediate'
-                                ? '70%'
-                                : '50%',
-                          }"
+                          class="h-2 rounded-full transition-all duration-300"
+                          :class="getProficiencyColor(skill.skill_proficiency)"
                         ></div>
                       </div>
-                      <span
-                        class="text-xs text-gray-600 capitalize whitespace-nowrap"
-                        >{{ skill.skill_proficiency }}</span
-                      >
+                      <span class="text-xs text-gray-600 capitalize min-w-fit">
+                        {{ skill.skill_proficiency }}
+                      </span>
                     </div>
+                    <p
+                      v-if="!resumeStore.skills?.some((s) => s.skill_name)"
+                      class="text-gray-500 italic"
+                    >
+                      No skills listed
+                    </p>
                   </div>
                 </div>
               </div>
 
               <!-- Soft Skills -->
-              <div>
+              <div class="bg-white shadow-lg rounded-lg p-6">
                 <h2
-                  class="text-base lg:text-lg font-bold text-gray-900 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
+                  class="text-base lg:text-lg font-bold text-shadow-sm text-violet-800 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
                   Soft Skills
                 </h2>
-                <div class="space-y-2 lg:space-y-3">
+                <div
+                  class="border-l-4 border-violet-600 pl-4 space-y-2 lg:space-y-3"
+                >
                   <div
                     v-for="softSkill in resumeStore.softSkills"
                     :key="softSkill.soft_skill_name"
@@ -356,13 +375,15 @@ onMounted(() => {
               </div>
 
               <!-- Education -->
-              <div>
+              <div class="bg-white shadow-lg rounded-lg p-6">
                 <h2
-                  class="text-base lg:text-lg font-bold text-gray-900 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
+                  class="text-base lg:text-lg font-bold text-indigo-800 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
                   Education
                 </h2>
-                <div class="space-y-2 lg:space-y-3">
+                <div
+                  class="space-y-2 lg:space-y-3 border-l-4 border-indigo-600 pl-4"
+                >
                   <div
                     v-for="edu in resumeStore.education"
                     :key="edu.education_history_institution"
@@ -395,13 +416,15 @@ onMounted(() => {
             <!-- Right Column (2/3 width on desktop, full width on mobile) -->
             <div class="lg:col-span-2 space-y-4 lg:space-y-6">
               <!-- Work Experience -->
-              <div>
+              <div class="bg-white shadow-lg rounded-lg p-6">
                 <h2
-                  class="text-base lg:text-lg font-bold text-gray-900 mb-3 lg:mb-4 pb-1 border-b border-gray-400 uppercase tracking-wide"
+                  class="text-base lg:text-lg font-bold text-blue-800 text-shadow-sm mb-3 lg:mb-4 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
                   Professional Experience
                 </h2>
-                <div class="space-y-3 lg:space-y-4">
+                <div
+                  class="border-l-4 border-blue-600 pl-4 space-y-3 lg:space-y-4"
+                >
                   <div
                     v-for="work in resumeStore.workExperience"
                     :key="work.work_experience_company_name"
@@ -416,7 +439,7 @@ onMounted(() => {
                           {{ work.work_experience_position }}
                         </h3>
                         <p
-                          class="text-xs lg:text-sm font-semibold text-gray-700"
+                          class="text-xs lg:text-sm font-semibold text-blue-700"
                         >
                           {{ work.work_experience_company_name }}
                         </p>
@@ -444,13 +467,18 @@ onMounted(() => {
               </div>
 
               <!-- Internships -->
-              <div v-if="resumeStore.internships?.length">
+              <div
+                v-if="resumeStore.internships?.length"
+                class="bg-white shadow-lg rounded-lg p-6"
+              >
                 <h2
-                  class="text-base lg:text-lg font-bold text-gray-900 mb-3 lg:mb-4 pb-1 border-b border-gray-400 uppercase tracking-wide"
+                  class="text-base lg:text-lg font-bold text-shadow-sm text-orange-800 mb-3 lg:mb-4 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
                   Internships
                 </h2>
-                <div class="space-y-3 lg:space-y-4">
+                <div
+                  class="border-l-4 border-orange-800 pl-4 space-y-3 lg:space-y-4"
+                >
                   <div
                     v-for="internship in resumeStore.internships"
                     :key="internship.internship_company_name"
@@ -484,7 +512,7 @@ onMounted(() => {
               </div>
 
               <!-- Projects -->
-              <div>
+              <div class="bg-white shadow-lg rounded-lg p-6">
                 <h2
                   class="text-base lg:text-lg font-bold text-gray-900 mb-3 lg:mb-4 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
@@ -496,31 +524,35 @@ onMounted(() => {
                     :key="project.project_name"
                   >
                     <div
-                      class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-1 space-y-1 sm:space-y-0"
+                      class="border border-gray-200 roundend-lg p-4 flex flex-col sm:flex-row sm:justify-between sm:items-start mb-1 space-y-1 sm:space-y-0"
                     >
-                      <h3 class="text-sm lg:text-base font-bold text-gray-900">
+                      <h3
+                        class="text-sm lg:text-base font-bold text-orange-900"
+                      >
                         {{ project.project_name }}
                       </h3>
                       <a
                         v-if="project.project_attachment_link"
                         :href="project.project_attachment_link"
                         target="_blank"
-                        class="text-xs text-blue-600 underline hover:text-blue-800 self-start sm:self-auto"
+                        class="text-xs text-blue-600 underline hover:text-blue-800 self-start sm:self-auto hover:scale-105 transition-all duration-200 ease-in-out"
                       >
                         View Project →
                       </a>
                     </div>
                     <p
-                      class="text-xs lg:text-sm font-semibold text-gray-700 mb-1"
+                      class="text-xs lg:text-sm font-semibold text-gray-700 mb-1 pl-4"
                     >
                       {{ project.project_technology_used }}
                     </p>
                     <p
-                      class="text-xs lg:text-sm text-gray-700 mb-2 leading-relaxed"
+                      class="text-xs lg:text-sm text-gray-700 mb-2 leading-relaxed pl-4"
                     >
                       {{ project.project_description }}
                     </p>
-                    <p class="text-xs lg:text-sm text-gray-800 font-medium">
+                    <p
+                      class="text-xs lg:text-sm text-blue-800 font-medium pl-4"
+                    >
                       • {{ project.project_impact }}
                     </p>
                   </div>
@@ -528,9 +560,12 @@ onMounted(() => {
               </div>
 
               <!-- Training -->
-              <div v-if="resumeStore.training?.length">
+              <div
+                v-if="resumeStore.training?.length"
+                class="bg-white shadow-lg rounden-lg p-6"
+              >
                 <h2
-                  class="text-base lg:text-lg font-bold text-gray-900 mb-3 lg:mb-4 pb-1 border-b border-gray-400 uppercase tracking-wide"
+                  class="text-base lg:text-lg font-bold text-yellow-700 mb-3 lg:mb-4 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
                   Training & Certifications
                 </h2>
@@ -564,7 +599,7 @@ onMounted(() => {
                       <a
                         :href="training.training_history_certificate_file"
                         target="_blank"
-                        class="text-xs text-blue-600 underline hover:text-blue-800"
+                        class="text-xs text-blue-600 underline hover:text-blue-800 self-start sm:self-auto hover:scale-105 transition-all duration-200 ease-in-out"
                       >
                         View Certificate →
                       </a>
@@ -574,9 +609,12 @@ onMounted(() => {
               </div>
 
               <!-- Additional Info -->
-              <div v-if="resumeStore.additionalInfo?.length">
+              <div
+                v-if="resumeStore.additionalInfo?.length"
+                class="bg-white shadow-lg p-6"
+              >
                 <h2
-                  class="text-base lg:text-lg font-bold text-gray-900 mb-3 lg:mb-4 pb-1 border-b border-gray-400 uppercase tracking-wide"
+                  class="text-base lg:text-lg font-bold text-yellow-700 mb-3 lg:mb-4 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
                   Additional Information
                 </h2>
@@ -598,7 +636,7 @@ onMounted(() => {
                       <a
                         :href="info.additional_info_file_attachment"
                         target="_blank"
-                        class="text-xs text-blue-600 underline hover:text-blue-800"
+                        class="text-xs text-blue-600 underline hover:text-blue-800 self-start sm:self-auto hover:scale-105 transition-all duration-200 ease-in-out"
                       >
                         View Resource →
                       </a>

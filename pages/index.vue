@@ -42,7 +42,7 @@ async function login() {
       class="flex-grow flex justify-center items-center px-4 sm:px-6 lg:px-8 py-6 sm:py-8"
     >
       <div
-        class="flex flex-col md:flex-row w-full max-w-sm sm:max-w-md md:max-w-4xl rounded-xl overflow-hidden shadow-md animate-fade-up animate-once animate-ease-linear bg-white"
+        class="flex flex-col md:flex-row w-full max-w-sm sm:max-w-md md:max-w-4xl rounded-xl overflow-hidden shadow-xl/30 animate-fade-up animate-once animate-ease-linear bg-white"
       >
         <!-- ส่วนข้อมูลด้านซ้าย -->
         <div
@@ -98,7 +98,7 @@ async function login() {
                 </g>
               </svg>
               <p class="text-xs sm:text-sm md:text-base">
-                สร้าง resume ที่น่าประทับใจ
+                เพิ่มโอกาศการเข้าทำงาน
               </p>
             </div>
             <div class="flex items-center">
@@ -119,7 +119,7 @@ async function login() {
                 </g>
               </svg>
               <p class="text-xs sm:text-sm md:text-base">
-                สร้าง resume ที่น่าประทับใจ
+                มีพื้นที่แสดงผลผลงานในระดับมืออาชีพ
               </p>
             </div>
             <div class="flex items-center">
@@ -140,14 +140,14 @@ async function login() {
                 </g>
               </svg>
               <p class="text-xs sm:text-sm md:text-base">
-                สร้าง resume ที่น่าประทับใจ
+                แชร์ผลงานหรือโปรเจคจากในหรือนอกห้องเรียนสุดเจ๋ง
               </p>
             </div>
           </div>
         </div>
 
         <!-- ฟอร์มล็อกอินด้านขวา -->
-        <div class="w-full md:w-1/2 bg-gray-100 p-4 sm:p-6 md:p-12">
+        <div class="w-full md:w-1/2 p-4 sm:p-6 md:p-12">
           <div class="mb-4 sm:mb-6 md:mb-8">
             <h3
               class="text-base sm:text-lg md:text-2xl font-semibold text-gray-800"
@@ -239,10 +239,10 @@ async function login() {
             </button>
           </form>
         </div>
-        <!-- รูปภาพ teacher3d.png -->
-        <div class="w-full md:w-1/3 relative mt-4 md:mt-0">
+        <!-- รูปภาพ student_1.png -->
+        <div class="w-full md:w-1/3 relative mt-4 md:mt-0 animate-fade-up">
           <img
-            src="../assets/images/teacher3d.png"
+            src="../assets/images/student_1.png"
             alt="Teacher 3D"
             class="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[250px] h-auto object-contain mx-auto md:absolute md:bottom-0 md:right-0"
           />

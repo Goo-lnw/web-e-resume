@@ -253,7 +253,7 @@ onMounted(() => {
             <div class="space-y-4">
               <div v-for="(work, index) in resume.workExperience?.filter(w => w.work_experience_company_name)" :key="index"
                    class="border-l-4 border-orange-400 pl-4 py-2">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">
+                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-2">  
                   <h3 class="font-semibold text-gray-800">{{ work.work_experience_position }}</h3>
                   <span class="text-sm text-gray-500">
                     {{ formatDate(work.work_experience_start_date) }} - {{ formatDate(work.work_experience_end_date) }}
