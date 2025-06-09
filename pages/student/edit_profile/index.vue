@@ -5,21 +5,14 @@
       <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
         <div class="px-6 py-4 border-b border-gray-200">
           <h1 class="text-2xl font-bold text-gray-900">Edit Profile</h1>
-          <p class="text-sm text-gray-600 mt-1">
-            Update your personal information
-          </p>
+          <p class="text-sm text-gray-600 mt-1">Update your personal information</p>
         </div>
       </div>
 
       <!-- Loading State -->
-      <div
-        v-if="isLoading"
-        class="bg-white rounded-lg shadow-sm border border-gray-200 p-8"
-      >
+      <div v-if="isLoading" class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
         <div class="flex items-center justify-center">
-          <div
-            class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"
-          ></div>
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           <span class="ml-3 text-gray-600">Loading profile...</span>
         </div>
       </div>
@@ -35,21 +28,13 @@
             <div class="flex items-center space-x-6">
               <div class="shrink-0">
                 <img
-                  :src="
-                    studentData.student_profile_image ||
-                    'https://static-00.iconduck.com/assets.00/avatar-default-icon-1975x2048-2mpk4u9k.png'
-                  "
+                  :src="studentData.student_profile_image || 'https://static-00.iconduck.com/assets.00/avatar-default-icon-1975x2048-2mpk4u9k.png'"
                   :alt="studentData.student_name"
                   class="h-20 w-20 rounded-full object-cover ring-4 ring-gray-100"
                 />
               </div>
               <div class="flex-1">
-                <label
-                  for="student_profile_image"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  รูปชุดนักศึกษา
-                </label>
+                <label for="student_profile_image" class="block text-sm font-medium text-gray-700 mb-2"> รูปชุดนักศึกษา </label>
                 <input
                   id="student_profile_image"
                   type="file"
@@ -65,21 +50,13 @@
             <div class="flex items-center space-x-6">
               <div class="shrink-0">
                 <img
-                  :src="
-                    studentData.graduation_gown ||
-                    'https://static-00.iconduck.com/assets.00/avatar-default-icon-1975x2048-2mpk4u9k.png'
-                  "
+                  :src="studentData.graduation_gown || 'https://static-00.iconduck.com/assets.00/avatar-default-icon-1975x2048-2mpk4u9k.png'"
                   :alt="studentData.student_name"
                   class="h-20 w-20 rounded-full object-cover ring-4 ring-gray-100"
                 />
               </div>
               <div class="flex-1">
-                <label
-                  for="graduation_gown"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  รูปชุดครุย
-                </label>
+                <label for="graduation_gown" class="block text-sm font-medium text-gray-700 mb-2"> รูปชุดครุย </label>
                 <input
                   id="graduation_gown"
                   type="file"
@@ -95,21 +72,13 @@
             <div class="flex items-center space-x-6">
               <div class="shrink-0">
                 <img
-                  :src="
-                    studentData.suit ||
-                    'https://static-00.iconduck.com/assets.00/avatar-default-icon-1975x2048-2mpk4u9k.png'
-                  "
+                  :src="studentData.suit || 'https://static-00.iconduck.com/assets.00/avatar-default-icon-1975x2048-2mpk4u9k.png'"
                   :alt="studentData.student_name"
                   class="h-20 w-20 rounded-full object-cover ring-4 ring-gray-100"
                 />
               </div>
               <div class="flex-1">
-                <label
-                  for="suit"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  รูปชุดสุภาพ
-                </label>
+                <label for="suit" class="block text-sm font-medium text-gray-700 mb-2"> รูปชุดสุภาพ </label>
                 <input
                   id="suit"
                   type="file"
@@ -126,17 +95,12 @@
         <!-- Basic Information -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
           <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">
-              Basic Information
-            </h2>
+            <h2 class="text-lg font-semibold text-gray-900">Basic Information</h2>
           </div>
           <div class="px-6 py-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label
-                  for="student_name"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
+                <label for="student_name" class="block text-sm font-medium text-gray-700 mb-2">
                   Full Name
                   <span class="text-red-500">*</span>
                 </label>
@@ -151,12 +115,7 @@
               </div>
 
               <div>
-                <label
-                  for="student_name_thai"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Thai Name
-                </label>
+                <label for="student_name_thai" class="block text-sm font-medium text-gray-700 mb-2"> Thai Name </label>
                 <input
                   id="student_name_thai"
                   v-model="studentData.student_name_thai"
@@ -167,12 +126,7 @@
               </div>
 
               <div>
-                <label
-                  for="student_main_id"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Student ID
-                </label>
+                <label for="student_main_id" class="block text-sm font-medium text-gray-700 mb-2"> Student ID </label>
                 <input
                   id="student_main_id"
                   v-model="studentData.student_main_id"
@@ -183,12 +137,7 @@
               </div>
 
               <div>
-                <label
-                  for="student_email"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Email <span class="text-red-500">*</span>
-                </label>
+                <label for="student_email" class="block text-sm font-medium text-gray-700 mb-2"> Email <span class="text-red-500">*</span> </label>
                 <input
                   id="student_email"
                   v-model="studentData.student_email"
@@ -200,12 +149,7 @@
               </div>
 
               <div>
-                <label
-                  for="student_phone"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Phone Number
-                </label>
+                <label for="student_phone" class="block text-sm font-medium text-gray-700 mb-2"> Phone Number </label>
                 <input
                   id="student_phone"
                   v-model="studentData.student_phone"
@@ -216,12 +160,7 @@
               </div>
 
               <div>
-                <label
-                  for="date_of_birth"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Date of Birth
-                </label>
+                <label for="date_of_birth" class="block text-sm font-medium text-gray-700 mb-2"> Date of Birth </label>
                 <input
                   id="date_of_birth"
                   v-model="formattedDateOfBirth"
@@ -236,19 +175,12 @@
         <!-- Personal Details -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
           <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">
-              Personal Details
-            </h2>
+            <h2 class="text-lg font-semibold text-gray-900">Personal Details</h2>
           </div>
           <div class="px-6 py-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label
-                  for="religion"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Religion
-                </label>
+                <label for="religion" class="block text-sm font-medium text-gray-700 mb-2"> Religion </label>
                 <input
                   id="religion"
                   v-model="studentData.religion"
@@ -259,12 +191,7 @@
               </div>
 
               <div>
-                <label
-                  for="nationality"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Nationality
-                </label>
+                <label for="nationality" class="block text-sm font-medium text-gray-700 mb-2"> Nationality </label>
                 <input
                   id="nationality"
                   v-model="studentData.nationality"
@@ -275,12 +202,7 @@
               </div>
 
               <div>
-                <label
-                  for="ethnicity"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Ethnicity
-                </label>
+                <label for="ethnicity" class="block text-sm font-medium text-gray-700 mb-2"> Ethnicity </label>
                 <input
                   id="ethnicity"
                   v-model="studentData.ethnicity"
@@ -291,12 +213,7 @@
               </div>
 
               <div>
-                <label
-                  for="position"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Position
-                </label>
+                <label for="position" class="block text-sm font-medium text-gray-700 mb-2"> Position </label>
                 <input
                   id="position"
                   v-model="studentData.position"
@@ -307,12 +224,7 @@
               </div>
 
               <div>
-                <label
-                  for="weight"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Weight (kg)
-                </label>
+                <label for="weight" class="block text-sm font-medium text-gray-700 mb-2"> Weight (kg) </label>
                 <input
                   id="weight"
                   v-model="studentData.weight"
@@ -324,12 +236,7 @@
               </div>
 
               <div>
-                <label
-                  for="height"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Height (cm)
-                </label>
+                <label for="height" class="block text-sm font-medium text-gray-700 mb-2"> Height (cm) </label>
                 <input
                   id="height"
                   v-model="studentData.height"
@@ -341,12 +248,7 @@
               </div>
 
               <div class="md:col-span-2">
-                <label
-                  for="address"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Address
-                </label>
+                <label for="address" class="block text-sm font-medium text-gray-700 mb-2"> Address </label>
                 <textarea
                   id="address"
                   v-model="studentData.address"
@@ -357,12 +259,7 @@
               </div>
 
               <div class="md:col-span-2">
-                <label
-                  for="hobby"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Hobbies & Interests
-                </label>
+                <label for="hobby" class="block text-sm font-medium text-gray-700 mb-2"> Hobbies & Interests </label>
                 <textarea
                   id="hobby"
                   v-model="studentData.hobby"
@@ -378,19 +275,12 @@
         <!-- Social Media -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
           <div class="px-6 py-4 border-b border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-900">
-              Social Media & Links
-            </h2>
+            <h2 class="text-lg font-semibold text-gray-900">Social Media & Links</h2>
           </div>
           <div class="px-6 py-6">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
-                <label
-                  for="facebook"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Facebook
-                </label>
+                <label for="facebook" class="block text-sm font-medium text-gray-700 mb-2"> Facebook </label>
                 <input
                   id="facebook"
                   v-model="studentData.facebook"
@@ -401,12 +291,7 @@
               </div>
 
               <div>
-                <label
-                  for="line"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Line ID
-                </label>
+                <label for="line" class="block text-sm font-medium text-gray-700 mb-2"> Line ID </label>
                 <input
                   id="line"
                   v-model="studentData.line"
@@ -417,12 +302,7 @@
               </div>
 
               <div>
-                <label
-                  for="github"
-                  class="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  GitHub
-                </label>
+                <label for="github" class="block text-sm font-medium text-gray-700 mb-2"> GitHub </label>
                 <input
                   id="github"
                   v-model="studentData.github"
@@ -452,9 +332,7 @@
               :disabled="isSaving"
             >
               <span v-if="isSaving" class="flex items-center">
-                <div
-                  class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"
-                ></div>
+                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
                 Saving...
               </span>
               <span v-else>Save Changes</span>
@@ -464,10 +342,7 @@
       </form>
 
       <!-- Success Message -->
-      <div
-        v-if="showSuccess"
-        class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-300"
-      >
+      <div v-if="showSuccess" class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-300">
         <div class="flex items-center">
           <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
             <path
@@ -477,6 +352,20 @@
             ></path>
           </svg>
           Profile updated successfully!
+        </div>
+      </div>
+
+      <!-- error Message -->
+      <div v-if="showError" class="fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-300">
+        <div class="flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+          {{ errorDetail }}
         </div>
       </div>
     </div>
@@ -524,7 +413,8 @@ const originalData = ref({});
 const isLoading = ref(false);
 const isSaving = ref(false);
 const showSuccess = ref(false);
-
+const showError = ref(false);
+const errorDetail = ref(null);
 // Composables
 const { $axios } = useNuxtApp();
 
@@ -547,18 +437,31 @@ const getStudent = async () => {
   }
 };
 
-const handlelImageInputChange = (event) => {
-  if (event.target.name === "student_profile_image") {
-    // studentData.value.student_profile_image = event.target.files[0];
-    selectedImage.value.student_profile_image = event.target.files[0];
-  }
-  if (event.target.name === "graduation_gown") {
-    // studentData.value.graduation_gown = event.target.files[0];
-    selectedImage.value.graduation_gown = event.target.files[0];
-  }
-  if (event.target.name === "suit") {
-    // studentData.value.suit = event.target.files[0];
-    selectedImage.value.suit = event.target.files[0];
+const handlelImageInputChange = async (event) => {
+  try {
+    const file = event.target.files[0];
+    const allowedTypes = ["image/jpeg", "image/png"];
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+    if (!allowedTypes.includes(file.type)) {
+      event.target.value = null;
+      throw `${file.name} : File type ${file.type} not allowed. Allowed: ${allowedTypes.join(", ")}`;
+    }
+    if (file.size > MAX_FILE_SIZE) {
+      event.target.value = null;
+      throw `${file.name} : is larger than 5 MB : ${(file.size / (1024 * 1024)).toFixed(2)}`;
+    }
+    if (event.target.name === "student_profile_image") {
+      selectedImage.value.student_profile_image = event.target.files[0];
+    }
+    if (event.target.name === "graduation_gown") {
+      selectedImage.value.graduation_gown = event.target.files[0];
+    }
+    if (event.target.name === "suit") {
+      selectedImage.value.suit = event.target.files[0];
+    }
+  } catch (error) {
+    showNotiError(error);
+    console.error(error);
   }
 };
 
@@ -568,11 +471,13 @@ const uploadImages = async () => {
     // loop image data in selectedImages and append to formData kub
     for (const [key, file] of Object.entries(selectedImage.value)) {
       if (!file) continue;
+      console.log(file);
+
       formData.append(key, file);
     }
     // Check that form data is contains data brfore upload
     if (Array.from(formData.keys()).length > 0) {
-      // upload to nuxt server
+      // upload to elysia server
       const res = await $axios.post("/image", formData);
       // console.log(res.data);
       return res.data;
@@ -596,13 +501,12 @@ const saveStudent = async () => {
     if (uploadedImageResult.success) {
       for (const imageField in uploadedImageResult.imagesData) {
         if (imageField in studentData.value) {
-          studentData.value[imageField] =
-            uploadedImageResult.imagesData[imageField];
+          studentData.value[imageField] = uploadedImageResult.imagesData[imageField];
           // console.log(studentData.value[imageField]);
         }
       }
     }
-    // Prepare data for API
+    // // Prepare data for API
     const updateData = {
       student_name: studentData.value.student_name,
       student_name_thai: studentData.value.student_name_thai,
@@ -616,12 +520,8 @@ const saveStudent = async () => {
       date_of_birth: studentData.value.date_of_birth,
       ethnicity: studentData.value.ethnicity,
       hobby: studentData.value.hobby,
-      weight: studentData.value.weight
-        ? parseFloat(studentData.value.weight)
-        : null,
-      height: studentData.value.height
-        ? parseFloat(studentData.value.height)
-        : null,
+      weight: studentData.value.weight ? parseFloat(studentData.value.weight) : null,
+      height: studentData.value.height ? parseFloat(studentData.value.height) : null,
       address: studentData.value.address,
       facebook: studentData.value.facebook,
       line: studentData.value.line,
@@ -660,7 +560,14 @@ const formattedDateOfBirth = computed({
 const resetForm = () => {
   bnm, (studentData.value = { ...originalData.value });
 };
+const showNotiError = async (detail) => {
+  errorDetail.value = detail;
+  showError.value = true;
 
+  setInterval(() => {
+    showError.value = false;
+  }, 4000);
+};
 // Lifecycle
 onMounted(() => {
   getStudent();
