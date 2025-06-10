@@ -18,7 +18,7 @@
       </div>
 
       <!-- Form -->
-      <form v-else @submit.prevent="saveStudent" class="space-y-6">
+      <form v-else @submit.prevent="saveStudent($event)" class="space-y-6">
         <!-- Profile Image Section -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200">
           <div class="px-6 py-4 border-b border-gray-200">
@@ -442,22 +442,24 @@ const handlelImageInputChange = async (event) => {
     const file = event.target.files[0];
     const allowedTypes = ["image/jpeg", "image/png"];
     const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-    if (!allowedTypes.includes(file.type)) {
-      event.target.value = null;
-      throw `${file.name} : File type ${file.type} not allowed. Allowed: ${allowedTypes.join(", ")}`;
-    }
-    if (file.size > MAX_FILE_SIZE) {
-      event.target.value = null;
-      throw `${file.name} : is larger than 5 MB : ${(file.size / (1024 * 1024)).toFixed(2)}`;
-    }
-    if (event.target.name === "student_profile_image") {
-      selectedImage.value.student_profile_image = event.target.files[0];
-    }
-    if (event.target.name === "graduation_gown") {
-      selectedImage.value.graduation_gown = event.target.files[0];
-    }
-    if (event.target.name === "suit") {
-      selectedImage.value.suit = event.target.files[0];
+    if (file) {
+      if (!allowedTypes.includes(file.type)) {
+        event.target.value = null;
+        throw `${file.name} : File type ${file.type} not allowed. Allowed: ${allowedTypes.join(", ")}`;
+      }
+      if (file.size > MAX_FILE_SIZE) {
+        event.target.value = null;
+        throw `${file.name} : is larger than 5 MB : This file is ${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+      }
+      if (event.target.name === "student_profile_image") {
+        selectedImage.value.student_profile_image = event.target.files[0];
+      }
+      if (event.target.name === "graduation_gown") {
+        selectedImage.value.graduation_gown = event.target.files[0];
+      }
+      if (event.target.name === "suit") {
+        selectedImage.value.suit = event.target.files[0];
+      }
     }
   } catch (error) {
     showNotiError(error);
@@ -465,49 +467,19 @@ const handlelImageInputChange = async (event) => {
   }
 };
 
-const uploadImages = async () => {
+const saveStudent = async (event) => {
   try {
+    isSaving.value = true;
+
+    // Prepare data for API
     const formData = new FormData();
     // loop image data in selectedImages and append to formData kub
     for (const [key, file] of Object.entries(selectedImage.value)) {
       if (!file) continue;
       console.log(file);
-
       formData.append(key, file);
     }
-    // Check that form data is contains data brfore upload
-    if (Array.from(formData.keys()).length > 0) {
-      // upload to elysia server
-      const res = await $axios.post("/image", formData);
-      // console.log(res.data);
-      return res.data;
-    }
-    //return false if no images change
-    return { success: false };
-  } catch (error) {
-    console.error("Upload failed:", error);
-    throw error;
-  }
-};
-
-const saveStudent = async () => {
-  try {
-    isSaving.value = true;
-    // upload images by uploadImages function first kub
-    // because we need sure that upload complete then save filename to DB kub
-    const uploadedImageResult = await uploadImages();
-    // check uploadedImage result then
-    // loop to set image name in to studentData ref kub
-    if (uploadedImageResult.success) {
-      for (const imageField in uploadedImageResult.imagesData) {
-        if (imageField in studentData.value) {
-          studentData.value[imageField] = uploadedImageResult.imagesData[imageField];
-          // console.log(studentData.value[imageField]);
-        }
-      }
-    }
-    // // Prepare data for API
-    const updateData = {
+    const updateData = JSON.stringify({
       student_name: studentData.value.student_name,
       student_name_thai: studentData.value.student_name_thai,
       student_email: studentData.value.student_email,
@@ -527,8 +499,20 @@ const saveStudent = async () => {
       line: studentData.value.line,
       github: studentData.value.github,
       position: studentData.value.position,
-    };
-    await $axios.put("/student/editStudent", updateData);
+    });
+    formData.append("student_profile_data", updateData);
+    const updatedResult = await $axios.put("/student/edit_profile", formData);
+    const uploadedImageResult = await updatedResult.data;
+    // check uploadedImage & Update result then
+    // loop to set image name in to studentData ref kub
+    if (uploadedImageResult.success) {
+      for (const imageField in uploadedImageResult.imagesData) {
+        if (imageField in studentData.value) {
+          studentData.value[imageField] = uploadedImageResult.imagesData[imageField];
+          event.target.querySelector(`#${imageField}`).value = null;
+        }
+      }
+    }
 
     console.log("Student profile updated successfully");
     originalData.value = { ...studentData.value };
