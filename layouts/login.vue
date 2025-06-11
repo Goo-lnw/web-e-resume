@@ -1,8 +1,10 @@
 <template>
   <div style="font-family: 'Mitr', sans-serif; min-height: 100vh">
-    <nav class="animate-fade-down bg-blue-600 shadow-lg sticky top-0 z-10 min-h-16">
+    <nav
+      class="animate-fade-down bg-blue-600 shadow-lg sticky top-0 z-10 min-h-16"
+    >
       <div
-        class="container mx-auto px-4 flex justify-between items-center flex-wrap md:flex-nowrap "
+        class="container mx-auto px-4 flex justify-between items-center flex-wrap md:flex-nowrap"
       >
         <!-- โลโก้ -->
         <div class="flex items-center gap-4 flex-shrink-0">
@@ -21,7 +23,7 @@
         </div>
         <!-- เมนู -->
         <div
-          class="flex flex-wrap gap-4 items-center justify-end w-full md:w-auto mt-2 md:mt-0 overflow-x-auto animate-slide-in-right"
+          class="flex flex-wrap gap-4 items-center justify-end w-full md:w-auto mt-2 md:mt-0 animate-slide-in-right"
         >
           <NuxtLink
             to="/"
@@ -42,21 +44,14 @@
           >
             ติดต่อเรา
           </NuxtLink>
-
-          <select
-            class=" text-white border-none rounded px-2 py-1 cursor-pointer focus:outline-none focus:ring "
-          >
-            <option value="th" class="bg-blue-500 text-white">ไทย</option>
-            <option value="en" class="bg-blue-500 text-white">English</option>
-          </select>
         </div>
       </div>
     </nav>
     <slot />
   </div>
 </template>
-
-<script setup></script>
+<script setup>
+</script>
 
 <style scoped>
 /* อนิเมชันสำหรับ fade-up */

@@ -77,19 +77,19 @@ function getProficiencyColor(proficiency) {
                 :alt="resumeStore.student.student_name"
                 class="w-24 h-24 sm:w-32 md:w-40 lg:w-46 lg:h-64 border-2 border-gray-300 object-cover justify-self-start"
               />
-              <div class="text-start ">
+              <div class="text-start">
                 <h1
-                  class="text-4xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 tracking-wide"
-                >
-                  {{ resumeStore.student.student_name }}
-                </h1>
-                <p
                   v-if="resumeStore.student.student_name_thai"
-                  class="text-2xl sm:text-2xl lg:text-2xl text-gray-600 mb-3"
+                  class="text-3xl sm:text-3xl lg:text-3xl font-bold text-blue-900 mb-3"
                 >
                   {{ resumeStore.student.student_name_thai }}
+                </h1>
+                <p
+                  class="text-xl sm:text-xl lg:text-xl font-bold text-blue-900 mb-2 tracking-wide"
+                >
+                  {{ resumeStore.student.student_name }}
                 </p>
-                <p class="text-2xl lg:text-xl text-gray-600 mb-3 lg:mb-4">
+                <p class="text-2xl lg:text-xl text-gray-800 mb-3 lg:mb-4">
                   {{ resumeStore.student.position || "Full Stack Developer" }}
                 </p>
                 <div

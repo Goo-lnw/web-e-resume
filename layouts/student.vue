@@ -106,7 +106,7 @@
                   <li>
                     <button
                       @click="showSkillModal = true"
-                      class="block px-4 py-2 w-full text-left hover:bg-gray-100"
+                      class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
                     >
                       Technical Skills
                     </button>
@@ -115,7 +115,7 @@
                   <li>
                     <button
                       @click="showSoftSkillModal = true"
-                      class="block px-4 py-2 w-full text-left hover:bg-gray-100"
+                      class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
                     >
                        Soft Skill
                     </button>
@@ -123,7 +123,7 @@
                   <li>
                     <button
                       @click="showEducationModal = true"
-                      class="block px-4 py-2 w-full text-left hover:bg-gray-100"
+                      class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
                     >
                       Education
                     </button>
@@ -377,6 +377,7 @@
       <slot />
     </div>
   </div>
+  <Footer/>
   <SkillModal v-if="showSkillModal" @close="showSkillModal = false" />
   <SoftSkillModal v-if="showSoftSkillModal" @close="showSoftSkillModal = false" />
   <educationModal v-if="showEducationModal" @close="showEducationModal = false" />
@@ -397,6 +398,7 @@ const { $axios } = useNuxtApp();
 const router = useRouter();
 
 import { useResumeStore } from '../stores/resumeStore'
+import Footer from "~/components/common/Footer.vue";
 const resumeStore = useResumeStore()
 
 async function logout() {

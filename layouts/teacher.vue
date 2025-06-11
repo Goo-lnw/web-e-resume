@@ -186,8 +186,9 @@
       <slot />
     </div>
   </div>
-</template>
+      <Footer/>
 
+</template>
 <style scoped>
 /* อนิเมชันสำหรับ fade-down */
 @keyframes fade-down {
@@ -269,6 +270,8 @@ select::-webkit-scrollbar-thumb:hover {
 </style>
 
 <script setup>
+import Footer from '~/components/common/Footer.vue';
+
 const { $axios } = useNuxtApp();
 
 const router = useRouter();
@@ -292,4 +295,5 @@ async function logout() {
   } catch (err) {
     console.log(err);
   }
+  
 }</script>
