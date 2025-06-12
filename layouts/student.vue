@@ -160,11 +160,12 @@
                     </button>
                   </li>
                   <li>
-                    <NuxtLink
-                      to="/additional-info"
+                    <button
+                      @click="showAdditionalInfoModal = true"
                       class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
-                      >Additional Info</NuxtLink
                     >
+                      Additional Info
+                    </button>
                   </li>
                 </ul>
               </div>
@@ -289,7 +290,7 @@
                   </li>
                   <li>
                     <button
-                      to="/additional-info"
+                      @click="showAdditionalInfoModal = true"
                       class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
                     >
                       Additional Info
@@ -404,6 +405,10 @@
     @close="showInternshipsModal = false"
   />
   <trainingModal v-if="showTrainingModal" @close="showTrainingModal = false" />
+  <additionalInfoModal
+    v-if="showAdditionalInfoModal"
+    @close="showAdditionalInfoModal = false"
+  />
 </template>
 <script setup>
 import { ref } from "vue";
@@ -414,6 +419,7 @@ import projectModal from "../components/modal/projectModal.vue";
 import workExperienceModal from "../components/modal/workExperienceModal.vue";
 import internshipsModal from "../components/modal/internshipsModal.vue";
 import trainingModal from "../components/modal/trainingModal.vue";
+import additionalInfoModal from "../components/modal/additionalInfoModal.vue";
 
 const showSkillModal = ref(false);
 const showSoftSkillModal = ref(false);
@@ -422,6 +428,7 @@ const showProjectModal = ref(false);
 const showWorkExperienceModal = ref(false);
 const showInternshipsModal = ref(false);
 const showTrainingModal = ref(false);
+const showAdditionalInfoModal = ref(false);
 
 const isDropdownOpen = ref(false);
 const { $axios } = useNuxtApp();

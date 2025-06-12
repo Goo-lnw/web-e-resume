@@ -12,9 +12,9 @@
       >
         <div class="flex items-center justify-between">
           <div>
-            <h2 class="text-2xl font-bold">Internships</h2>
+            <h2 class="text-2xl font-bold">Additional Information</h2>
             <p class="text-blue-100 text-sm mt-1">
-              Manage your internship experiences
+              Manage your extra details and achievements
             </p>
           </div>
           <button
@@ -42,13 +42,13 @@
       <!-- Content -->
       <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
         <div class="space-y-4">
-          <!-- Existing Internships -->
+          <!-- Existing Additional Info -->
           <div
-            v-for="(internship, index) in internshipData"
-            :key="internship.internship_id || `new-${index}`"
+            v-for="(info, index) in additionalInfoData"
+            :key="info.additional_info_id || `new-${index}`"
             class="group bg-gradient-to-r from-gray-50 to-gray-100 hover:from-blue-50 hover:to-purple-50 border border-gray-200 hover:border-blue-300 rounded-xl p-5 transition-all duration-300 hover:shadow-md"
           >
-            <!-- Internship Header -->
+            <!-- Additional Info Header -->
             <div class="flex items-center justify-between mb-4">
               <div class="flex items-center space-x-3">
                 <div
@@ -60,21 +60,18 @@
                 </div>
                 <div>
                   <h3 class="font-semibold text-gray-800">
-                    {{
-                      internship.internship_company_name ||
-                      `Internship ${index + 1}`
-                    }}
+                    {{ info.additional_info_title || `Info ${index + 1}` }}
                   </h3>
                   <p class="text-sm text-gray-500">
-                    Configure your internship details
+                    Configure your additional info details
                   </p>
                 </div>
               </div>
               <div class="flex items-center space-x-2">
                 <button
-                  @click="removeInternship(internship.internship_id)"
+                  @click="removeAdditionalInfo(info.additional_info_id)"
                   class="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-all duration-300 cursor-pointer transform hover:scale-120 ease-in-out"
-                  title="Remove internship"
+                  title="Remove additional info"
                 >
                   <svg
                     class="w-4 h-4"
@@ -95,7 +92,7 @@
 
             <!-- Inline Form Fields -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <!-- Company Name -->
+              <!-- Title -->
               <div class="space-y-2">
                 <label
                   class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
@@ -113,98 +110,17 @@
                       d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
                     ></path>
                   </svg>
-                  <span>Company Name</span>
+                  <span>Title</span>
                 </label>
                 <input
-                  v-model="internship.internship_company_name"
+                  v-model="info.additional_info_title"
                   type="text"
-                  placeholder="e.g., Startup Inc."
+                  placeholder="e.g., Volunteer Work"
                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
                 />
               </div>
 
-              <!-- Position -->
-              <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-                    ></path>
-                  </svg>
-                  <span>Position</span>
-                </label>
-                <input
-                  v-model="internship.internship_position"
-                  type="text"
-                  placeholder="e.g., Intern Developer"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
-                />
-              </div>
-
-              <!-- Start Date -->
-              <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    ></path>
-                  </svg>
-                  <span>Start Date</span>
-                </label>
-                <input
-                  v-model="internship.internship_start_date"
-                  type="date"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
-                />
-              </div>
-
-              <!-- End Date -->
-              <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                    ></path>
-                  </svg>
-                  <span>End Date</span>
-                </label>
-                <input
-                  v-model="internship.internship_end_date"
-                  type="date"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
-                />
-              </div>
-
+            
               <!-- Description -->
               <div class="space-y-2 lg:col-span-2">
                 <label
@@ -226,46 +142,19 @@
                   <span>Description</span>
                 </label>
                 <textarea
-                  v-model="internship.internship_description"
-                  placeholder="Describe your internship role"
+                  v-model="info.additional_info_description"
+                  placeholder="Describe the activity or achievement"
                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
                   rows="4"
                 ></textarea>
               </div>
 
-              <!-- Related Files -->
-              <div class="space-y-2 lg:col-span-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
-                    ></path>
-                  </svg>
-                  <span>Related Files</span>
-                </label>
-                <input
-                  v-model="internship.internship_related_files"
-                  type="url"
-                  placeholder="e.g., https://drive.google.com/your-files"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
-                />
-              </div>
             </div>
           </div>
         </div>
-        <!-- Add New Internship Card -->
+        <!-- Add New Additional Info Card -->
         <div
-          @click="addNewInternship"
+          @click="addNewAdditionalInfo"
           class="group bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border-2 border-dashed border-green-300 hover:border-green-400 rounded-xl p-8 transition-all duration-300 hover:shadow-md cursor-pointer"
         >
           <div class="flex flex-col items-center justify-center text-center">
@@ -287,9 +176,11 @@
               </svg>
             </div>
             <h3 class="text-lg font-semibold text-green-800 mb-2">
-              Add New Internship
+              Add New Additional Info
             </h3>
-            <p class="text-green-600 text-sm">Click to add a new internship</p>
+            <p class="text-green-600 text-sm">
+              Click to add new additional information
+            </p>
           </div>
         </div>
 
@@ -301,12 +192,15 @@
           <div
             class="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mb-4"
           ></div>
-          <p class="text-gray-500 text-lg">Loading your internships...</p>
+          <p class="text-gray-500 text-lg">Loading your additional info...</p>
           <p class="text-gray-400 text-sm">Please wait a moment</p>
         </div>
 
-        <!-- Empty State (if no internships after loading) -->
-        <div v-else-if="internshipData.length === 0" class="text-center py-12">
+        <!-- Empty State (if no additional info after loading) -->
+        <div
+          v-else-if="additionalInfoData.length === 0"
+          class="text-center py-12"
+        >
           <div
             class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center"
           >
@@ -325,16 +219,16 @@
             </svg>
           </div>
           <h3 class="text-lg font-medium text-gray-900 mb-2">
-            No internships found
+            No additional info found
           </h3>
           <p class="text-gray-500 mb-4">
-            Start by adding your first internship!
+            Start by adding your first additional info!
           </p>
           <button
-            @click="addNewInternship"
+            @click="addNewAdditionalInfo"
             class="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-200 font-medium"
           >
-            Add Your First Internship
+            Add Your First Additional Info
           </button>
         </div>
       </div>
@@ -343,8 +237,8 @@
       <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
         <div class="flex items-center justify-between">
           <div class="text-sm text-gray-500">
-            {{ internshipData.length }} internship{{
-              internshipData.length !== 1 ? "s" : ""
+            {{ additionalInfoData.length }} info{{
+              additionalInfoData.length !== 1 ? "s" : ""
             }}
             total
           </div>
@@ -357,7 +251,7 @@
               Cancel
             </button>
             <button
-              @click="saveInternships"
+              @click="saveAdditionalInfo"
               :disabled="isSaving"
               class="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 cursor-pointer"
             >
@@ -391,71 +285,63 @@ import { useResumeStore } from "../../stores/resumeStore";
 const resumeStore = useResumeStore();
 const emit = defineEmits(["close", "save"]);
 
-const internshipData = ref([]);
+const additionalInfoData = ref([]);
 const isLoading = ref(true);
 const isSaving = ref(false);
 const { $axios } = useNuxtApp();
 const { showAlert } = useAlert();
 
-const getInternship = async () => {
+const getAdditionalInfo = async () => {
   try {
     isLoading.value = true;
-    const res = await $axios.get("/student/internship");
-    internshipData.value = res.data || [];
-    console.log("Fetched internships:", internshipData.value);
+    const res = await $axios.get("/student/additional_info");
+    additionalInfoData.value = res.data || [];
+    console.log("Fetched additional info:", additionalInfoData.value);
   } catch (error) {
-    console.error("Failed to fetch internships:", error);
-    internshipData.value = [];
+    console.error("Failed to fetch additional info:", error);
+    additionalInfoData.value = [];
   } finally {
     isLoading.value = false;
   }
 };
 
-const addNewInternship = async () => {
+const addNewAdditionalInfo = async () => {
   try {
     isSaving.value = true;
-    const res = await $axios.post("/resume/increase_internship");
-    console.log("Added new internship:", res.data);
-    await getInternship();
+    const res = await $axios.post("/resume/increase_additional_info");
+    console.log("Added new additional info:", res.data);
+    await getAdditionalInfo();
   } catch (error) {
-    console.error("Failed to add new internship:", error);
+    console.error("Failed to add new additional info:", error);
   } finally {
     isSaving.value = false;
   }
 };
 
-const removeInternship = async (internship_id) => {
+const removeAdditionalInfo = async (additional_info_id) => {
   try {
-    await $axios.delete(`/resume/internship/${internship_id}`);
-    internshipData.value.splice(index, 1);
-    console.log("Internship removed successfully");
-
+    await $axios.delete(`/resume/additional_info/${additional_info_id}`);
+    await getAdditionalInfo();
   } catch (error) {
-    console.error("Failed to remove internship:", error);
-        await getInternship();
-
+    console.error("Failed to remove additional info:", error);
   }
 };
 
-const saveInternships = async () => {
+const saveAdditionalInfo = async () => {
   try {
     isSaving.value = true;
-    for (const internship of internshipData.value) {
-      await $axios.put(`/resume/internship/${internship.internship_id}`, {
-        internship_company_name: internship.internship_company_name,
-        internship_position: internship.internship_position,
-        internship_start_date: internship.internship_start_date,
-        internship_end_date: internship.internship_end_date,
-        internship_description: internship.internship_description,
-        internship_related_files: internship.internship_related_files,
+    for (const info of additionalInfoData.value) {
+      await $axios.put(`/resume/additional_info/${info.additional_info_id}`, {
+        additional_info_title: info.additional_info_title,
+        additional_info_description: info.additional_info_description,
+        additional_info_file_attachment: info.additional_info_file_attachment,
       });
     }
     showAlert("บันทึกข้อมูลสำเร็จ", "success");
-    emit("save", internshipData.value);
+    emit("save", additionalInfoData.value);
     close();
   } catch (error) {
-    console.error("Failed to save internships:", error);
-    showAlert("บันทึกข้อมูลล้มเหลว", "error");
+    console.error("Failed to save additional info:", error);
   } finally {
     isSaving.value = false;
   }
@@ -467,6 +353,6 @@ const close = () => {
 };
 
 onMounted(() => {
-  getInternship();
+  getAdditionalInfo();
 });
 </script>
