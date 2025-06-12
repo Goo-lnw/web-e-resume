@@ -516,7 +516,7 @@ function getProficiencyColor(proficiency) {
                 <h2
                   class="text-base lg:text-lg font-bold text-gray-900 mb-3 lg:mb-4 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
-                  Key Projects
+                Projects
                 </h2>
                 <div class="space-y-3 lg:space-y-4">
                   <div

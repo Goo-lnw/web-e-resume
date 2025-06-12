@@ -65,7 +65,6 @@
                 />
               </svg>
 
-              
               <!-- bottom indicator -->
               <div
                 class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300 ease-out"
@@ -117,7 +116,7 @@
                       @click="showSoftSkillModal = true"
                       class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
                     >
-                       Soft Skill
+                      Soft Skill
                     </button>
                   </li>
                   <li>
@@ -129,11 +128,12 @@
                     </button>
                   </li>
                   <li>
-                    <NuxtLink
-                      to="/projects"
-                      class="block px-4 py-2 hover:bg-gray-100"
-                      >Projects</NuxtLink
+                    <button
+                      @click="showProjectModal = true"
+                      class="block px-4 py-2  w-full text-left hover:bg-slate-200 cursor-pointer"
                     >
+                      Projects
+                    </button>
                   </li>
                   <li>
                     <NuxtLink
@@ -206,7 +206,7 @@
               </svg>
             </NuxtLink>
             <!-- Dropdown for Mobile -->
-            <div class="relative sm:hidden ">
+            <div class="relative sm:hidden">
               <button
                 @click="isDropdownOpen = !isDropdownOpen"
                 class="flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200"
@@ -252,12 +252,14 @@
                     </button>
                   </li>
                   <li>
-                    <NuxtLink
-                      to="/projects"
-                      class="block px-4 py-2 hover:bg-gray-100"
-                      >Projects</NuxtLink
+                    <button
+                      @click="showProjectModal = true"
+                      class="block px-4 py-2 w-full text-left hover:bg-gray-100"
                     >
+                      Projects
+                    </button>
                   </li>
+            
                   <li>
                     <NuxtLink
                       to="/work-experience"
@@ -321,8 +323,7 @@
             </NuxtLink>
             <p class="text-black">{{ resumeStore.student?.student_name }}</p>
             <!-- Profile Button -->
-            <div class="group relative"
-            >
+            <div class="group relative">
               <span
                 class="flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200 cursor-pointer"
               >
@@ -343,7 +344,7 @@
                   />
                 </svg>
               </span>
-                 <div
+              <div
                 class="absolute top-full mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-50"
               >
                 <ul class="text-sm text-gray-800">
@@ -361,12 +362,11 @@
                       @click.prevent="logout()"
                       class="block px-4 py-2 w-full text-left hover:bg-gray-100 cursor-pointer"
                     >
-                       ออกจากระบบ
+                      ออกจากระบบ
                     </button>
                   </li>
                 </ul>
               </div>
-               
             </div>
           </div>
         </div>
@@ -377,29 +377,38 @@
       <slot />
     </div>
   </div>
-  <Footer/>
+  <Footer />
   <SkillModal v-if="showSkillModal" @close="showSkillModal = false" />
-  <SoftSkillModal v-if="showSoftSkillModal" @close="showSoftSkillModal = false" />
-  <educationModal v-if="showEducationModal" @close="showEducationModal = false" />
+  <SoftSkillModal
+    v-if="showSoftSkillModal"
+    @close="showSoftSkillModal = false"
+  />
+  <educationModal
+    v-if="showEducationModal"
+    @close="showEducationModal = false"
+  />
+  <projectModal v-if="showProjectModal" @close="showProjectModal = false" />
 </template>
 <script setup>
 import { ref } from "vue";
-import SkillModal from '../components/modal/skillModal.vue';
-import SoftSkillModal from '../components/modal/softSkillModal.vue';
-import educationModal from '../components/modal/educationModal.vue';
+import SkillModal from "../components/modal/skillModal.vue";
+import SoftSkillModal from "../components/modal/softSkillModal.vue";
+import educationModal from "../components/modal/educationModal.vue";
+import projectModal from "../components/modal/projectModal.vue";
 
-const showSkillModal = ref(false)
-const showSoftSkillModal = ref(false)
-const showEducationModal = ref(false)
+const showSkillModal = ref(false);
+const showSoftSkillModal = ref(false);
+const showEducationModal = ref(false);
+const showProjectModal = ref(false);
 
 const isDropdownOpen = ref(false);
 const { $axios } = useNuxtApp();
 
 const router = useRouter();
 
-import { useResumeStore } from '../stores/resumeStore'
+import { useResumeStore } from "../stores/resumeStore";
 import Footer from "~/components/common/Footer.vue";
-const resumeStore = useResumeStore()
+const resumeStore = useResumeStore();
 
 async function logout() {
   try {
@@ -421,7 +430,6 @@ async function logout() {
     console.log(err);
   }
 }
-
 </script>
 <style scoped>
 /* อนิเมชันสำหรับ fade-down */
