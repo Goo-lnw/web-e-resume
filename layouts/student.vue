@@ -130,36 +130,36 @@
                   <li>
                     <button
                       @click="showProjectModal = true"
-                      class="block px-4 py-2  w-full text-left hover:bg-slate-200 cursor-pointer"
+                      class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
                     >
                       Projects
                     </button>
                   </li>
                   <li>
-                    <NuxtLink
-                      to="/work-experience"
-                      class="block px-4 py-2 hover:bg-gray-100"
-                      >Work Experience</NuxtLink
+                    <button
+                      @click = "showWorkExperienceModal = true"
+                      class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
+                      >Work Experience</button
                     >
                   </li>
                   <li>
                     <NuxtLink
                       to="/internships"
-                      class="block px-4 py-2 hover:bg-gray-100"
+                      class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
                       >Internships</NuxtLink
                     >
                   </li>
                   <li>
                     <NuxtLink
                       to="/training"
-                      class="block px-4 py-2 hover:bg-gray-100"
+                      class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
                       >Training</NuxtLink
                     >
                   </li>
                   <li>
                     <NuxtLink
                       to="/additional-info"
-                      class="block px-4 py-2 hover:bg-gray-100"
+                      class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
                       >Additional Info</NuxtLink
                     >
                   </li>
@@ -259,12 +259,12 @@
                       Projects
                     </button>
                   </li>
-            
+
                   <li>
-                    <NuxtLink
-                      to="/work-experience"
+                    <button
+                      @click="showWorkExperienceModal = true"
                       class="block px-4 py-2 hover:bg-gray-100"
-                      >Work Experience</NuxtLink
+                      >Work Experience</button
                     >
                   </li>
                   <li>
@@ -388,6 +388,10 @@
     @close="showEducationModal = false"
   />
   <projectModal v-if="showProjectModal" @close="showProjectModal = false" />
+  <workExperienceModal
+    v-if="showWorkExperienceModal"
+    @close="showWorkExperienceModal = false"
+  />
 </template>
 <script setup>
 import { ref } from "vue";
@@ -395,11 +399,13 @@ import SkillModal from "../components/modal/skillModal.vue";
 import SoftSkillModal from "../components/modal/softSkillModal.vue";
 import educationModal from "../components/modal/educationModal.vue";
 import projectModal from "../components/modal/projectModal.vue";
+import workExperienceModal from "../components/modal/workExperienceModal.vue";
 
 const showSkillModal = ref(false);
 const showSoftSkillModal = ref(false);
 const showEducationModal = ref(false);
 const showProjectModal = ref(false);
+const showWorkExperienceModal = ref(false);
 
 const isDropdownOpen = ref(false);
 const { $axios } = useNuxtApp();
