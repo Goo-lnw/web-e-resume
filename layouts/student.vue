@@ -137,17 +137,19 @@
                   </li>
                   <li>
                     <button
-                      @click = "showWorkExperienceModal = true"
+                      @click="showWorkExperienceModal = true"
                       class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
-                      >Work Experience</button
                     >
+                      Work Experience
+                    </button>
                   </li>
                   <li>
-                    <NuxtLink
-                      to="/internships"
+                    <button
+                      @click="showInternshipsModal = true"
                       class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
-                      >Internships</NuxtLink
                     >
+                      Internships
+                    </button>
                   </li>
                   <li>
                     <NuxtLink
@@ -264,15 +266,17 @@
                     <button
                       @click="showWorkExperienceModal = true"
                       class="block px-4 py-2 hover:bg-gray-100"
-                      >Work Experience</button
                     >
+                      Work Experience
+                    </button>
                   </li>
                   <li>
-                    <NuxtLink
-                      to="/internships"
+                    <button
+                      @close="showInternshipsModal = true"
                       class="block px-4 py-2 hover:bg-gray-100"
-                      >Internships</NuxtLink
                     >
+                      Internships
+                    </button>
                   </li>
                   <li>
                     <NuxtLink
@@ -392,6 +396,10 @@
     v-if="showWorkExperienceModal"
     @close="showWorkExperienceModal = false"
   />
+  <internshipsModal
+    v-if="showInternshipsModal"
+    @close="showInternshipsModal = false"
+  />
 </template>
 <script setup>
 import { ref } from "vue";
@@ -400,12 +408,14 @@ import SoftSkillModal from "../components/modal/softSkillModal.vue";
 import educationModal from "../components/modal/educationModal.vue";
 import projectModal from "../components/modal/projectModal.vue";
 import workExperienceModal from "../components/modal/workExperienceModal.vue";
+import internshipsModal from "../components/modal/internshipsModal.vue";
 
 const showSkillModal = ref(false);
 const showSoftSkillModal = ref(false);
 const showEducationModal = ref(false);
 const showProjectModal = ref(false);
 const showWorkExperienceModal = ref(false);
+const showInternshipsModal = ref(false);
 
 const isDropdownOpen = ref(false);
 const { $axios } = useNuxtApp();
