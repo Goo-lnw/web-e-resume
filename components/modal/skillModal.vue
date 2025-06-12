@@ -392,6 +392,7 @@ const removeSkill = async (index) => {
   }
 };
 
+
 const saveSkills = async () => {
   try {
     for (const skill of skillData.value) {

@@ -424,15 +424,15 @@ const addNewInternship = async () => {
   }
 };
 
-const removeInternship = async (internship_id) => {
+const removeInternship = async (index) => {
+  const internship_id = index;
   try {
     await $axios.delete(`/resume/internship/${internship_id}`);
-    internshipData.value.splice(index, 1);
+    internshipData.value.splice(index, 1); // ลบจาก array
+    await getInternship(); // รีเฟรชข้อมูล
     console.log("Internship removed successfully");
-
   } catch (error) {
     console.error("Failed to remove internship:", error);
-        await getInternship();
 
   }
 };
