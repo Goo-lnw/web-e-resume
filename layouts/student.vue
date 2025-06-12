@@ -152,11 +152,12 @@
                     </button>
                   </li>
                   <li>
-                    <NuxtLink
-                      to="/training"
+                    <button
+                      @click="showTrainingModal = true"
                       class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
-                      >Training</NuxtLink
                     >
+                      Training
+                    </button>
                   </li>
                   <li>
                     <NuxtLink
@@ -265,32 +266,34 @@
                   <li>
                     <button
                       @click="showWorkExperienceModal = true"
-                      class="block px-4 py-2 hover:bg-gray-100"
+                      class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
                     >
                       Work Experience
                     </button>
                   </li>
                   <li>
                     <button
-                      @close="showInternshipsModal = true"
-                      class="block px-4 py-2 hover:bg-gray-100"
+                      @click="showInternshipsModal = true"
+                      class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
                     >
                       Internships
                     </button>
                   </li>
                   <li>
-                    <NuxtLink
-                      to="/training"
-                      class="block px-4 py-2 hover:bg-gray-100"
-                      >Training</NuxtLink
+                    <button
+                      @click="showTrainingModal = true"
+                      class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
                     >
+                      Training
+                    </button>
                   </li>
                   <li>
-                    <NuxtLink
+                    <button
                       to="/additional-info"
-                      class="block px-4 py-2 hover:bg-gray-100"
-                      >Additional Info</NuxtLink
+                      class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
                     >
+                      Additional Info
+                    </button>
                   </li>
                 </ul>
               </div>
@@ -400,6 +403,7 @@
     v-if="showInternshipsModal"
     @close="showInternshipsModal = false"
   />
+  <trainingModal v-if="showTrainingModal" @close="showTrainingModal = false" />
 </template>
 <script setup>
 import { ref } from "vue";
@@ -409,6 +413,7 @@ import educationModal from "../components/modal/educationModal.vue";
 import projectModal from "../components/modal/projectModal.vue";
 import workExperienceModal from "../components/modal/workExperienceModal.vue";
 import internshipsModal from "../components/modal/internshipsModal.vue";
+import trainingModal from "../components/modal/trainingModal.vue";
 
 const showSkillModal = ref(false);
 const showSoftSkillModal = ref(false);
@@ -416,6 +421,7 @@ const showEducationModal = ref(false);
 const showProjectModal = ref(false);
 const showWorkExperienceModal = ref(false);
 const showInternshipsModal = ref(false);
+const showTrainingModal = ref(false);
 
 const isDropdownOpen = ref(false);
 const { $axios } = useNuxtApp();
