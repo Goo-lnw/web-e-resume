@@ -369,7 +369,7 @@ const addNewSkill = async () => {
   try {
     isSaving.value = true;
     // Call the increaseSkill API to add a new skill
-    const res = await $axios.post("/resume/increaseSkill");
+    const res = await $axios.post("/resume/increase_skill");
     console.log("Added new skill:", res.data);
 
     // Refresh the skills list after adding
@@ -384,7 +384,7 @@ const addNewSkill = async () => {
 const removeSkill = async (index) => {
   const skill_id = index;
   try {
-    await $axios.delete(`/resume/deleteSkill/${skill_id}`);
+    await $axios.delete(`/resume/delete_skill/${skill_id}`);
     skillData.value.splice(index, 1);
     await getSkill();
   } catch (error) {

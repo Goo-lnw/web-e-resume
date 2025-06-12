@@ -287,7 +287,7 @@ const addNewEducation = async () => {
   try {
     isSaving.value = true;
     // Call the increaseEducation API to add a new education entry
-    const res = await $axios.post("/resume/increaseEducation");
+    const res = await $axios.post("/resume/increase_education");
     console.log("Added new Education:", res.data);
 
     // Refresh the education list after adding
@@ -302,7 +302,7 @@ const addNewEducation = async () => {
 
 const removeEducation = async (index, education_id) => {
   try {
-    await $axios.delete(`/resume/deleteEducation/${education_id}`);
+    await $axios.delete(`/resume/delete_education/${education_id}`);
     // Remove from local array
     educationData.value.splice(index, 1);
     console.log("Education removed successfully");
@@ -323,7 +323,7 @@ const saveEducation = async () => {
     // Save all education entries
     for (const education of educationData.value) {
       await $axios.put(
-        `/resume/education-history/${education.education_history_id}`,
+        `/resume/education_history/${education.education_history_id}`,
         {
           education_history_institution:
             education.education_history_institution,

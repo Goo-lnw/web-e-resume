@@ -358,7 +358,7 @@ const { showAlert } = useAlert();
 const getSoftSkill = async () => {
   try {
     isLoading.value = true;
-    const res = await $axios.get("/student/softSkill");
+    const res = await $axios.get("/student/soft_skill");
     softSkillData.value = res.data || [];
     console.log("Fetched softSkill:", softSkillData.value);
   } catch (error) {
@@ -375,7 +375,7 @@ const addNewSoftSkill = async () => {
   try {
     isSaving.value = true;
     // Call the increaseSoftSkill API to add a new skill
-    const res = await $axios.post("/resume/increaseSoftSkill");
+    const res = await $axios.post("/resume/increase_soft_skill");
     console.log("Added new soft skill:", res.data);
 
     // Refresh the skills list after adding
@@ -396,7 +396,7 @@ const removeSoftSkill = async (index) => {
   }
 
   try {
-    await $axios.delete(`/resume/deleteSoftSkill/${softSkill.soft_skill_id}`);
+    await $axios.delete(`/resume/delete_soft_skill/${softSkill.soft_skill_id}`);
     console.log("Removed soft skill successfully");
 
     // Refresh the skills list after deletion
