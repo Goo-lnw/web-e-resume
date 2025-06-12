@@ -145,7 +145,7 @@
                   </li>
                   <li>
                     <button
-                      @click="showInternshipsModal = true"
+                      @click="showInternshipModal = true"
                       class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
                     >
                       Internships
@@ -274,7 +274,7 @@
                   </li>
                   <li>
                     <button
-                      @click="showInternshipsModal = true"
+                      @click="showInternshipModal = true"
                       class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
                     >
                       Internships
@@ -400,9 +400,9 @@
     v-if="showWorkExperienceModal"
     @close="showWorkExperienceModal = false"
   />
-  <internshipsModal
-    v-if="showInternshipsModal"
-    @close="showInternshipsModal = false"
+  <internshipModal
+    v-if="showInternshipModal"
+    @close="showInternshipModal = false"
   />
   <trainingModal v-if="showTrainingModal" @close="showTrainingModal = false" />
   <additionalInfoModal
@@ -417,7 +417,7 @@ import SoftSkillModal from "../components/modal/softSkillModal.vue";
 import educationModal from "../components/modal/educationModal.vue";
 import projectModal from "../components/modal/projectModal.vue";
 import workExperienceModal from "../components/modal/workExperienceModal.vue";
-import internshipsModal from "../components/modal/internshipsModal.vue";
+import internshipModal from "../components/modal/internshipModal.vue";
 import trainingModal from "../components/modal/trainingModal.vue";
 import additionalInfoModal from "../components/modal/additionalInfoModal.vue";
 
@@ -426,7 +426,7 @@ const showSoftSkillModal = ref(false);
 const showEducationModal = ref(false);
 const showProjectModal = ref(false);
 const showWorkExperienceModal = ref(false);
-const showInternshipsModal = ref(false);
+const showInternshipModal = ref(false);
 const showTrainingModal = ref(false);
 const showAdditionalInfoModal = ref(false);
 
