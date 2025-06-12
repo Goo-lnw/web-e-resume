@@ -120,7 +120,6 @@
                 />
               </div>
 
-            
               <!-- Description -->
               <div class="space-y-2 lg:col-span-2">
                 <label
@@ -149,6 +148,33 @@
                 ></textarea>
               </div>
 
+              <div class="space-y-2 lg:col-span-2">
+                <label
+                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
+                >
+                  <svg
+                    class="w-4 h-4 text-gray-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    ></path>
+                  </svg>
+                  <span>Description</span>
+                </label>
+                
+                  <input
+                    type="file"
+                    @change="handleFileChange($event, info)"
+                    class="..."
+                  />
+                
+              </div>
             </div>
           </div>
         </div>
@@ -327,16 +353,43 @@ const removeAdditionalInfo = async (additional_info_id) => {
   }
 };
 
+const handleFileChange = (event, info) => {
+  const file = event.target.files[0];
+  if (file) {
+    info.additional_info_file_attachment = file;
+  }
+};
+
 const saveAdditionalInfo = async () => {
   try {
     isSaving.value = true;
+
     for (const info of additionalInfoData.value) {
-      await $axios.put(`/resume/additional_info/${info.additional_info_id}`, {
-        additional_info_title: info.additional_info_title,
-        additional_info_description: info.additional_info_description,
-        additional_info_file_attachment: info.additional_info_file_attachment,
-      });
+      const formData = new FormData();
+      formData.append("additional_info_title", info.additional_info_title);
+      formData.append(
+        "additional_info_description",
+        info.additional_info_description
+      );
+
+      if (info.additional_info_file_attachment instanceof File) {
+        formData.append(
+          "additional_info_file_attachment",
+          info.additional_info_file_attachment
+        );
+      }
+
+      await $axios.put(
+        `/resume/additional_info/${info.additional_info_id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
     }
+
     showAlert("บันทึกข้อมูลสำเร็จ", "success");
     emit("save", additionalInfoData.value);
     close();
