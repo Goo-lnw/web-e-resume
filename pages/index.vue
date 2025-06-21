@@ -5,6 +5,7 @@ definePageMeta({
 const toast = useToast();
 const { $axios } = useNuxtApp();
 const router = useRouter();
+const { handleApiError } = useErrorHandler();
 
 const formData = ref({
   email: "",
@@ -30,7 +31,8 @@ async function login() {
       }
     }
   } catch (err) {
-    console.log(err);
+    handleApiError(err, "เกิดข้อผิดพลาดในการเข้าสู่ระบบ");
+    console.error("Login error:", err);
   }
 }
 </script>

@@ -17,8 +17,6 @@ export const useResumeStore = defineStore('resume', () => {
 
   async function fetchResume() {
     const { $axios } = useNuxtApp();
-    const { handleApiError } = useErrorHandler();
-    
     loading.value = true
     try {
       const res = await $axios.get('/student/protected')
@@ -34,10 +32,8 @@ export const useResumeStore = defineStore('resume', () => {
       workExperience.value = res.data.workExperience || []
       error.value = null
       console.log(workExperience.value)
-    } catch (err) {
+    } catch (err:any) {
       error.value = err.message || 'Failed to load data'
-      handleApiError(err, "เกิดข้อผิดพลาดในการดึงข้อมูล Resume")
-      console.error("Error fetching resume data:", err)
     } finally {
       loading.value = false
     }
@@ -58,4 +54,4 @@ export const useResumeStore = defineStore('resume', () => {
     loading,
     error,
   }
-}) 
+})
