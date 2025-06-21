@@ -11,6 +11,11 @@ const showModalAdd = ref(false);
 const editData = ref(null);
 const editId = ref(null);
 const { showAlert } = useAlert();
+const { handleApiError } = useErrorHandler();
+
+// เพิ่ม loading และ error states
+const isLoading = ref(false);
+const error = ref(null);
 
 const formEdit = ref({
   student_name: "",
@@ -28,13 +33,20 @@ const formAdd = ref({
 
 async function fetchStudent() {
   try {
+    isLoading.value = true;
+    error.value = null;
     const response = await $axios.get("/student");
     student.value = response.data;
     console.log(student.value);
   } catch (err) {
-    console.log(err);
+    error.value = err.message;
+    handleApiError(err, "เกิดข้อผิดพลาดในการดึงข้อมูลนักเรียน");
+    console.error("Error fetching students:", err);
+  } finally {
+    isLoading.value = false;
   }
 }
+
 async function actionStudent(params, action) {
   try {
     if (action === "delete" && params) {
@@ -60,9 +72,15 @@ async function actionStudent(params, action) {
       showModalAdd.value = true;
     }
   } catch (err) {
-    console.log(err);
+    if (action === "delete") {
+      handleApiError(err, "เกิดข้อผิดพลาดในการลบข้อมูลนักเรียน");
+    } else if (action === "edit") {
+      handleApiError(err, "เกิดข้อผิดพลาดในการดึงข้อมูลนักเรียน");
+    }
+    console.error("Error in actionStudent:", err);
   }
 }
+
 async function saveEdit() {
   try {
     console.log(formEdit.value);
@@ -78,9 +96,11 @@ async function saveEdit() {
       fetchStudent();
     }
   } catch (err) {
-    console.log(err);
+    handleApiError(err, "เกิดข้อผิดพลาดในการแก้ไขข้อมูลนักเรียน");
+    console.error("Error saving edit:", err);
   }
 }
+
 async function saveAdd() {
   try {
     console.log(formAdd.value);
@@ -91,7 +111,8 @@ async function saveAdd() {
     }
     fetchStudent();
   } catch (err) {
-    console.log(err);
+    handleApiError(err, "เกิดข้อผิดพลาดในการเพิ่มข้อมูลนักเรียน");
+    console.error("Error saving add:", err);
   }
 }
 
@@ -113,7 +134,30 @@ onMounted(() => {
         </h1>
       </div>
 
-      <div class="rounded-lg shadow-md p-4 sm:p-6 bg-white">
+      <!-- Loading State -->
+      <div v-if="isLoading" class="flex justify-center items-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <span class="ml-3 text-gray-600">กำลังโหลดข้อมูล...</span>
+      </div>
+
+      <!-- Error State -->
+      <div v-else-if="error" class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded mb-4">
+        <div class="flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+          </svg>
+          {{ error }}
+        </div>
+        <button 
+          @click="fetchStudent" 
+          class="mt-2 text-sm text-red-600 hover:text-red-800 underline"
+        >
+          ลองใหม่อีกครั้ง
+        </button>
+      </div>
+
+      <!-- Main Content -->
+      <div v-else class="rounded-lg shadow-md p-4 sm:p-6 bg-white">
         <div
           class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-3 sm:gap-4"
         >
@@ -219,15 +263,21 @@ onMounted(() => {
               <tr
                 v-for="(item, index) in student"
                 :key="index + 1"
-                class="hover:bg-gray-50 dtransition-all uration-200 "
+                class="hover:bg-gray-50 dtransition-all uration-200"
               >
-                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
+                <td
+                  class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105"
+                >
                   {{ item.student_main_id }}
                 </td>
-                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
+                <td
+                  class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105"
+                >
                   {{ item.student_name }}
                 </td>
-                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105 text-blue-500 ">
+                <td
+                  class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105 text-blue-500"
+                >
                   {{ item.student_email }}
                 </td>
                 <td
@@ -282,7 +332,7 @@ onMounted(() => {
     <!-- Edit Modal -->
     <dialog
       v-if="showModal"
-      class="fixed  inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full"
+      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full"
       :class="{ active: showModal }"
       open
     >
@@ -381,7 +431,7 @@ onMounted(() => {
                 placeholder="เบอร์โทรศัพท์"
               />
             </div>
-            <div class="flex justify-end space-x-2 sm:space-x-3 pt-3 sm:pt-4 ">
+            <div class="flex justify-end space-x-2 sm:space-x-3 pt-3 sm:pt-4">
               <button
                 class="px-3 sm:px-4 py-1.5 sm:py-2 bg-amber-600 rounded-lg text-white hover:bg-amber-700 transition duration-200 text-sm sm:text-base cursor-pointer"
                 @click.prevent="showModal = false"

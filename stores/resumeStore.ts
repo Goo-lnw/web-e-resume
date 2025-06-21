@@ -32,7 +32,7 @@ export const useResumeStore = defineStore('resume', () => {
       workExperience.value = res.data.workExperience || []
       error.value = null
       console.log(workExperience.value)
-    } catch (err) {
+    } catch (err:any) {
       error.value = err.message || 'Failed to load data'
     } finally {
       loading.value = false

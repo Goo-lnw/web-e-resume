@@ -266,6 +266,7 @@ const isLoading = ref(true);
 const isSaving = ref(false);
 const { $axios } = useNuxtApp();
 const { showAlert } = useAlert();
+const { handleApiError } = useErrorHandler();
 
 const getEducation = async () => {
   try {
@@ -276,6 +277,7 @@ const getEducation = async () => {
   } catch (error) {
     console.error("Failed to fetch education:", error);
     educationData.value = [];
+    handleApiError(error, "เกิดข้อผิดพลาดในการดึงข้อมูลการศึกษา");
   } finally {
     isLoading.value = false;
   }
@@ -294,7 +296,7 @@ const addNewEducation = async () => {
     await getEducation();
   } catch (error) {
     console.error("Failed to add new Education:", error);
-    // You might want to show a toast notification here
+    handleApiError(error, "เกิดข้อผิดพลาดในการเพิ่มข้อมูลการศึกษา");
   } finally {
     isSaving.value = false;
   }
@@ -308,10 +310,12 @@ const removeEducation = async (index, education_id) => {
     console.log("Education removed successfully");
   } catch (error) {
     console.error("Failed to remove education:", error);
+    handleApiError(error, "เกิดข้อผิดพลาดในการลบข้อมูลการศึกษา");
     // Refresh the list in case of error to sync with server
     await getEducation();
   }
 };
+
 const parseStr = (value) => {
   return value !== null && value !== undefined ? String(value) : null;
 };
@@ -342,7 +346,7 @@ const saveEducation = async () => {
     close();
   } catch (error) {
     console.error("Failed to save education:", error);
-    // You might want to show an error message to the user
+    handleApiError(error, "เกิดข้อผิดพลาดในการบันทึกข้อมูลการศึกษา");
   } finally {
     isSaving.value = false;
   }
