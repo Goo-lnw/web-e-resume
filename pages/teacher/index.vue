@@ -3,7 +3,7 @@ definePageMeta({
   layout: "teacher",
 });
 
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 const student = ref({});
 const { $axios } = useNuxtApp();
 const showModal = ref(false);
@@ -12,6 +12,29 @@ const editData = ref(null);
 const editId = ref(null);
 const { showAlert } = useAlert();
 const { handleApiError } = useErrorHandler();
+
+// state สำหรับการค้นหานักเรียน
+const searchQuery = ref("");
+
+// ฟังก์ชันสำหรับการค้นหานักเรียน ด้วยชื่อ เเละ รหัสนักเรียน
+function filterStudents() {
+  // 
+  if (!searchQuery.value) {
+    return student.value;
+  }
+  // แปลง query เป็นตัวพิมพ์เล็กเพื่อการค้นหาที่ไม่สนใจตัวพิมพ์ใหญ่
+  const query = searchQuery.value.toLowerCase();
+  return student.value.filter((item) => {
+    return (
+      item.student_name.toLowerCase().includes(query) ||
+      item.student_main_id.toLowerCase().includes(query)
+    );
+  });
+}
+
+// ใช้ computed เพื่อให้การค้นหาทำงานแบบ reactive
+const filteredStudents = computed(() => filterStudents());
+
 
 // เพิ่ม loading และ error states
 const isLoading = ref(false);
@@ -136,20 +159,29 @@ onMounted(() => {
 
       <!-- Loading State -->
       <div v-if="isLoading" class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"
+        ></div>
         <span class="ml-3 text-gray-600">กำลังโหลดข้อมูล...</span>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded mb-4">
+      <div
+        v-else-if="error"
+        class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded mb-4"
+      >
         <div class="flex items-center">
           <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clip-rule="evenodd"
+            ></path>
           </svg>
           {{ error }}
         </div>
-        <button 
-          @click="fetchStudent" 
+        <button
+          @click="fetchStudent"
           class="mt-2 text-sm text-red-600 hover:text-red-800 underline"
         >
           ลองใหม่อีกครั้ง
@@ -165,6 +197,7 @@ onMounted(() => {
           <div class="flex items-center w-full sm:w-auto">
             <div class="relative w-full">
               <input
+                v-model="searchQuery"
                 type="text"
                 placeholder="ค้นหานักเรียน/นักศึกษา..."
                 class="pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg shadow-lg w-full text-sm sm:text-base"
@@ -261,7 +294,7 @@ onMounted(() => {
             </thead>
             <tbody class="divide-y divide-gray-200">
               <tr
-                v-for="(item, index) in student"
+                v-for="(item, index) in filteredStudents"
                 :key="index + 1"
                 class="hover:bg-gray-50 dtransition-all uration-200"
               >
