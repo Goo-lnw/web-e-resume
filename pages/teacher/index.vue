@@ -4,7 +4,7 @@ definePageMeta({
 });
 
 import { ref, onMounted, computed } from "vue";
-const student = ref({});
+
 const { $axios } = useNuxtApp();
 const showModal = ref(false);
 const showModalAdd = ref(false);
@@ -12,6 +12,12 @@ const editData = ref(null);
 const editId = ref(null);
 const { showAlert } = useAlert();
 const { handleApiError } = useErrorHandler();
+
+// 2️⃣ ตัวแปรเก็บข้อมูล
+const student = ref([]);
+const page = ref(1); // หน้าปัจจุบัน
+const limit = ref(10); // จำนวนข้อมูลต่อหน้า
+const totalPages = ref(1); // จำนวนหน้าทั้งหมด
 
 // state สำหรับการค้นหานักเรียน
 const searchQuery = ref("");
@@ -31,9 +37,6 @@ function filterStudents() {
     );
   });
 }
-
-// ใช้ computed เพื่อให้การค้นหาทำงานแบบ reactive
-const filteredStudents = computed(() => filterStudents());
 
 // เพิ่ม loading และ error states
 const isLoading = ref(false);
@@ -57,9 +60,15 @@ async function fetchStudent() {
   try {
     isLoading.value = true;
     error.value = null;
-    const response = await $axios.get("/student");
-    student.value = response.data;
-    console.log(student.value);
+    const response = await $axios.get("/student", {
+      params: {
+        page: page.value,
+        limit: limit.value,
+      },
+    });
+    student.value = response.data.data;
+    totalPages.value = response.data.totalPages;
+    console.log(response.data);
   } catch (err) {
     error.value = err.message;
     handleApiError(err, "เกิดข้อผิดพลาดในการดึงข้อมูลนักเรียน");
@@ -143,6 +152,7 @@ async function saveAdd() {
 onMounted(() => {
   fetchStudent();
 });
+watch(page, () => fetchStudents());
 </script>
 <template>
   <div class="min-h-full bg-gradient-to-b from-blue-100 to-white rounded">
@@ -281,8 +291,8 @@ onMounted(() => {
             </thead>
             <tbody class="divide-y divide-gray-200">
               <tr
-                v-for="(item, index) in filteredStudents"
-                :key="index + 1"
+                v-for="item in filterStudents()"
+                :key="item.student_id"
                 class="hover:bg-gray-50 dtransition-all uration-200"
               >
                 <td
@@ -345,6 +355,23 @@ onMounted(() => {
               </tr>
             </tbody>
           </table>
+          <div class="flex items-center justify-center mt-4 gap-4">
+            <button
+              @click="page--"
+              :disabled="page <= 1"
+              class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+            >
+              Prev
+            </button>
+            <span>Page {{ page }} / {{ totalPages }}</span>
+            <button
+              @click="page++"
+              :disabled="page >= totalPages"
+              class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>
