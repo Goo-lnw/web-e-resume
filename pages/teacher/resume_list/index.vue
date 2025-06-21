@@ -15,7 +15,7 @@ async function fetchResume() {
   try {
     const res = await $axios.get("/resume");
     const data = res.data;
-    console.log(data);
+    console.log("resume ", data);
 
     data.map((item) => {
       item.resume_teacher_comment = "";
@@ -51,7 +51,17 @@ async function Resume(params) {
 
   r.push(`/teacher/resume_list/${params}`);
 }
-
+async function likeHendler(params) {
+  console.log(params);
+  try {
+    const res = await $axios.patch(`/resume/like/${params}`);
+    if (res.status === 200) {
+      fetchResume();
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
 onMounted(() => {
   fetchResume();
 });
@@ -166,20 +176,20 @@ onMounted(() => {
             <div class="border-t border-gray-100">
               <div class="flex">
                 <button
+                  @click="likeHendler(item.resume.resume_id)"
                   class="flex items-center space-x-2 text-gray-600 hover:bg-gray-100 hover:scale-110 transition-all duration-200 ease-in-out px-3 py-2 rounded-lg flex-1 justify-center cursor-pointer group"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="18"
-                    height="18"
-                    viewBox="0 0 48 48"
-                    class=""
-                  >
-                    <path
-                      fill="#f44336"
-                      d="M34 9c-4.2 0-7.9 2.1-10 5.4C21.9 11.1 18.2 9 14 9C7.4 9 2 14.4 2 21c0 11.9 22 24 22 24s22-12 22-24c0-6.6-5.4-12-12-12"
-                    />
-                  </svg>
+                  <Icon
+                    v-if="item.resume.resume_follow_resume === '1'"
+                    name="material-symbols:favorite"
+                    style="color: red"
+                  />
+
+                  <Icon
+                    v-else
+                    name="material-symbols:favorite"
+                    style="color: black"
+                  />
                   <span class="text-sx sm:text-sm font-medium">ถูกใจ</span>
                 </button>
                 <div class="bg-gray-200 w-px"></div>
@@ -204,7 +214,7 @@ onMounted(() => {
           </div>
         </div>
         <!-- 9. Right Sidebar -->
-        <div class="lg:col-span-1 order-3 ">
+        <div class="lg:col-span-1 order-3">
           <!--  -->
           <div class="bg-white rounded-lg shadow p-4 sticky top-20">
             <h3 class="font-semibold text-gray-700">ได้รับการสนับสนุน</h3>
