@@ -15,19 +15,16 @@ const formData = ref({
 async function login() {
   try {
     const response = await $axios.post("/login", formData.value);
-    console.log(response.data);
     if (response.status === 200) {
       const token = response.data.token;
       const tokenCookie = useCookie("token");
       tokenCookie.value = token;
 
       const role = response.data.data.role;
-      //   console.log(response.data.data);
-
       if (role === "student") {
-        router.push("/student");
+        window.location.href = "/student";
       } else if (role === "teacher") {
-        router.push("/teacher");
+        window.location.href = "/teacher";
       }
     }
   } catch (err) {
@@ -254,7 +251,6 @@ async function login() {
   </div>
 </template>
 
-<script setup></script>
 <style scoped>
 /* อนิเมชันสำหรับ fade-up */
 @keyframes fade-up {

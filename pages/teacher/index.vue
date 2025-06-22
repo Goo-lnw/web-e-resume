@@ -3,8 +3,8 @@ definePageMeta({
   layout: "teacher",
 });
 
-import { ref, onMounted } from "vue";
-const student = ref({});
+import { ref, onMounted, computed } from "vue";
+
 const { $axios } = useNuxtApp();
 const showModal = ref(false);
 const showModalAdd = ref(false);
@@ -12,6 +12,31 @@ const editData = ref(null);
 const editId = ref(null);
 const { showAlert } = useAlert();
 const { handleApiError } = useErrorHandler();
+
+// 2️⃣ ตัวแปรเก็บข้อมูล
+const student = ref([]);
+const page = ref(1); // หน้าปัจจุบัน
+const limit = ref(10); // จำนวนข้อมูลต่อหน้า
+const totalPages = ref(1); // จำนวนหน้าทั้งหมด
+
+// state สำหรับการค้นหานักเรียน
+const searchQuery = ref("");
+
+// ฟังก์ชันสำหรับการค้นหานักเรียน ด้วยชื่อ เเละ รหัสนักเรียน
+function filterStudents() {
+  //
+  if (!searchQuery.value) {
+    return student.value;
+  }
+  // แปลง query เป็นตัวพิมพ์เล็กเพื่อการค้นหาที่ไม่สนใจตัวพิมพ์ใหญ่
+  const query = searchQuery.value.toLowerCase();
+  return student.value.filter((item) => {
+    return (
+      item.student_name.toLowerCase().includes(query) ||
+      item.student_main_id.toLowerCase().includes(query)
+    );
+  });
+}
 
 // เพิ่ม loading และ error states
 const isLoading = ref(false);
@@ -35,9 +60,15 @@ async function fetchStudent() {
   try {
     isLoading.value = true;
     error.value = null;
-    const response = await $axios.get("/student");
-    student.value = response.data;
-    console.log(student.value);
+    const response = await $axios.get("/student", {
+      params: {
+        page: page.value,
+        limit: limit.value,
+      },
+    });
+    student.value = response.data.data;
+    totalPages.value = response.data.totalPages;
+    console.log(response.data);
   } catch (err) {
     error.value = err.message;
     handleApiError(err, "เกิดข้อผิดพลาดในการดึงข้อมูลนักเรียน");
@@ -67,9 +98,11 @@ async function actionStudent(params, action) {
       formEdit.value.student_profile_image =
         response_id.data.student_profile_image;
       editId.value = response_id.data.student_id;
-    } else if ((action == "add", params == 0)) {
+    } else if (action == "add" && params == 0) {
       showModal.value = false;
       showModalAdd.value = true;
+    } else if (action === "add_activity") {
+      window.location.href = "/teacher/activity";
     }
   } catch (err) {
     if (action === "delete") {
@@ -119,6 +152,7 @@ async function saveAdd() {
 onMounted(() => {
   fetchStudent();
 });
+watch(page, () => fetchStudents());
 </script>
 <template>
   <div class="min-h-full bg-gradient-to-b from-blue-100 to-white rounded">
@@ -136,20 +170,29 @@ onMounted(() => {
 
       <!-- Loading State -->
       <div v-if="isLoading" class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"
+        ></div>
         <span class="ml-3 text-gray-600">กำลังโหลดข้อมูล...</span>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded mb-4">
+      <div
+        v-else-if="error"
+        class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded mb-4"
+      >
         <div class="flex items-center">
           <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clip-rule="evenodd"
+            ></path>
           </svg>
           {{ error }}
         </div>
-        <button 
-          @click="fetchStudent" 
+        <button
+          @click="fetchStudent"
           class="mt-2 text-sm text-red-600 hover:text-red-800 underline"
         >
           ลองใหม่อีกครั้ง
@@ -165,6 +208,7 @@ onMounted(() => {
           <div class="flex items-center w-full sm:w-auto">
             <div class="relative w-full">
               <input
+                v-model="searchQuery"
                 type="text"
                 placeholder="ค้นหานักเรียน/นักศึกษา..."
                 class="pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg shadow-lg w-full text-sm sm:text-base"
@@ -192,40 +236,26 @@ onMounted(() => {
 
           <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:ml-auto">
             <button
-              @click="actionStudent(0, 'add')"
-              class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center transition duration-200 cursor-pointer text-sm sm:text-base"
+              @click="actionStudent(0, 'add_activity')"
+              class="space-x-1 bg-green-400 hover:bg-green-600 text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center transition duration-200 cursor-pointer text-xs sm:text-xs"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4 sm:h-5 sm:w-5 mr-1"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              เพิ่มนักเรียน/นักศึกษา
+              <Icon name="ep:circle-plus-filled" style="color: white" />
+              <span>เพิ่มกิจกรรม</span>
+            </button>
+
+            <button
+              @click="actionStudent(0, 'add')"
+              class="space-x-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center transition duration-200 cursor-pointer text-xs sm:text-xs"
+            >
+              <Icon name="ep:circle-plus-filled" style="color: white" />
+              <span>เพิ่มนักเรียน/นักศึกษา</span>
             </button>
             <NuxtLink
               to="/teacher/resume_list"
-              class="flex items-center bg-cyan-600 text-white px-4 sm:px-6 py-2 rounded-lg shadow-md hover:bg-cyan-700 transition duration-200 gap-1 sm:gap-2 text-sm sm:text-base"
+              class="space-x-1 flex items-center bg-cyan-600 text-white px-4 sm:px-6 py-2 rounded-lg shadow-md hover:bg-cyan-700 transition duration-200 gap-1 sm:gap-2 text-xs sm:text-xs"
             >
-              หน้ารายการ Resume
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4 sm:h-5 sm:w-5"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="currentColor"
-                  fill-rule="evenodd"
-                  d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10m.47-13.53a.75.75 0 0 1 1.06 0l3 3a.75.75 0 0 1 0 1.06l-3 3a.75.75 0 1 1-1.06-1.06l1.72-1.72H8a.75.75 0 0 1 0-1.5h6.19l-1.72-1.72a.75.75 0 0 1 0-1.06"
-                  clip-rule="evenodd"
-                />
-              </svg>
+              <span>หน้ารายการ Resume</span>
+              <Icon name="ep:right" style="color: white" />
             </NuxtLink>
           </div>
         </div>
@@ -261,8 +291,8 @@ onMounted(() => {
             </thead>
             <tbody class="divide-y divide-gray-200">
               <tr
-                v-for="(item, index) in student"
-                :key="index + 1"
+                v-for="item in filterStudents()"
+                :key="item.student_id"
                 class="hover:bg-gray-50 dtransition-all uration-200"
               >
                 <td
@@ -325,6 +355,23 @@ onMounted(() => {
               </tr>
             </tbody>
           </table>
+          <div class="flex items-center justify-center mt-4 gap-4">
+            <button
+              @click="page--"
+              :disabled="page <= 1"
+              class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+            >
+              Prev
+            </button>
+            <span>Page {{ page }} / {{ totalPages }}</span>
+            <button
+              @click="page++"
+              :disabled="page >= totalPages"
+              class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>
