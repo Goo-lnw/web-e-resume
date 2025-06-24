@@ -100,6 +100,16 @@ function getProficiencyColor(proficiency) {
   }
 }
 
+function viewCertificate(training) {
+  const name = btoa(
+    encodeURIComponent(resume.value.student?.student_name || "Unknown")
+  );
+  const file = btoa(
+    encodeURIComponent(training.training_history_certificate_file)
+  );
+  window.open(`/teacher/resume_list/cerdetail/${name}?file=${file}`, "_blank");
+}
+
 onMounted(() => {
   fetchResume();
 });
@@ -508,17 +518,19 @@ onMounted(() => {
                 <p class="text-sm text-gray-500 mb-2">
                   📍 {{ training.training_history_location }}
                 </p>
-                <NuxtLink
+                <button
                   v-if="training.training_history_certificate_file"
-                  :to="{
-                  path: `/teacher/resume_list/cerdetail/${(resume.student?.student_name || 'U').split(' ').join('_')}/`,
-                  query: { file: training?.training_history_certificate_file }
-                  }"
-                  target="_blank"
+                  @click="viewCertificate(training)"
                   class="text-blue-500 hover:text-blue-700 text-sm underline"
+                  style="
+                    background: none;
+                    border: none;
+                    padding: 0;
+                    cursor: pointer;
+                  "
                 >
                   View Certificate
-                </NuxtLink>
+                </button>
               </div>
               <p
                 v-if="

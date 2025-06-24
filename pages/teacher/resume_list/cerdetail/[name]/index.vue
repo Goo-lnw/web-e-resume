@@ -23,8 +23,8 @@ import { useRoute } from "vue-router";
 const certCanvas = ref("certCanvas");
 const canvasWrapper = ref("canvasWrapper");
 const route = useRoute();
-const name = ref(route.params?.name);
-const urls = ref(route.query?.file);
+const name = ref(decodeURIComponent(atob(route.params.name)));
+const urls = ref(decodeURIComponent(atob(route.query.file)));
 
 function generateAndUploadImage(imageSrc) {
   const canvas = certCanvas.value;
