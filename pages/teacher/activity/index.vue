@@ -2,9 +2,8 @@
 definePageMeta({
     layout: "teacher",
 });
-import { table } from "#build/ui";
-import { ref, onMounted } from "vue";
-const r = useRouter();
+
+import { ref, onMounted, watch } from "vue";
 const { $axios } = useNuxtApp();
 const { showAlert } = useAlert();
 // fetch state
@@ -12,6 +11,8 @@ const allActivityData = ref([]);
 const viewActivityData = ref({});
 const notCheckinStudentData = ref({});
 const checkedinStudentData = ref({});
+const certExistStudent = ref({});
+const certNotExistStudent = ref({});
 
 //form ref state
 const formCreateActivity = ref({
@@ -42,244 +43,23 @@ const initialFormCreate = {
     activity_start_date: null,
     activity_end_date: null,
 };
-const id_activity = ref(null);
-const deleteActivityCheckbox = ref([]);
-const assignActivityCheckbox = ref([]);
-
+const notCheckedinStudentCheckbox = ref([]);
+const removeStudentCertCheckbox = ref([]);
+const certNotExistTableCheckbox = ref([]);
 // modal state
-// const assignCertModalShow = ref(false);
 const createActivityModalShow = ref(false);
 const editActivityModalShow = ref(false);
 const viewActivityModalShow = ref(false);
-//
-const notCheckedinTab = ref(false);
-const checkedinTab = ref(false);
+
+// activity view tab
+const notCheckedinTab = ref(true);
+const assignCertTab = ref(false);
+const checkCertificateTab = ref(false);
+
+const id_activity = ref(null);
 
 const certCanvas = ref("certCanvas");
-// const imageCanvasRef = ref(null);
 const canvasWrapper = ref("canvasWrapper");
-
-async function fetchActivity() {
-    try {
-        const res = await $axios.get("/teacher/activity");
-        const data = res.data;
-
-        allActivityData.value = data;
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-async function fecthActivityById(aid) {
-    try {
-        const res = await $axios.get(`/teacher/activity/${aid}`);
-        const data = res.data[0];
-        // console.log(data);
-        id_activity.value = data.activity_id;
-        console.log("ID กิจกรรม:", id_activity.value);
-        Object.assign(viewActivityData.value, data);
-        // viewActivityData.value = data;
-        // console.log(viewActivityData.value);
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-async function checkInSubmit() {
-    const selectedStudents = notCheckinStudentData.value.filter((student) => student.selected);
-    const selectedIds = selectedStudents.map((student) => student.resume_id);
-    console.log("รหัสนักเรียนที่ติ๊ก:", selectedIds);
-
-    const payload = {
-        activity_id: id_activity.value,
-        resume_id: selectedIds,
-    };
-
-    // console.log("payload:", payload);
-
-    const res = await $axios.post("/teacher/activity/check_in", payload);
-    if (res.status === 200) {
-        showAlert("เพิ่มรายชื่อนักเรียนแล้ว", "success");
-        await fetchNotCheckedinStudent();
-        await fetchCheckedinStudent(id_activity.value);
-    } else {
-        showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error");
-    }
-}
-
-async function assignActivitySubmit() {
-    const resume_id = [];
-    for (const rid of assignActivityCheckbox.value) {
-        resume_id.push(rid);
-    }
-    const payload = {
-        activity_id: id_activity.value,
-        resume_id: resume_id,
-    };
-    // console.log(payload);
-
-    const res = await $axios.post(`/teacher/activity/assign_cert`, payload);
-
-    if (res.status === 200) {
-        showAlert("มอบใบ Certificate เรียบร้อยแล้ว", "success");
-        assignActivityCheckbox.value = [];
-        viewActivityData.value = [];
-        viewActivityModalShow.value = false;
-        await fetchNotCheckedinStudent(id_activity.value);
-        await fetchCheckedinStudent(id_activity.value);
-    } else {
-        showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error");
-    }
-}
-
-async function removeSelectedStudents() {
-    const resume_id = [];
-    for (const rid of deleteActivityCheckbox.value) {
-        resume_id.push(rid);
-    }
-    const payload = {
-        resume_id: resume_id,
-    };
-    const res = await $axios.delete(`/teacher/activity/student/${id_activity.value}`, {
-        data: payload,
-    });
-
-    if (res.status === 200) {
-        showAlert("นำชื่อออกแล้ว", "success");
-        deleteActivityCheckbox.value = [];
-        await fetchNotCheckedinStudent(id_activity.value);
-        await fetchCheckedinStudent(id_activity.value);
-    } else {
-        showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error");
-    }
-}
-
-async function fetchNotCheckedinStudent(aid) {
-    try {
-        const res = await $axios.get(`/teacher/activity/student_not_in/${aid}`);
-        const data = res.data;
-        console.log(data);
-
-        Object.assign(notCheckinStudentData.value, data);
-
-        notCheckinStudentData.value = data.map((student) => ({
-            ...student,
-            selected: false,
-        }));
-        // console.log(notCheckinStudentData.value);
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-async function fetchCheckedinStudent(aid) {
-    try {
-        const res = await $axios.get(`/teacher/activity/student_in/${aid}`);
-        const data = res.data;
-        console.log(data);
-
-        Object.assign(checkedinStudentData.value, data);
-
-        checkedinStudentData.value = data.map((student) => ({
-            ...student,
-            selected: false,
-        }));
-        // console.log(checkedinStudentData.value);
-    } catch (err) {
-        console.log(err);
-    }
-}
-
-function generateAndUploadImage(imageSrc) {
-    const canvas = certCanvas.value;
-    const wrapper = canvasWrapper.value;
-    if (!canvas || !wrapper) return;
-
-    const ctx = canvas.getContext("2d");
-    const img = new Image();
-    img.src = imageSrc;
-
-    // ข้อมูลเกี่ยวกับข้อความ
-    let textX = 50;
-    let textY = 50;
-    // const text = "Your Text Here";
-    const text = "นาย ชื่อจริง นามสกุล";
-    let isDragging = false;
-    let offsetX = 0;
-    let offsetY = 0;
-
-    img.onload = () => {
-        const parentWidth = wrapper.clientWidth;
-        const parentHeight = wrapper.clientHeight || window.innerHeight * 0.6; // fallback ถ้าไม่มี
-
-        // คำนวณ scale โดยรักษาอัตราส่วนของภาพ (fit แบบ contain)
-        const scale = Math.min(parentWidth / img.width, parentHeight / img.height);
-
-        // ตั้งค่า canvas ขนาดตาม scale
-        canvas.width = img.width * scale;
-        canvas.height = img.height * scale;
-
-        // แปลง context scale
-        ctx.setTransform(scale, 0, 0, scale, 0, 0);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0);
-
-        // ตั้งค่าฟอนต์ก่อนวัดขนาดข้อความ
-        ctx.font = "30px Arial";
-        const metrics = ctx.measureText(text);
-        const textWidth = metrics.width;
-        const textHeight = 30;
-
-        // คำนวณตำแหน่งตัวอักษร
-        textX = (img.width - textWidth) / 2;
-        textY = (img.height + textHeight) / 2;
-
-        ctx.fillText(text, textX, textY);
-
-        const draw = () => {
-            ctx.clearRect(0, 0, canvas.width / scale, canvas.height / scale);
-            ctx.drawImage(img, 0, 0);
-            // ctx.font = "30px Angsana New";
-            // ctx.fillStyle = "#fffff";
-            ctx.fillText(text, textX, textY);
-        };
-
-        const isInsideText = (x, y) => {
-            const metrics = ctx.measureText(text);
-            const textWidth = metrics.width;
-            const textHeight = 30;
-            return x >= textX && x <= textX + textWidth && y >= textY - textHeight && y <= textY;
-        };
-
-        canvas.onmousedown = (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / scale;
-            const y = (e.clientY - rect.top) / scale;
-            if (isInsideText(x, y)) {
-                isDragging = true;
-                offsetX = x - textX;
-                offsetY = y - textY;
-            }
-        };
-
-        canvas.onmousemove = (e) => {
-            if (isDragging) {
-                const rect = canvas.getBoundingClientRect();
-                // textX = (e.clientX - rect.left) / scale - offsetX;
-                textY = (e.clientY - rect.top) / scale - offsetY;
-                draw();
-            }
-        };
-
-        canvas.onmouseup = () => {
-            isDragging = false;
-        };
-
-        canvas.onmouseleave = () => {
-            isDragging = false;
-        };
-    };
-}
 
 async function actionActivity(params, action) {
     try {
@@ -301,6 +81,9 @@ async function actionActivity(params, action) {
             await fetchNotCheckedinStudent(params);
             await fetchCheckedinStudent(params);
             await fecthActivityById(params);
+            await fetchCertExistStudent(params);
+            await fetchNoCertExistStudent(params);
+
             viewActivityModalShow.value = true;
             const certImage = viewActivityData.value.activity_certificate_file;
 
@@ -311,6 +94,175 @@ async function actionActivity(params, action) {
         }
     } catch (err) {
         console.log(err);
+    }
+}
+
+async function fetchActivity() {
+    try {
+        const res = await $axios.get("/teacher/activity");
+        const data = res.data;
+
+        allActivityData.value = data;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function fecthActivityById(aid) {
+    try {
+        const res = await $axios.get(`/teacher/activity/${aid}`);
+        const data = res.data[0];
+        id_activity.value = data.activity_id;
+        Object.assign(viewActivityData.value, data);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function fetchNotCheckedinStudent(aid) {
+    try {
+        const res = await $axios.get(`/teacher/activity/student_not_in/${aid}`);
+        const data = res.data;
+
+        notCheckinStudentData.value = data.map((student) => ({
+            ...student,
+            selected: false,
+        }));
+        // console.log(notCheckinStudentData.value);
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function fetchCheckedinStudent(aid) {
+    try {
+        const res = await $axios.get(`/teacher/activity/student_in/${aid}`);
+        const data = res.data;
+        checkedinStudentData.value = data.map((student) => ({
+            ...student,
+            selected: false,
+        }));
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function fetchCertExistStudent(aid) {
+    try {
+        const res = await $axios.get(`/teacher/activity/student_cert/${aid}`);
+        const data = res.data;
+        certExistStudent.value = data;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function fetchNoCertExistStudent(aid) {
+    try {
+        const res = await $axios.get(`/teacher/activity/student_no_cert/${aid}`);
+        const data = res.data;
+        certNotExistStudent.value = data;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function checkInSubmit() {
+    // const selectedStudents = notCheckinStudentData.value.filter((student) => student.selected);
+    // const selectedIds = selectedStudents.map((student) => student.resume_id);
+
+    const resume_id = [];
+    for (const rid of notCheckedinStudentCheckbox.value) {
+        resume_id.push(rid);
+    }
+
+    const payload = {
+        activity_id: id_activity.value,
+        resume_id: resume_id,
+    };
+
+    const res = await $axios.post("/teacher/activity/check_in", payload);
+    if (res.status === 200) {
+        showAlert("เพิ่มรายชื่อนักเรียนแล้ว", "success");
+        await fetchNotCheckedinStudent(id_activity.value);
+        await fetchCheckedinStudent(id_activity.value);
+        await fetchNoCertExistStudent(id_activity.value);
+    } else {
+        showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error");
+    }
+}
+
+async function removeCheckinStudentsBtn() {
+    const resume_id = [];
+    for (const rid of certNotExistTableCheckbox.value) {
+        resume_id.push(rid);
+    }
+    const payload = {
+        resume_id: resume_id,
+    };
+    const res = await $axios.delete(`/teacher/activity/student/${id_activity.value}`, {
+        data: payload,
+    });
+
+    if (res.status === 200) {
+        showAlert("นำชื่อออกแล้ว", "success");
+        certNotExistTableCheckbox.value = [];
+        await fetchNotCheckedinStudent(id_activity.value);
+        await fetchNoCertExistStudent(id_activity.value);
+    } else {
+        showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error");
+    }
+}
+
+async function assignCertBtn() {
+    const resume_id = [];
+    for (const rid of certNotExistTableCheckbox.value) {
+        resume_id.push(rid);
+    }
+    const payload = {
+        activity_id: id_activity.value,
+        resume_id: resume_id,
+    };
+    // console.log(payload);
+
+    const res = await $axios.post(`/teacher/activity/assign_cert`, payload);
+
+    if (res.status === 200) {
+        showAlert("มอบใบ Certificate เรียบร้อยแล้ว", "success");
+        certNotExistTableCheckbox.value = [];
+        await fetchNoCertExistStudent(id_activity.value);
+        await fetchCertExistStudent(id_activity.value);
+    } else {
+        showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error");
+    }
+}
+
+async function removeCertBtn() {
+    try {
+        const resume_id = [];
+        for (const rid of removeStudentCertCheckbox.value) {
+            resume_id.push(rid);
+        }
+        const payload = {
+            resume_id: resume_id,
+        };
+        const res = await $axios.delete(`/teacher/activity/student_cert/${id_activity.value}`, {
+            data: payload,
+        });
+
+        if (res.status === 200) {
+            showAlert("ลบ certificate แล้ว", "success");
+            removeStudentCertCheckbox.value = [];
+            await fetchNotCheckedinStudent(id_activity.value);
+            await fetchCheckedinStudent(id_activity.value);
+            await fetchNoCertExistStudent(id_activity.value);
+            await fetchCertExistStudent(id_activity.value);
+        } else {
+            showAlert("เกิดข้อผิดพลาดในการลบ", "error");
+        }
+    } catch (error) {
+        console.error(error);
+        showAlert("เกิดข้อผิดพลาดในการลบ", "error");
     }
 }
 
@@ -384,24 +336,227 @@ async function editActivitySubmit(aid) {
     }
 }
 
+function generateAndUploadImage(imageSrc) {
+    const canvas = certCanvas.value;
+    const wrapper = canvasWrapper.value;
+    if (!canvas || !wrapper) return;
+
+    const ctx = canvas.getContext("2d");
+    const img = new Image();
+    img.src = imageSrc;
+
+    // ข้อมูลเกี่ยวกับข้อความ
+    let textX = 50;
+    let textY = 50;
+    const text = "นาย ชื่อจริง นามสกุล";
+    let isDragging = false;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    img.onload = () => {
+        const parentWidth = wrapper.clientWidth;
+        const parentHeight = wrapper.clientHeight || window.innerHeight * 0.6;
+
+        // const desiredMaxWidth = Math.min(parentWidth, 800);
+        const desiredMaxWidth = parentWidth;
+        // const desiredMaxHeight = Math.min(parentHeight, 600);
+        const desiredMaxHeight = parentHeight;
+
+        const scale = Math.min(desiredMaxWidth / img.width, desiredMaxHeight / img.height);
+
+        canvas.width = img.width * scale;
+        canvas.height = img.height * scale;
+        canvas.style.width = canvas.width + "px";
+        canvas.style.height = canvas.height + "px";
+
+        const draw = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+            // วาดข้อความ
+            ctx.font = `${30 * scale}px Arial`;
+            ctx.fillStyle = "#000000";
+            ctx.fillText(text, textX * scale, textY * scale);
+        };
+
+        // คำนวณตำแหน่งเริ่มต้นของข้อความ (กึ่งกลาง)
+        ctx.font = `${30 * scale}px Arial`;
+        const metrics = ctx.measureText(text);
+        textX = (img.width - metrics.width / scale) / 2;
+        textY = img.height / 2;
+
+        draw();
+
+        const isInsideText = (mouseX, mouseY) => {
+            ctx.font = `${30 * scale}px Arial`;
+            const metrics = ctx.measureText(text);
+            const textWidth = metrics.width;
+            const textHeight = 30 * scale;
+
+            const scaledTextX = textX * scale;
+            const scaledTextY = textY * scale;
+
+            return mouseX >= scaledTextX && mouseX <= scaledTextX + textWidth && mouseY >= scaledTextY - textHeight && mouseY <= scaledTextY;
+        };
+
+        // Event handlers
+        const handleMouseDown = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            if (isInsideText(x, y)) {
+                isDragging = true;
+                offsetX = x / scale - textX;
+                offsetY = y / scale - textY;
+                canvas.style.cursor = "grabbing";
+            }
+        };
+
+        const handleMouseMove = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            if (isDragging) {
+                // textX = x / scale - offsetX;
+                textY = y / scale - offsetY;
+
+                // จำกัดไม่ให้ข้อความออกนอกขอบรูป
+                const metrics = ctx.measureText(text);
+                textX = Math.max(0, Math.min(textX, img.width - metrics.width / scale));
+                textY = Math.max(30, Math.min(textY, img.height));
+
+                draw();
+            } else {
+                canvas.style.cursor = isInsideText(x, y) ? "grab" : "default";
+            }
+        };
+
+        const handleMouseUp = () => {
+            isDragging = false;
+            canvas.style.cursor = "default";
+        };
+
+        // ลบ event listeners เก่า
+        canvas.removeEventListener("mousedown", handleMouseDown);
+        canvas.removeEventListener("mousemove", handleMouseMove);
+        canvas.removeEventListener("mouseup", handleMouseUp);
+        canvas.removeEventListener("mouseleave", handleMouseUp);
+
+        // เพิ่ม event listeners ใหม่
+        canvas.addEventListener("mousedown", handleMouseDown);
+        canvas.addEventListener("mousemove", handleMouseMove);
+        canvas.addEventListener("mouseup", handleMouseUp);
+        canvas.addEventListener("mouseleave", handleMouseUp);
+
+        // Touch events สำหรับมือถือ
+        canvas.addEventListener("touchstart", (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = canvas.getBoundingClientRect();
+            const mouseEvent = {
+                clientX: touch.clientX,
+                clientY: touch.clientY,
+            };
+            handleMouseDown(mouseEvent);
+        });
+
+        canvas.addEventListener("touchmove", (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = {
+                clientX: touch.clientX,
+                clientY: touch.clientY,
+            };
+            handleMouseMove(mouseEvent);
+        });
+
+        canvas.addEventListener("touchend", (e) => {
+            e.preventDefault();
+            handleMouseUp();
+        });
+    };
+}
+
 async function changeViewActivityTab(tab) {
-    if (tab === "checked_in") {
+    if (tab === "not_checked_in") {
         if (notCheckedinTab.value === true) {
             notCheckedinTab.value = false;
         } else {
             notCheckedinTab.value = true;
         }
     }
-    if (tab === "not_checked_in") {
-        if (checkedinTab.value === true) {
-            checkedinTab.value = false;
+    if (tab === "assign_certificate") {
+        if (assignCertTab.value === true) {
+            assignCertTab.value = false;
         } else {
-            checkedinTab.value = true;
+            assignCertTab.value = true;
+        }
+    }
+    if (tab === "check_certificate") {
+        if (checkCertificateTab.value === true) {
+            checkCertificateTab.value = false;
+        } else {
+            checkCertificateTab.value = true;
         }
     }
 }
+
 onMounted(() => {
     fetchActivity();
+});
+
+const certNotExistTableSelectAll = ref(false);
+const certExistStudentTableSelectAll = ref(false);
+const notCheckedinStudentTableSelectAll = ref(false);
+
+watch(notCheckedinStudentTableSelectAll, (value) => {
+    if (value) {
+        notCheckedinStudentCheckbox.value = notCheckinStudentData.value.map((s) => s.resume_id);
+    } else {
+        notCheckedinStudentCheckbox.value = [];
+    }
+});
+
+watch(notCheckedinStudentCheckbox, (value) => {
+    if (value.length === notCheckinStudentData.value.length) {
+        notCheckedinStudentTableSelectAll.value = true;
+    } else {
+        notCheckedinStudentTableSelectAll.value = false;
+    }
+});
+
+watch(certExistStudentTableSelectAll, (value) => {
+    if (value) {
+        removeStudentCertCheckbox.value = certExistStudent.value.map((s) => s.resume_id);
+    } else {
+        removeStudentCertCheckbox.value = [];
+    }
+});
+
+watch(removeStudentCertCheckbox, (value) => {
+    if (value.length === certExistStudent.value.length) {
+        certExistStudentTableSelectAll.value = true;
+    } else {
+        certExistStudentTableSelectAll.value = false;
+    }
+});
+
+watch(certNotExistTableSelectAll, (value) => {
+    if (value) {
+        certNotExistTableCheckbox.value = certNotExistStudent.value.map((s) => s.resume_id);
+    } else {
+        certNotExistTableCheckbox.value = [];
+    }
+});
+
+watch(certNotExistTableCheckbox, (value) => {
+    if (value.length === certNotExistStudent.value.length) {
+        certNotExistTableSelectAll.value = true;
+    } else {
+        certNotExistTableSelectAll.value = false;
+    }
 });
 </script>
 <template>
@@ -428,9 +583,16 @@ onMounted(() => {
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:ml-auto">
-                        <button @click="actionActivity(0, 'add')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center transition duration-200 cursor-pointer text-sm sm:text-base">
+                        <button
+                            @click="actionActivity(0, 'add')"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center transition duration-200 cursor-pointer text-sm sm:text-base"
+                        >
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                <path
+                                    fill-rule="evenodd"
+                                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                    clip-rule="evenodd"
+                                />
                             </svg>
                             เพิ่มกิจกรรม
                         </button>
@@ -461,8 +623,17 @@ onMounted(() => {
                                 </td>
                                 <td class="py-2 sm:py-3 px-2 sm:px-4 text-center space-x-1 sm:space-x-2">
                                     <div class="flex justify-center items-center space-x-1 sm:space-x-2">
-                                        <button @click="actionActivity(item.activity_id, 'view')" class="text-green-600 hover:text-green-700 transition duration-200 cursor-pointer">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 transform hover:scale-125 transition-transform duration-200" width="24" height="24" viewBox="0 0 24 24">
+                                        <button
+                                            @click="actionActivity(item.activity_id, 'view')"
+                                            class="text-green-600 hover:text-green-700 transition duration-200 cursor-pointer"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                class="h-4 w-4 sm:h-5 sm:w-5 transform hover:scale-125 transition-transform duration-200"
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                            >
                                                 <path
                                                     fill="none"
                                                     stroke-linecap="round"
@@ -473,8 +644,17 @@ onMounted(() => {
                                                 />
                                             </svg>
                                         </button>
-                                        <button @click="actionActivity(item.activity_id, 'edit')" class="text-indigo-600 hover:text-indigo-800 transition duration-200 cursor-pointer">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 transform hover:scale-125 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <button
+                                            @click="actionActivity(item.activity_id, 'edit')"
+                                            class="text-indigo-600 hover:text-indigo-800 transition duration-200 cursor-pointer"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                class="h-4 w-4 sm:h-5 sm:w-5 transform hover:scale-125 transition-transform duration-200"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                            >
                                                 <path
                                                     stroke-linecap="round"
                                                     stroke-linejoin="round"
@@ -483,8 +663,17 @@ onMounted(() => {
                                                 />
                                             </svg>
                                         </button>
-                                        <button @click="actionActivity(item.activity_id, 'delete')" class="text-red-600 hover:text-red-800 transition duration-200 cursor-pointer">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 transform hover:scale-125 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <button
+                                            @click="actionActivity(item.activity_id, 'delete')"
+                                            class="text-red-600 hover:text-red-800 transition duration-200 cursor-pointer"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                class="h-4 w-4 sm:h-5 sm:w-5 transform hover:scale-125 transition-transform duration-200"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                                stroke="currentColor"
+                                            >
                                                 <path
                                                     stroke-linecap="round"
                                                     stroke-linejoin="round"
@@ -503,7 +692,12 @@ onMounted(() => {
         </div>
 
         <!-- create Activity Modal -->
-        <dialog v-if="createActivityModalShow" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full" :class="{ active: createActivityModalShow }" open>
+        <dialog
+            v-if="createActivityModalShow"
+            class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full"
+            :class="{ active: createActivityModalShow }"
+            open
+        >
             <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-auto">
                 <div class="p-4 sm:p-6">
                     <div class="flex justify-between items-center mb-4">
@@ -576,10 +770,18 @@ onMounted(() => {
                             />
                         </div>
                         <div class="flex justify-end space-x-2 sm:space-x-3 pt-3 sm:pt-4">
-                            <button class="px-3 sm:px-4 py-1.5 sm:py-2 bg-amber-600 rounded-lg text-white hover:bg-amber-700 transition duration-200 text-sm sm:text-base cursor-pointer" @click.prevent="createActivityModalShow = false">
+                            <button
+                                class="px-3 sm:px-4 py-1.5 sm:py-2 bg-amber-600 rounded-lg text-white hover:bg-amber-700 transition duration-200 text-sm sm:text-base cursor-pointer"
+                                @click.prevent="createActivityModalShow = false"
+                            >
                                 ปิด
                             </button>
-                            <button type="submit" class="px-3 sm:px-4 py-1.5 sm:py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer">บันทึก</button>
+                            <button
+                                type="submit"
+                                class="px-3 sm:px-4 py-1.5 sm:py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer"
+                            >
+                                บันทึก
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -587,7 +789,12 @@ onMounted(() => {
         </dialog>
 
         <!-- Edit Activity Modal -->
-        <dialog v-if="editActivityModalShow" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full" :class="{ active: editActivityModalShow }" open>
+        <dialog
+            v-if="editActivityModalShow"
+            class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full"
+            :class="{ active: editActivityModalShow }"
+            open
+        >
             <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-auto">
                 <div class="p-4 sm:p-6">
                     <div class="flex justify-between items-center mb-4">
@@ -666,7 +873,12 @@ onMounted(() => {
                             >
                                 ปิด
                             </button>
-                            <button type="submit" class="px-3 sm:px-4 py-1.5 sm:py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer">บันทึก</button>
+                            <button
+                                type="submit"
+                                class="px-3 sm:px-4 py-1.5 sm:py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer"
+                            >
+                                บันทึก
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -674,7 +886,12 @@ onMounted(() => {
         </dialog>
 
         <!-- View Activity Modal -->
-        <dialog v-if="viewActivityModalShow" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full" :class="{ active: viewActivityModalShow }" open>
+        <dialog
+            v-if="viewActivityModalShow"
+            class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full"
+            :class="{ active: viewActivityModalShow }"
+            open
+        >
             <div class="bg-white rounded-lg shadow-lg w-full max-w-screen-xl h-[90vh] mx-2 sm:mx-6 overflow-y-auto">
                 <div class="p-4 sm:p-6">
                     <div class="flex justify-between items-center mb-4">
@@ -723,15 +940,13 @@ onMounted(() => {
                             <div>
                                 <h5 class="text-md sm:text-lg font-semibold text-gray-800">ตัวอย่างใบ certificate</h5>
                                 <div v-if="viewActivityData.activity_certificate_file" class="p-4">
-                                    <div ref="canvasWrapper" class="canvas-wrapper">
-                                        <canvas id="certCanvas" ref="certCanvas"></canvas>
+                                    <div ref="canvasWrapper" class="canvas-wrapper flex justify-center items-center">
+                                        <canvas ref="certCanvas"></canvas>
                                     </div>
                                 </div>
-                                <div v-else class="p-4">
-                                    <div ref="canvasWrapper" class="canvas-wrapper">
-                                        <canvas id="certCanvas" ref="certCanvas"></canvas>
-                                    </div>
-                                </div>
+                                <!-- <div v-else class="p-4"> -->
+                                <!-- <h5>ยังไม่อัพโหลด</h5> -->
+                                <!-- </div> -->
                             </div>
                             <div class="flex justify-between my-4">
                                 <p class="text-xs text-green-600">
@@ -746,96 +961,253 @@ onMounted(() => {
                         </div>
 
                         <div class="bg-white rounded-lg shadow-lg mx-2 sm:mx-6 overflow-y-auto p-4 sm:p-6">
-                            <div class="flex justify-center items-center space-x-1 sm:space-x-2">
-                                <button type="button" class="px-4 py-2 mx-2 bg-indigo-500 hover:bg-indigo-800 text-white rounded" @click="changeViewActivityTab('checked_in')">นักศึกษาที่ยังไม่เข้าร่วมกิจกรรม</button>
-                                <button type="button" class="px-4 py-2 mx-2 bg-green-500 hover:bg-green-800 text-white rounded" @click="changeViewActivityTab('not_checked_in')">นักศึกษาที่เข้าร่วมกิจกรรม</button>
-                            </div>
-                            <div v-if="notCheckedinTab">
-                                <div class="my-4">
-                                    <h5 class="text-md sm:text-lg font-semibold text-gray-800">เพิ่มรายชื่อนักศึกษาที่เข้าร่วมกิจกรรม</h5>
-                                    <table class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base md:my-4 sm:my-2">
-                                        <thead class="bg-gray-100 text-gray-700">
-                                            <tr>
-                                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">รหัสนักศึกษา</th>
-                                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">ชื่อ</th>
-                                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">
-                                                    <div class="flex justify-center items-center space-x-1 sm:space-x-2">เลือก</div>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody v-if="notCheckinStudentData.length > 0" class="divide-y divide-gray-200">
-                                            <tr v-for="(item, index) in notCheckinStudentData" :key="index + 1" class="hover:bg-gray-50 dtransition-all uration-200">
-                                                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
-                                                    {{ item.student_main_id }}
-                                                </td>
-                                                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
-                                                    {{ item.student_name_thai }}
-                                                </td>
-                                                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center space-x-1 sm:space-x-2">
-                                                    <div class="flex justify-center items-center space-x-1 sm:space-x-2">
-                                                        <input type="checkbox" v-model="item.selected" :value="item.resume_id" />
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                        <tbody v-else="notCheckinStudentData.length < 1" class="divide-y divide-gray-200">
-                                            <tr>
-                                                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105" colspan="3">
-                                                    <div class="flex justify-center items-center space-x-1 sm:space-x-2">ไม่มีนักเรียนที่ยังไม่เข้าร่วมกิจกรรม</div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <div class="flex justify-end animate-fade-up">
-                                        <button @click="checkInSubmit" class="px-4 py-2 bg-blue-500 text-white rounded">เพิ่ม</button>
+                            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                                <!-- ปุ่มเมนูด้านซ้าย -->
+                                <div class="sm:col-span-1">
+                                    <div class="flex flex-col space-y-2">
+                                        <span>จัดการนักศึกษา</span>
+                                        <button
+                                            type="button"
+                                            class="px-4 py-2 text-white hover:bg-yellow-800 rounded transition duration-300"
+                                            :class="[
+                                                notCheckedinTab ? 'bg-yellow-700 outline-solid outline-gray-400 outline-1 outline-offset-2' : 'bg-yellow-500',
+                                            ]"
+                                            @click="changeViewActivityTab('not_checked_in')"
+                                        >
+                                            นักศึกษาที่ยังไม่เข้าร่วมกิจกรรม
+                                        </button>
+                                        <span>จัดการ Certificate</span>
+                                        <button
+                                            type="button"
+                                            class="px-4 py-2 hover:bg-green-800 text-white rounded transition duration-300"
+                                            :class="[assignCertTab ? 'bg-green-700 outline-solid outline-gray-400 outline-1 outline-offset-2' : 'bg-green-500']"
+                                            @click="changeViewActivityTab('assign_certificate')"
+                                        >
+                                            มอบ Certificate
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="px-4 py-2 hover:bg-indigo-800 text-white rounded transition duration-300"
+                                            :class="[
+                                                checkCertificateTab
+                                                    ? 'bg-indigo-700 outline-solid outline-gray-400 outline-1 outline-offset-2'
+                                                    : 'bg-indigo-600',
+                                            ]"
+                                            @click="changeViewActivityTab('check_certificate')"
+                                        >
+                                            ตรวจสอบ Certificate
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
-                            <div v-if="checkedinTab">
-                                <div class="my-4">
-                                    <h5 class="text-md sm:text-lg font-semibold text-gray-800">รายชื่อนักศึกษาที่เข้าร่วมกิจกรรม</h5>
-                                    <table class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base md:my-4 sm:my-2">
-                                        <thead class="bg-gray-100 text-gray-700">
-                                            <tr>
-                                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">รหัสนักศึกษา</th>
-                                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">ชื่อ</th>
-                                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">
-                                                    <div class="flex justify-center items-center space-x-1 sm:space-x-2">เลือก</div>
-                                                </th>
-                                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">
-                                                    <div class="flex justify-center items-center space-x-1 sm:space-x-2">ลบ</div>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody v-if="checkedinStudentData.length > 0" class="divide-y divide-gray-200">
-                                            <tr v-for="(item, index) in checkedinStudentData" :key="index + 1" class="hover:bg-gray-50 dtransition-all uration-200">
-                                                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
-                                                    {{ item.student_main_id }}
-                                                </td>
-                                                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
-                                                    {{ item.student_name_thai }}
-                                                </td>
-                                                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center space-x-1 sm:space-x-2">
-                                                    <div class="flex justify-center items-center space-x-1 sm:space-x-2">
-                                                        <input type="checkbox" v-model="assignActivityCheckbox" :value="item.resume_id" />
-                                                    </div>
-                                                </td>
-                                                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center space-x-1 sm:space-x-2">
-                                                    <div class="flex justify-center items-center space-x-1 sm:space-x-2">
-                                                        <input type="checkbox" v-model="deleteActivityCheckbox" :value="item.resume_id" />
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                        <tbody v-else="checkedinStudentData.length < 1" class="divide-y divide-gray-200">
-                                            <tr>
-                                                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105" colspan="5"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <div class="flex justify-end animate-fade-up">
-                                        <button @click="assignActivitySubmit" class="px-4 py-2 mx-2 bg-green-500 text-white rounded">มอบCertificate</button>
-                                        <button @click="removeSelectedStudents" class="px-4 py-2 mx-2 bg-red-500 text-white rounded">ลบ</button>
+
+                                <!-- เนื้อหาหลักด้านขวา -->
+                                <div class="sm:col-span-3">
+                                    <div v-if="notCheckedinTab" class="p-4 bg-gray-100 rounded shadow my-2">
+                                        <h5 class="text-lg sm:text-lg font-semibold text-indigo-800">จัดการ นักศึกษาที่เข้าร่วม</h5>
+                                        <div class="my-4">
+                                            <p class="text-gray-800">นักศึกษาที่ยังไม่เข้าร่วมกิจกรรม</p>
+                                            <table class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base md:my-4 sm:my-2">
+                                                <thead class="bg-gray-100 text-gray-700">
+                                                    <tr>
+                                                        <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">รหัสนักศึกษา</th>
+                                                        <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">ชื่อ</th>
+                                                        <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">
+                                                            <div class="flex justify-center items-center space-x-1 sm:space-x-2">
+                                                                <input
+                                                                    type="checkbox"
+                                                                    v-model="notCheckedinStudentTableSelectAll"
+                                                                    id="notCheckedinStudentTableSelectAll"
+                                                                />
+                                                                <label class="text-gray-800" for="notCheckedinStudentTableSelectAll">เลือกทั้งหมด</label>
+                                                            </div>
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody v-if="notCheckinStudentData.length > 0" class="divide-y divide-gray-200">
+                                                    <tr
+                                                        v-for="(item, index) in notCheckinStudentData"
+                                                        :key="index + 1"
+                                                        class="hover:bg-gray-50 dtransition-all uration-200"
+                                                    >
+                                                        <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
+                                                            {{ item.student_main_id }}
+                                                        </td>
+                                                        <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
+                                                            {{ item.student_name_thai }}
+                                                        </td>
+                                                        <!-- <td class="py-2 sm:py-3 px-2 sm:px-4 text-center space-x-1 sm:space-x-2">
+                                                            <div class="flex justify-center items-center space-x-1 sm:space-x-2">
+                                                                <input type="checkbox" v-model="item.selected" :value="item.resume_id" />
+                                                            </div>
+                                                        </td> -->
+                                                        <td class="py-2 sm:py-3 px-2 sm:px-4 text-center space-x-1 sm:space-x-2">
+                                                            <div class="flex justify-center items-center space-x-1 sm:space-x-2">
+                                                                <input type="checkbox" v-model="notCheckedinStudentCheckbox" :value="item.resume_id" />
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tbody v-else="notCheckinStudentData.length < 1" class="divide-y divide-gray-200">
+                                                    <tr>
+                                                        <td
+                                                            class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105"
+                                                            colspan="3"
+                                                        >
+                                                            <div class="flex justify-center items-center space-x-1 sm:space-x-2">
+                                                                ไม่มีนักศึกษาที่ไม่เข้าร่วมกิจกรรม
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="flex justify-end animate-fade-up">
+                                                <button @click="checkInSubmit" class="px-4 py-2 text-white rounded bg-indigo-500 hover:bg-indigo-800">
+                                                    เพิ่ม
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div v-if="assignCertTab || checkCertificateTab" class="p-4 bg-gray-100 rounded shadow my-2">
+                                        <h5 class="text-lg sm:text-lg font-semibold text-indigo-800">จัดการ Certificate</h5>
+                                        <div v-if="assignCertTab">
+                                            <div class="my-4">
+                                                <p class="text-gray-800">ยังไม่ได้รับ</p>
+                                                <table class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base md:my-4 sm:my-2">
+                                                    <thead class="bg-gray-100 text-gray-700">
+                                                        <tr>
+                                                            <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">รหัสนักศึกษา</th>
+                                                            <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">ชื่อ</th>
+                                                            <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">
+                                                                <div class="flex justify-center items-center space-x-1 sm:space-x-2">
+                                                                    <input
+                                                                        type="checkbox"
+                                                                        v-model="certNotExistTableSelectAll"
+                                                                        id="certNotExistTableSelectAll"
+                                                                    />
+                                                                    <label class="text-gray-800" for="certNotExistTableSelectAll">เลือกทั้งหมด</label>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody v-if="certNotExistStudent.length > 0" class="divide-y divide-gray-200">
+                                                        <tr
+                                                            v-for="(item, index) in certNotExistStudent"
+                                                            :key="index + 1"
+                                                            class="hover:bg-gray-50 dtransition-all uration-200"
+                                                        >
+                                                            <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
+                                                                {{ item.student_main_id }}
+                                                            </td>
+                                                            <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
+                                                                {{ item.student_name_thai }}
+                                                            </td>
+                                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-center space-x-1 sm:space-x-2">
+                                                                <div class="flex justify-center items-center space-x-1 sm:space-x-2">
+                                                                    <input type="checkbox" v-model="certNotExistTableCheckbox" :value="item.resume_id" />
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tbody v-else="(certNotExistStudent.length = 1)" class="divide-y divide-gray-200">
+                                                        <tr>
+                                                            <td
+                                                                class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105"
+                                                                colspan="4"
+                                                            >
+                                                                <div class="flex justify-center items-center space-x-1 sm:space-x-2">
+                                                                    ได้รับครบแล้ว หรือ ยังไม่มีนักศึกษาที่เข้าร่วม
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="flex justify-end animate-fade-up">
+                                                    <button
+                                                        @click="assignCertBtn"
+                                                        :class="certNotExistTableCheckbox.length === 0 ? 'bg-green-800' : 'bg-green-500'"
+                                                        :disabled="certNotExistTableCheckbox.length === 0 ? true : false"
+                                                        class="px-4 py-2 mx-2 text-white rounded"
+                                                    >
+                                                        มอบCertificate
+                                                    </button>
+                                                    <button
+                                                        @click="removeCheckinStudentsBtn"
+                                                        :disabled="certNotExistTableCheckbox.length === 0 ? true : false"
+                                                        :class="certNotExistTableCheckbox.length === 0 ? 'bg-red-800' : 'bg-red-500 '"
+                                                        class="px-4 py-2 mx-2 text-white rounded"
+                                                    >
+                                                        ลบ
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-if="checkCertificateTab">
+                                            <div class="my-4">
+                                                <p class="text-gray-800">ได้รับแล้ว</p>
+                                                <table class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base md:my-4 sm:my-2">
+                                                    <thead class="bg-gray-100 text-gray-700">
+                                                        <tr>
+                                                            <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">รหัสนักศึกษา</th>
+                                                            <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">ชื่อ</th>
+                                                            <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">
+                                                                <div class="flex justify-center items-center space-x-1 sm:space-x-2">
+                                                                    <div class="flex justify-center items-center space-x-1 sm:space-x-2">
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            v-model="certExistStudentTableSelectAll"
+                                                                            id="certExistStudentTableSelectAll"
+                                                                        />
+                                                                        <label class="text-gray-800" for="certExistStudentTableSelectAll">เลือกทั้งหมด</label>
+                                                                    </div>
+                                                                </div>
+                                                            </th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody v-if="certExistStudent.length > 0" class="divide-y divide-gray-200">
+                                                        <tr
+                                                            v-for="(item, index) in certExistStudent"
+                                                            :key="index + 1"
+                                                            class="hover:bg-gray-50 dtransition-all duration-200"
+                                                        >
+                                                            <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
+                                                                {{ item.student_main_id }}
+                                                            </td>
+                                                            <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
+                                                                {{ item.student_name_thai }}
+                                                            </td>
+                                                            <td class="py-2 sm:py-3 px-2 sm:px-4 text-center space-x-1 sm:space-x-2">
+                                                                <div class="flex justify-center items-center space-x-1 sm:space-x-2">
+                                                                    <input type="checkbox" v-model="removeStudentCertCheckbox" :value="item.resume_id" />
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tbody v-else="certExistStudent.length < 0" class="divide-y divide-gray-200">
+                                                        <tr>
+                                                            <td
+                                                                class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105"
+                                                                colspan="4"
+                                                            >
+                                                                <div class="flex justify-center items-center space-x-1 sm:space-x-2">
+                                                                    ได้รับครบแล้ว หรือ ยังไม่มีนักศึกษาที่เข้าร่วม
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="flex justify-end animate-fade-up">
+                                                    <button
+                                                        @click="removeCertBtn"
+                                                        :disabled="removeStudentCertCheckbox.length === 0 ? true : false"
+                                                        :class="removeStudentCertCheckbox.length === 0 ? 'bg-red-800' : 'bg-red-500'"
+                                                        class="px-4 py-2 mx-2 text-white rounded"
+                                                    >
+                                                        ลบ Certificate
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -847,15 +1219,18 @@ onMounted(() => {
     </div>
 </template>
 <style scoped>
-.canvas-wrapper {
-    width: 100%;
+canvas {
+    display: block;
     max-width: 100%;
-    overflow: hidden;
+    height: auto;
 }
 
-canvas {
-    width: 100%;
-    height: auto;
-    display: block;
+.canvas-wrapper {
+    /* width: 90vw; 90% ของความกว้างหน้าจอ */
+    height: 40vh; /* 70% ของความสูงหน้าจอ */
+    /* max-width: 1400px; */
+    max-height: 800px;
+    margin: 0 auto;
+    margin: 0 auto;
 }
 </style>
