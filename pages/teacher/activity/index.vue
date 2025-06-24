@@ -375,7 +375,7 @@ function generateAndUploadImage(imageSrc) {
 
             // วาดข้อความ
             ctx.font = `${30 * scale}px Arial`;
-            ctx.fillStyle = "#000000";
+            ctx.fillStyle = "#ffffff";
             ctx.fillText(text, textX * scale, textY * scale);
         };
 
@@ -940,7 +940,7 @@ watch(certNotExistTableCheckbox, (value) => {
                             <div>
                                 <h5 class="text-md sm:text-lg font-semibold text-gray-800">ตัวอย่างใบ certificate</h5>
                                 <div v-if="viewActivityData.activity_certificate_file" class="p-4">
-                                    <div ref="canvasWrapper" class="canvas-wrapper flex justify-center items-center">
+                                    <div ref="canvasWrapper" class="canvas-wrapper flex justify-center items-center text-white">
                                         <canvas ref="certCanvas"></canvas>
                                     </div>
                                 </div>

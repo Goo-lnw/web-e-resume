@@ -27,25 +27,6 @@ async function fetchResume() {
   }
 }
 
-async function updateComment(index) {
-  try {
-    const resume_id = resume.value[index].resume_id;
-    const comment = resume.value[index].resume_teacher_comment;
-    const status = resume.value[index].resume_status;
-
-    console.log(resume_id, comment, status);
-    const res = await $axios.put(`/resume/${resume_id}/edit`, {
-      resume_teacher_comment: comment,
-      resume_status: Number(status),
-    });
-    if (res.status === 200) {
-      fetchResume();
-    }
-  } catch (err) {
-    console.log(err);
-  }
-}
-
 async function Resume(params) {
   console.log(params);
 
