@@ -216,20 +216,7 @@ watch(page, () => fetchStudents());
               <div
                 class="absolute left-2 sm:left-3 top-2 sm:top-2.5 text-gray-400"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4 sm:h-5 sm:w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
+                <Icon name="stash:search" style="width: 24px; height: 24px" />
               </div>
             </div>
           </div>
@@ -239,7 +226,7 @@ watch(page, () => fetchStudents());
               @click="actionStudent(0, 'add_activity')"
               class="space-x-1 bg-green-400 hover:bg-green-600 text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center transition duration-200 cursor-pointer text-xs sm:text-xs"
             >
-              <Icon name="ep:circle-plus-filled" style="color: white" />
+              <Icon name="ep:circle-plus-filled" style="color: white ;width: 16px; height: 16px" />
               <span>เพิ่มกิจกรรม</span>
             </button>
 
@@ -247,7 +234,7 @@ watch(page, () => fetchStudents());
               @click="actionStudent(0, 'add')"
               class="space-x-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center transition duration-200 cursor-pointer text-xs sm:text-xs"
             >
-              <Icon name="ep:circle-plus-filled" style="color: white" />
+              <Icon name="ep:circle-plus-filled" style="color: white ;width: 16px; height: 16px" />
               <span>เพิ่มนักเรียน/นักศึกษา</span>
             </button>
             <NuxtLink
@@ -255,7 +242,7 @@ watch(page, () => fetchStudents());
               class="space-x-1 flex items-center bg-cyan-600 text-white px-4 sm:px-6 py-2 rounded-lg shadow-md hover:bg-cyan-700 transition duration-200 gap-1 sm:gap-2 text-xs sm:text-xs"
             >
               <span>หน้ารายการ Resume</span>
-              <Icon name="ep:right" style="color: white" />
+              <Icon name="ep:right" style="color: white ;width: 16px; height: 16px" />
             </NuxtLink>
           </div>
         </div>
@@ -317,7 +304,18 @@ watch(page, () => fetchStudents());
                     @click="actionStudent(item.student_id, 'edit')"
                     class="text-indigo-600 hover:text-indigo-800 transition duration-200 cursor-pointer"
                   >
-                    <svg
+                    <Icon
+                      name="tabler:edit"
+                      style="
+                        width: 20px;
+                        height: 20px;
+
+                        padding-left: 10%;
+                      "
+                      class="sm:w-5 sm:h-5 md:w-6 md:h-6 transform hover:scale-125 transition-transform duration-200"
+                    />
+
+                    <!-- <svg
                       xmlns="http://www.w3.org/2000/svg"
                       class="h-4 w-4 sm:h-5 sm:w-5 transform hover:scale-125 transition-transform duration-200"
                       fill="none"
@@ -330,13 +328,23 @@ watch(page, () => fetchStudents());
                         stroke-width="2"
                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
                       />
-                    </svg>
+                    </svg> -->
                   </button>
                   <button
                     @click="actionStudent(item.student_id, 'delete')"
                     class="text-red-600 hover:text-red-800 transition duration-200 cursor-pointer"
                   >
-                    <svg
+                    <Icon
+                      name="material-symbols:delete-outline"
+                      style="
+                        width: 20px;
+                        height: 20px;
+
+                        padding-left: 10%;
+                      "
+                      class="sm:w-5 sm:h-5 md:w-6 md:h-6 transform hover:scale-125 transition-transform duration-200"
+                    />
+                    <!-- <svg
                       xmlns="http://www.w3.org/2000/svg"
                       class="h-4 w-4 sm:h-5 sm:w-5 transform hover:scale-125 transition-transform duration-200"
                       fill="none"
@@ -349,7 +357,7 @@ watch(page, () => fetchStudents());
                         stroke-width="2"
                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
                       />
-                    </svg>
+                    </svg> -->
                   </button>
                 </td>
               </tr>
@@ -392,23 +400,14 @@ watch(page, () => fetchStudents());
               แก้ไขข้อมูลนักเรียน
             </h3>
             <button
-              class="text-gray-400 hover:text-gray-600 cursor-pointer"
+              class="text-red-400 hover:text-red-600 cursor-pointer"
               @click.prevent="showModal = false"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 sm:h-6 sm:w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
+              <Icon
+                name="mingcute:close-line"
+                style="width: 24px; height: 24px; padding-left: 10%"
+                class="sm:w-5 sm:h-5 md:w-6 md:h-6 transform hover:scale-125 transition-transform duration-200"
+              />
             </button>
           </div>
           <form
@@ -513,10 +512,16 @@ watch(page, () => fetchStudents());
               เพิ่มนักเรียน/นักศึกษา
             </h3>
             <button
-              class="text-gray-400 hover:text-gray-600 cursor-pointer"
+              class="text-red-400 hover:text-red-600 cursor-pointer"
               @click.prevent="showModalAdd = false"
             >
-              <svg
+              <Icon
+                name="mingcute:close-line"
+                style="width: 24px; height: 24px; padding-left: 10%"
+                class="sm:w-5 sm:h-5 md:w-6 md:h-6 transform hover:scale-125 transition-transform duration-200"
+       
+              />
+              <!-- <svg
                 xmlns="http://www.w3.org/2000/svg"
                 class="h-5 w-5 sm:h-6 sm:w-6"
                 fill="none"
@@ -529,7 +534,7 @@ watch(page, () => fetchStudents());
                   stroke-width="2"
                   d="M6 18L18 6M6 6l12 12"
                 />
-              </svg>
+              </svg> -->
             </button>
           </div>
           <form
