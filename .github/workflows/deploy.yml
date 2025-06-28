@@ -34,7 +34,7 @@ jobs:
           source: ".output"
           target: "/home/xver/eWeb/web-e-resume"
 
-      - name: Restart app on VPS
+      - name: restart app with PM2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
