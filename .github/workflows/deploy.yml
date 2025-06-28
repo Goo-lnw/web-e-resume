@@ -36,7 +36,7 @@ jobs:
             git pull origin main
             npm install
             npm run build
-            pm2 restart nuxt-app
+            pm2 restart web-e-resume
 
           #form path to your app on the VPS
           #/home/xver/eWeb/web-e-resume
