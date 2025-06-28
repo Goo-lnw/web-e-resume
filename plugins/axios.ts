@@ -11,7 +11,7 @@ export default defineNuxtPlugin(() => {
   });
 
   const $axios = axios.create({
-    baseURL: config.public.apiBase || "https://apiresume.dymedev.com/api",
+    baseURL: config.public.apiBase ,
     withCredentials: true,
     timeout: 10000,
   });
