@@ -1,0 +1,44 @@
+name: Deploy Nuxt to VPS
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v3
+
+      - name: 🟢 Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: 📦 Install dependencies
+        run: npm install
+
+      - name: 🛠 Build Nuxt app
+        run: npm run build
+
+      - name: 📤 Deploy to VPS with rsync
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }} #form hostname or IP address of your VPS
+          username: ${{ secrets.VPS_USER }} #form username for your VPS 
+          key: ${{ secrets.VPS_SSH_KEY }} # SSH private key for your VPS
+          port: 22
+          script: |
+            cd /home/xver/eWeb/web-e-resume
+            git pull origin main
+            npm install
+            npm run build
+            pm2 restart nuxt-app
+
+          #form path to your app on the VPS
+          #/home/xver/eWeb/web-e-resume
+
+
