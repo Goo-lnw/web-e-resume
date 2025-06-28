@@ -3,7 +3,7 @@ name: Deploy Nuxt to VPS
 on:
   push:
     branches:
-      - main 
+      - main
 
 jobs:
   build-and-deploy:
@@ -16,7 +16,7 @@ jobs:
       - name: 🟢 Install Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "18"
 
       - name: 📦 Install dependencies
         run: npm install
@@ -28,7 +28,7 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }} #form hostname or IP address of your VPS
-          username: ${{ secrets.VPS_USER }} #form username for your VPS 
+          username: ${{ secrets.VPS_USER }} #form username for your VPS
           key: ${{ secrets.VPS_SSH_KEY }} # SSH private key for your VPS
           port: 22
           script: |
@@ -40,5 +40,3 @@ jobs:
 
           #form path to your app on the VPS
           #/home/xver/eWeb/web-e-resume
-
-
