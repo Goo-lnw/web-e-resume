@@ -1,4 +1,4 @@
-name: Deploy app to VPS
+name: Deploy Nuxt App to VPS
 
 on:
   push:
@@ -10,21 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout Code
         uses: actions/checkout@v3
 
-      - name: Install Node.js
+      - name: 🧰 Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "22"
 
-      - name: Install dependencies
-        run: npm install
+      - name: 📦 Install Dependencies
+        run: npm ci
 
-      - name: 🛠 Build Nuxt app
+      - name: 🛠 Build Nuxt App
         run: npm run build
 
-      - name: Upload built app to VPS
+      - name: 🚀 Upload Built App to VPS
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -34,7 +34,7 @@ jobs:
           source: ".output"
           target: "/home/xver/eWeb/web-e-resume"
 
-      - name: restart app with PM2
+      - name: 🔁 Restart App with PM2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -42,14 +42,35 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
           script: |
-            export PATH="/home/xver/.nvm/versions/node/v22.16.0/bin:$PATH"
+            export PATH="$HOME/.nvm/versions/node/v22.16.0/bin:$PATH"
             cd /home/xver/eWeb/web-e-resume
 
+            # Create pm2.config.js if it doesn't exist
+            if [ ! -f pm2.config.js ]; then
+              echo "Creating default pm2.config.js"
+              cat <<EOF > pm2.config.js
+              module.exports = {
+                apps: [
+                  {
+                    name: "web-e-resume",
+                    script: ".output/server/index.mjs",
+                    exec_mode: "fork",
+                    env: {
+                      NODE_ENV: "production",
+                      PORT: 3111
+                    }
+                  }
+                ]
+              };
+              EOF
+            fi
+
             if ! pm2 describe web-e-resume > /dev/null; then
-              echo "PM2 process not found. Starting new process..."
+              echo "PM2 process not found. Starting..."
               pm2 start pm2.config.js
-              pm2 save
             else
               echo "Restarting existing PM2 process..."
               pm2 restart web-e-resume
             fi
+
+            pm2 save

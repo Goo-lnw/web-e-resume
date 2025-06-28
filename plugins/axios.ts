@@ -13,7 +13,7 @@ export default defineNuxtPlugin(() => {
   const $axios = axios.create({
     baseURL: config.public.apiBase || "https://apiresume.dymedev.com/api",
     withCredentials: true,
-    timeout: 10000, // 10 seconds timeout
+    timeout: 10000,
   });
 
   $axios.interceptors.request.use(
