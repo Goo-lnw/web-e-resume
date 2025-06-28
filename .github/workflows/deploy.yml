@@ -1,4 +1,4 @@
-name: Deploy Nuxt to VPS
+name: Deploy app to VPS
 
 on:
   push:
