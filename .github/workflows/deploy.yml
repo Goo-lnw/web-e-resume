@@ -44,4 +44,12 @@ jobs:
           script: |
             export PATH="/home/xver/.nvm/versions/node/v22.16.0/bin:$PATH"
             cd /home/xver/eWeb/web-e-resume
-            pm2 restart web-e-resume
+
+            if ! pm2 describe web-e-resume > /dev/null; then
+              echo "PM2 process not found. Starting new process..."
+              pm2 start pm2.config.js
+              pm2 save
+            else
+              echo "Restarting existing PM2 process..."
+              pm2 restart web-e-resume
+            fi
