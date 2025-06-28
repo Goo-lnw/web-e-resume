@@ -29,7 +29,7 @@ export default defineNuxtPlugin(() => {
   $axios.interceptors.response.use(
     (response) => {
       if (
-        response.config.url?.includes("/users/login") &&
+        response.config.url?.includes("/api/login") &&
         response.data.token
       ) {
         tokenCookie.value = response.data.token;
