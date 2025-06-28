@@ -23,7 +23,13 @@
               to=""
               class="group relative flex flex-col items-center justify-center p-2 lg:p-3 rounded-lg transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200 cursor-pointer"
             >
-              <svg
+              <Icon
+                name="mdi:home"
+                style="height: 24px; width: 24px"
+                class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
+              />
+
+              <!-- <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
                 height="20"
@@ -34,7 +40,7 @@
                   fill="currentColor"
                   d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1"
                 />
-              </svg>
+              </svg> -->
 
               <!--bottom indicator -->
               <div
@@ -51,7 +57,7 @@
             <NuxtLink
               to="/student"
               class="group relative flex flex-col items-center justify-center p-2 lg:p-3 rounded-lg transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200 cursor-pointer"
-            >
+             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -83,7 +89,12 @@
               <button
                 class="flex flex-col items-center justify-center p-2 lg:p-3 rounded-lg transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200 cursor-pointer"
               >
-                <svg
+                <Icon
+                  name="mi:select"
+                  style="height: 24px; width: 24px"
+                  class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
+                />
+                <!-- <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
                   height="20"
@@ -91,7 +102,7 @@
                   class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
                 >
                   <path fill="currentColor" d="M12 16l-6-6h12z" />
-                </svg>
+                </svg> -->
                 <span
                   class="text-xs mt-1 text-gray-600 group-hover:text-blue-600"
                   >Resume Sections</span
@@ -178,20 +189,12 @@
               to=""
               class="group flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                class="text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
-              >
-                <path
-                  fill="currentColor"
-                  d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1"
-                />
-              </svg>
+              <Icon
+                name="mdi:home"
+                style="height: 24px; width: 24px"
+                class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
+              />
             </NuxtLink>
-
             <NuxtLink
               to=""
               class="group flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200"
@@ -215,15 +218,11 @@
                 @click="isDropdownOpen = !isDropdownOpen"
                 class="flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  class="text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
-                >
-                  <path fill="currentColor" d="M12 16l-6-6h12z" />
-                </svg>
+                <Icon
+                  name="mi:select"
+                  style="height: 24px; width: 24px"
+                  class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
+                />
               </button>
 
               <div
@@ -310,7 +309,9 @@
               to="#"
               class="group relative flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200"
             >
-              <svg
+              <Icon name="fluent:chat-help-20-filled" style="height: 26px; width: 26px;" class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200" />
+
+              <!-- <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
                 height="20"
@@ -321,7 +322,7 @@
                   fill="currentColor"
                   d="M11.95 18q.525 0 .888-.363t.362-.887t-.362-.888t-.888-.362t-.887.363t-.363.887t.363.888t.887.362m.05 4q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m.1-14.3q.625 0 1.088.4t.462 1q0 .55-.337.975t-.763.8q-.575.5-1.012 1.1t-.438 1.35q0 .35.263.588t.612.237q.375 0 .638-.25t.337-.625q.1-.525.45-.937t.75-.788q.575-.55.988-1.2t.412-1.45q0-1.275-1.037-2.087T12.1 6q-.95 0-1.812.4T8.975 7.625q-.175.3-.112.638t.337.512q.35.2.725.125t.625-.425q.275-.375.688-.575t.862-.2"
                 />
-              </svg>
+              </svg> -->
               <!-- Tooltip -->
               <div
                 class="absolute -bottom-10 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
@@ -335,7 +336,9 @@
               <span
                 class="flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200 cursor-pointer"
               >
-                <svg
+                <Icon name="ic:round-account-circle" style="height: 28px; width: 28px;" class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-800 group-hover:text-blue-600 transition-colors duration-200" />
+
+                <!-- <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
                   height="24"
@@ -350,7 +353,7 @@
                     fill="currentColor"
                     d="M26.749 24.93A13.99 13.99 0 1 0 2 16a13.9 13.9 0 0 0 3.251 8.93l-.02.017c.07.084.15.156.222.239c.09.103.187.2.28.3q.418.457.87.87q.14.124.28.242q.48.415.99.782c.044.03.084.069.128.1v-.012a13.9 13.9 0 0 0 16 0v.012c.044-.031.083-.07.128-.1q.51-.368.99-.782q.14-.119.28-.242q.451-.413.87-.87c.093-.1.189-.197.28-.3c.071-.083.152-.155.222-.24ZM16 8a4.5 4.5 0 1 1-4.5 4.5A4.5 4.5 0 0 1 16 8M8.007 24.93A4.996 4.996 0 0 1 13 20h6a4.996 4.996 0 0 1 4.993 4.93a11.94 11.94 0 0 1-15.986 0"
                   />
-                </svg>
+                </svg> -->
               </span>
               <div
                 class="absolute top-full mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-50"
@@ -359,7 +362,7 @@
                   <li>
                     <NuxtLink
                       to="/student/edit_profile"
-                      class="block px-4 py-2 w-full text-left hover:bg-gray-100"
+                      class="block px-4 py-2 w-full text-left hover:bg-gray-200 "
                     >
                       แก้ไขโปรไฟล์
                     </NuxtLink>
@@ -368,7 +371,7 @@
                   <li>
                     <button
                       @click.prevent="logout()"
-                      class="block px-4 py-2 w-full text-left hover:bg-gray-100 cursor-pointer"
+                      class="block px-4 py-2 w-full text-left hover:bg-gray-200 cursor-pointer"
                     >
                       ออกจากระบบ
                     </button>

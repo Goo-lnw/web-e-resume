@@ -169,7 +169,12 @@ async function login() {
                 class="flex items-center text-xs sm:text-sm font-medium text-gray-700 mb-1 gap-2"
               >
                 อีเมล
-                <svg
+                <Icon
+                  name="qlementine-icons:user-16"
+                  style="width: 20px; height: 20px; color: #3b82f6"
+                  class="sm:w-5 sm:h-5 md:w-6 md:h-6"
+                />
+                <!-- <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
                   viewBox="0 0 32 32"
@@ -182,7 +187,7 @@ async function login() {
                     fill="currentColor"
                     d="M26.749 24.93A13.99 13.99 0 1 0 2 16a13.9 13.9 0 0 0 3.251 8.93l-.02.017c.07.084.15.156.222.239c.09.103.187.2.28.3q.418.457.87.87q.14.124.28.242q.48.415.99.782c.044.03.084.069.128.1v-.012a13.9 13.9 0 0 0 16 0v.012c.044-.031.083-.07.128-.1q.51-.368.99-.782q.14-.119.28-.242q.451-.413.87-.87c.093-.1.189-.197.28-.3c.071-.083.152-.155.222-.24ZM16 8a4.5 4.5 0 1 1-4.5 4.5A4.5 4.5 0 0 1 16 8M8.007 24.93A4.996 4.996 0 0 1 13 20h6a4.996 4.996 0 0 1 4.993 4.93a11.94 11.94 0 0 1-15.986 0"
                   />
-                </svg>
+                </svg> -->
               </label>
               <input
                 type="email"
@@ -196,7 +201,13 @@ async function login() {
                 class="flex items-center text-xs sm:text-sm font-medium text-gray-700 mb-1 gap-2"
               >
                 รหัสผ่าน
-                <svg
+                <Icon
+                  name="bi:key-fill"
+                  style="width: 20px; height: 20px; color: #3b82f6"
+                  class="sm:w-5 sm:h-5 md:w-6 md:h-6"
+                />
+
+                <!-- <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
                   viewBox="0 0 24 24"
@@ -205,7 +216,7 @@ async function login() {
                     fill="currentColor"
                     d="M7 15q1.25 0 2.125-.875T10 12t-.875-2.125T7 9t-2.125.875T4 12t.875 2.125T7 15m0 3q-2.5 0-4.25-1.75T1 12t1.75-4.25T7 6q2.025 0 3.538 1.15T12.65 10h8.375L23 11.975l-3.5 4L17 14l-2 2l-2-2h-.35q-.625 1.8-2.175 2.9T7 18"
                   />
-                </svg>
+                </svg> -->
               </label>
               <input
                 type="password"
@@ -219,7 +230,12 @@ async function login() {
               class="flex justify-center items-center py-2 sm:py-2.5 w-full bg-indigo-500 hover:bg-indigo-700 text-gray-100 rounded-lg shadow-md transition duration-500 ease-in-out cursor-pointer"
             >
               เข้าสู่ระบบ
-              <svg
+              <Icon
+                name="si:sign-in-alt-duotone"
+                style="width: 20px; height: 20px;  padding-left: 10%;"
+                class="sm:w-5 sm:h-5 md:w-6 md:h-6"
+              />
+              <!-- <svg
                 class="w-4 h-4 sm:w-5 sm:h-5 ml-2"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -234,7 +250,7 @@ async function login() {
                   <circle cx="12" cy="12" r="10" />
                   <path d="M8 12h8m-4 4l4-4l-4-4" />
                 </g>
-              </svg>
+              </svg> -->
             </button>
           </form>
         </div>
