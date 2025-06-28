@@ -10,21 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: 🟢 Install Node.js
+      - name: Install Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "22"
 
-      - name: 📦 Install dependencies
+      - name: Install dependencies
         run: npm install
 
       - name: 🛠 Build Nuxt app
         run: npm run build
 
-      - name: 📤 Upload built app to VPS
+      - name: Upload built app to VPS
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -34,7 +34,7 @@ jobs:
           source: ".output"
           target: "/home/xver/eWeb/web-e-resume"
 
-      - name: 🚀 Restart app on VPS
+      - name: Restart app on VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
