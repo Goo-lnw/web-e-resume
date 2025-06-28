@@ -232,7 +232,7 @@ async function login() {
               เข้าสู่ระบบ
               <Icon
                 name="si:sign-in-alt-duotone"
-                style="width: 20px; height: 20px;  padding-left: 10%;"
+                style="width: 20px; height: 20px; padding-left: 10%"
                 class="sm:w-5 sm:h-5 md:w-6 md:h-6"
               />
               <!-- <svg
