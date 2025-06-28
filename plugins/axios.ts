@@ -11,7 +11,7 @@ export default defineNuxtPlugin(() => {
   });
 
   const $axios = axios.create({
-    baseURL: config.public.apiBase,
+    baseURL: config.public.apiBase || "https://apiresume.dymedev.com/api",
     withCredentials: true,
     timeout: 10000, // 10 seconds timeout
   });
@@ -28,10 +28,7 @@ export default defineNuxtPlugin(() => {
 
   $axios.interceptors.response.use(
     (response) => {
-      if (
-        response.config.url?.includes("/api/login") &&
-        response.data.token
-      ) {
+      if (response.config.url?.includes("/") && response.data.token) {
         tokenCookie.value = response.data.token;
       }
       return response;
