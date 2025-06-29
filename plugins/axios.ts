@@ -2,6 +2,7 @@ import axios from "axios";
 import { useCookie } from "#app";
 
 export default defineNuxtPlugin(() => {
+  const router = useRouter();
   const config = useRuntimeConfig();
   const tokenCookie = useCookie("token", {
     maxAge: 60 * 60 * 24, // 1 วัน
@@ -32,9 +33,11 @@ export default defineNuxtPlugin(() => {
         tokenCookie.value = response.data.token;
       }
       return response;
+
     },
     (error) => {
       return Promise.reject(error);
+
     }
   );
 

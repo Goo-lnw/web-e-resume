@@ -12,13 +12,10 @@ export function useAlert() {
     alertMessage.value = message;
     alertType.value = type;
     isAlertVisible.value = true;
-
-    // Hide after 3s
     setTimeout(() => {
       isAlertVisible.value = false;
     }, 3000);
   };
-
   return {
     alertMessage,
     alertType,

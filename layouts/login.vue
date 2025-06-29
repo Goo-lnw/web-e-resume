@@ -10,13 +10,13 @@
         <div class="flex items-center gap-4 flex-shrink-0">
           <NuxtLink to="/" class="flex items-center">
             <img
-              src="../assets/images/logo-it-bru-Photoroom.png"
+              src="@/assets/images/logo-it-bru-Photoroom.png"
               alt="logo-bru"
               class="h-12 animate-fade-down"
             />
           </NuxtLink>
           <img
-            src="../assets/images/Eresumem-logo-removebg.png"
+            src="@/assets/images/Eresumem-logo-removebg.png"
             alt="logo-eresume"
             class="h-18 w-28 filter brightness-0 invert animate-fade-down"
           />
@@ -53,7 +53,7 @@
 <script setup>
 </script>
 
-<style scoped>
+<!-- <style scoped>
 /* อนิเมชันสำหรับ fade-up */
 @keyframes fade-up {
   from {
@@ -116,4 +116,4 @@
 .animate-slide-in-right {
   animation: slide-in-right 0.5s ease-out;
 }
-</style>
+</style> -->
