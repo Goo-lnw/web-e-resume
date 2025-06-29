@@ -12,9 +12,9 @@ export default defineNuxtPlugin(() => {
   });
 
   const $axios = axios.create({
-    baseURL: config.public.apiBase,
+    baseURL: config.public.apiBase ,
     withCredentials: true,
-    timeout: 10000, // 10 seconds timeout
+    timeout: 10000,
   });
 
   $axios.interceptors.request.use(
@@ -29,13 +29,15 @@ export default defineNuxtPlugin(() => {
 
   $axios.interceptors.response.use(
     (response) => {
-      if (
-        response.config.url?.includes("/users/login") &&
-        response.data.token
-      ) {
+      if (response.config.url?.includes("/") && response.data.token) {
         tokenCookie.value = response.data.token;
       }
       return response;
+
+    },
+    (error) => {
+      return Promise.reject(error);
+
     }
   );
 

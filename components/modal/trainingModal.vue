@@ -1,39 +1,16 @@
 <template>
-  <div
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-    @click.self="close"
-  >
-    <div
-      class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden"
-    >
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" @click.self="close">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden">
       <!-- Header -->
-      <div
-        class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4 text-white"
-      >
+      <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4 text-white">
         <div class="flex items-center justify-between">
           <div>
             <h2 class="text-2xl font-bold">Training</h2>
-            <p class="text-blue-100 text-sm mt-1">
-              Manage your training and certifications
-            </p>
+            <p class="text-blue-100 text-sm mt-1">Manage your training and certifications</p>
           </div>
-          <button
-            @click="close"
-            class="p-2 hover:bg-white/20 rounded-full transition-colors duration-200 cursor-pointer"
-            aria-label="Close modal"
-          >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              ></path>
+          <button @click="close" class="p-2 hover:bg-white/20 rounded-full transition-colors duration-200 cursor-pointer" aria-label="Close modal">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
         </div>
@@ -51,23 +28,14 @@
             <!-- Training Header -->
             <div class="flex items-center justify-between mb-4">
               <div class="flex items-center space-x-3">
-                <div
-                  class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center"
-                >
-                  <span class="text-white font-bold text-lg">{{
-                    index + 1
-                  }}</span>
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <span class="text-white font-bold text-lg">{{ index + 1 }}</span>
                 </div>
                 <div>
                   <h3 class="font-semibold text-gray-800">
-                    {{
-                      training.training_history_course_name ||
-                      `Training ${index + 1}`
-                    }}
+                    {{ training.training_history_course_name || `Training ${index + 1}` }}
                   </h3>
-                  <p class="text-sm text-gray-500">
-                    Configure your training details
-                  </p>
+                  <p class="text-sm text-gray-500">Configure your training details</p>
                 </div>
               </div>
               <div class="flex items-center space-x-2">
@@ -76,12 +44,7 @@
                   class="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-all duration-300 cursor-pointer transform hover:scale-120 ease-in-out"
                   title="Remove training"
                 >
-                  <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -97,15 +60,8 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <!-- Course Name -->
               <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -125,15 +81,8 @@
 
               <!-- Organization -->
               <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -153,15 +102,8 @@
 
               <!-- Location -->
               <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -181,15 +123,8 @@
 
               <!-- Date -->
               <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -208,15 +143,8 @@
 
               <!-- Certificate File -->
               <div class="space-y-2 lg:col-span-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -227,11 +155,16 @@
                   <span>Certificate File</span>
                 </label>
                 <input
+                  type="file"
+                  @change="handleFileChange($event, index)"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
+                />
+                <!-- <input
                   v-model="training.training_history_certificate_file"
                   type="url"
                   placeholder="e.g., https://drive.google.com/your-certificate"
                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
-                />
+                /> -->
               </div>
             </div>
           </div>
@@ -245,50 +178,26 @@
             <div
               class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
             >
-              <svg
-                class="w-8 h-8 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                ></path>
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-green-800 mb-2">
-              Add New Training
-            </h3>
+            <h3 class="text-lg font-semibold text-green-800 mb-2">Add New Training</h3>
             <p class="text-green-600 text-sm">Click to add a new training</p>
           </div>
         </div>
 
         <!-- Loading State -->
-        <div
-          v-if="isLoading"
-          class="flex flex-col items-center justify-center py-12"
-        >
-          <div
-            class="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mb-4"
-          ></div>
+        <div v-if="isLoading" class="flex flex-col items-center justify-center py-12">
+          <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mb-4"></div>
           <p class="text-gray-500 text-lg">Loading your trainings...</p>
           <p class="text-gray-400 text-sm">Please wait a moment</p>
         </div>
 
         <!-- Empty State (if no trainings after loading) -->
         <div v-else-if="trainingData.length === 0" class="text-center py-12">
-          <div
-            class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center"
-          >
-            <svg
-              class="w-12 h-12 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+          <div class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -297,12 +206,10 @@
               ></path>
             </svg>
           </div>
-          <h3 class="text-lg font-medium text-gray-900 mb-2">
-            No trainings found
-          </h3>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">No trainings found</h3>
           <p class="text-gray-500 mb-4">Start by adding your first training!</p>
           <button
-            @click="addNewTraining"
+            @click="addNewTraining($event, trainingData)"
             class="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-200 font-medium"
           >
             Add Your First Training
@@ -314,9 +221,7 @@
       <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
         <div class="flex items-center justify-between">
           <div class="text-sm text-gray-500">
-            {{ trainingData.length }} training{{
-              trainingData.length !== 1 ? "s" : ""
-            }}
+            {{ trainingData.length }} training{{ trainingData.length !== 1 ? "s" : "" }}
             total
           </div>
           <div class="flex space-x-3">
@@ -332,13 +237,7 @@
               :disabled="isSaving"
               class="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 cursor-pointer"
             >
-              <svg
-                v-if="isSaving"
-                class="animate-spin w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg v-if="isSaving" class="animate-spin w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -358,6 +257,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useResumeStore } from "../../stores/resumeStore";
+import AdditionalInfoModal from "./additionalInfoModal.vue";
 
 const resumeStore = useResumeStore();
 const emit = defineEmits(["close", "save"]);
@@ -407,16 +307,25 @@ const removeTraining = async (training_history_id) => {
 const saveTrainings = async () => {
   try {
     isSaving.value = true;
+
     for (const training of trainingData.value) {
-      await $axios.put(`/resume/training/${training.training_history_id}`, {
-        training_history_course_name: training.training_history_course_name,
-        training_history_organization: training.training_history_organization,
-        training_history_location: training.training_history_location,
-        training_history_date: training.training_history_date,
-        training_history_certificate_file:
-          training.training_history_certificate_file,
+      const payload = new FormData();
+      payload.append("training_history_course_name", training.training_history_course_name);
+      payload.append("training_history_organization", training.training_history_organization);
+      payload.append("training_history_location", training.training_history_location);
+      payload.append("training_history_date", training.training_history_date);
+      if (training.training_history_certificate_file instanceof File) {
+        payload.append("training_history_certificate_file", training.training_history_certificate_file);
+      }
+      console.log(payload);
+
+      await $axios.put(`/resume/training/${training.training_history_id}`, payload, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
     }
+
     showAlert("บันทึกข้อมูลสำเร็จ", "success");
     emit("save", trainingData.value);
     close();
@@ -426,7 +335,15 @@ const saveTrainings = async () => {
     isSaving.value = false;
   }
 };
+const handleFileChange = (event, index) => {
+  const file = event.target.files[0];
+  console.log(index);
 
+  if (file) {
+    trainingData.value[index].training_history_certificate_file = file;
+    // console.log(trainingData.value);
+  }
+};
 const close = () => {
   emit("close");
   resumeStore.fetchResume();
