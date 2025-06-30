@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useCookie } from "#app";
+import { useAlert } from "~/composables/useAlert";
 
 export default defineNuxtPlugin(() => {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default defineNuxtPlugin(() => {
   });
 
   const $axios = axios.create({
-    baseURL: config.public.apiBase ,
+    baseURL: config.public.apiBase,
     withCredentials: true,
     timeout: 10000,
   });
