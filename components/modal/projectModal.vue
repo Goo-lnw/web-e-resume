@@ -1,39 +1,20 @@
 <template>
-  <div
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-    @click.self="close"
-  >
-    <div
-      class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden"
-    >
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" @click.self="close">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden">
       <!-- Header -->
-      <div
-        class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4 text-white"
-      >
+      <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4 text-white">
         <div class="flex items-center justify-between">
           <div>
             <h2 class="text-2xl font-bold">Projects</h2>
-            <p class="text-blue-100 text-sm mt-1">
-              Manage your project experiences
-            </p>
+            <p class="text-blue-100 text-sm mt-1">Manage your project experiences</p>
           </div>
           <button
             @click="close"
             class="p-2 hover:bg-white/20 rounded-full transition-colors duration-200 cursor-pointer"
             aria-label="Close modal"
           >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              ></path>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
         </div>
@@ -50,21 +31,17 @@
           >
             <!-- Project Header -->
             <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center space-x-3">
+              <div class="flex items-center space-x-3 min-w-0">
                 <div
                   class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center"
                 >
-                  <span class="text-white font-bold text-lg">{{
-                    index + 1
-                  }}</span>
+                  <span class="text-white font-bold text-lg">{{ index + 1 }}</span>
                 </div>
-                <div>
-                  <h3 class="font-semibold text-gray-800">
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-gray-800 break-words">
                     {{ project.project_name || `Project ${index + 1}` }}
                   </h3>
-                  <p class="text-sm text-gray-500">
-                    Configure your project details
-                  </p>
+                  <p class="text-sm text-gray-500">Configure your project details</p>
                 </div>
               </div>
               <div class="flex items-center space-x-2">
@@ -73,12 +50,7 @@
                   class="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-all duration-300 cursor-pointer transform hover:scale-120 ease-in-out"
                   title="Remove project"
                 >
-                  <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -94,15 +66,8 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <!-- Project Name -->
               <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -122,15 +87,8 @@
 
               <!-- Technologies Used -->
               <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -150,15 +108,8 @@
 
               <!-- Description -->
               <div class="space-y-2 lg:col-span-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -178,15 +129,8 @@
 
               <!-- Impact -->
               <div class="space-y-2 lg:col-span-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -206,15 +150,8 @@
 
               <!-- Attachment Link -->
               <div class="space-y-2 lg:col-span-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -243,12 +180,7 @@
             <div
               class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
             >
-              <svg
-                class="w-8 h-8 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -257,38 +189,22 @@
                 ></path>
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-green-800 mb-2">
-              Add New Project
-            </h3>
-            <p class="text-green-600 text-sm">
-              Click to add a new project
-            </p>
+            <h3 class="text-lg font-semibold text-green-800 mb-2">Add New Project</h3>
+            <p class="text-green-600 text-sm">Click to add a new project</p>
           </div>
         </div>
 
         <!-- Loading State -->
-        <div
-          v-if="isLoading"
-          class="flex flex-col items-center justify-center py-12"
-        >
-          <div
-            class="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mb-4"
-          ></div>
+        <div v-if="isLoading" class="flex flex-col items-center justify-center py-12">
+          <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mb-4"></div>
           <p class="text-gray-500 text-lg">Loading your projects...</p>
           <p class="text-gray-400 text-sm">Please wait a moment</p>
         </div>
 
         <!-- Empty State (if no projects after loading) -->
         <div v-else-if="projectData.length === 0" class="text-center py-12">
-          <div
-            class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center"
-          >
-            <svg
-              class="w-12 h-12 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+          <div class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -297,12 +213,8 @@
               ></path>
             </svg>
           </div>
-          <h3 class="text-lg font-medium text-gray-900 mb-2">
-            No projects found
-          </h3>
-          <p class="text-gray-500 mb-4">
-            Start by adding your first project!
-          </p>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">No projects found</h3>
+          <p class="text-gray-500 mb-4">Start by adding your first project!</p>
           <button
             @click="addNewProject"
             class="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-200 font-medium"
@@ -332,13 +244,7 @@
               :disabled="isSaving"
               class="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 cursor-pointer"
             >
-              <svg
-                v-if="isSaving"
-                class="animate-spin w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg v-if="isSaving" class="animate-spin w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"

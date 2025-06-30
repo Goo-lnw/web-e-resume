@@ -274,13 +274,6 @@ const parseStr = (value) => {
   return value !== null && value !== undefined ? String(value) : null;
 };
 
-const checkInput = (educationData) => {
-  for (const education of educationData.value) {
-    if (education.education_history_gpa > 4 || education.education_history_gpa < 1) {
-      err.value = "ตรวจสอบเกรดที่คุณป้อนให้ถูกต้อง";
-    }
-  }
-};
 // const saveEducation = async () => {
 //   try {
 //     isSaving.value = true;

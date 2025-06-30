@@ -1,39 +1,20 @@
 <template>
-  <div
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-    @click.self="close"
-  >
-    <div
-      class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden"
-    >
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" @click.self="close">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden">
       <!-- Header -->
-      <div
-        class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4 text-white"
-      >
+      <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4 text-white">
         <div class="flex items-center justify-between">
           <div>
             <h2 class="text-2xl font-bold">Technical Skills</h2>
-            <p class="text-blue-100 text-sm mt-1">
-              Manage your technical proficiencies
-            </p>
+            <p class="text-blue-100 text-sm mt-1">Manage your technical proficiencies</p>
           </div>
           <button
             @click="close"
             class="p-2 hover:bg-white/20 rounded-full transition-colors duration-200 cursor-pointer"
             aria-label="Close modal"
           >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              ></path>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
         </div>
@@ -50,33 +31,27 @@
           >
             <!-- Skill Header -->
             <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center space-x-3">
+              <div class="flex items-center space-x-3 min-w-0">
                 <div
                   class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center"
                 >
-                  <span class="text-white font-bold text-lg">{{
-                    index + 1
-                  }}</span>
+                  <span class="text-white font-bold text-lg">{{ index + 1 }}</span>
                 </div>
-                <div>
-                  <h3 class="font-semibold text-gray-800">
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-gray-800 break-words">
                     {{ skill.skill_name || `Skill ${index + 1}` }}
                   </h3>
-                  <p class="text-sm text-gray-500">
-                    Configure your technical skill
-                  </p>
+                  <p class="text-sm text-gray-500">Configure your technical skill</p>
                 </div>
               </div>
+
               <div class="flex items-center space-x-2">
                 <span
                   class="px-3 py-1 rounded-full text-xs font-medium"
                   :class="{
-                    'bg-green-100 text-green-800':
-                      skill.skill_proficiency === 'advanced',
-                    'bg-yellow-100 text-yellow-800':
-                      skill.skill_proficiency === 'intermediate',
-                    'bg-gray-100 text-gray-800':
-                      skill.skill_proficiency === 'beginner',
+                    'bg-green-100 text-green-800': skill.skill_proficiency === 'advanced',
+                    'bg-yellow-100 text-yellow-800': skill.skill_proficiency === 'intermediate',
+                    'bg-gray-100 text-gray-800': skill.skill_proficiency === 'beginner',
                   }"
                 >
                   {{ skill.skill_proficiency || "Not set" }}
@@ -86,12 +61,7 @@
                   class="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-all duration-300 cursor-pointer transform hover:scale-120 ease-in-out"
                   title="Remove skill"
                 >
-                  <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -104,18 +74,11 @@
             </div>
 
             <!-- Inline Form Fields -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            <div class="grid sm:grid-cols-1 md:grid-cols-3 gap-4">
               <!-- Skill Name -->
               <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -135,15 +98,8 @@
 
               <!-- Skill Type -->
               <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -165,15 +121,8 @@
 
               <!-- Proficiency -->
               <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -203,12 +152,10 @@
                   <div
                     class="h-2 rounded-full transition-all duration-500"
                     :class="{
-                      'bg-gradient-to-r from-green-400 to-green-600 w-full':
-                        skill.skill_proficiency === 'advanced',
+                      'bg-gradient-to-r from-green-400 to-green-600 w-full': skill.skill_proficiency === 'advanced',
                       'bg-gradient-to-r from-yellow-400 to-orange-500 w-2/3':
                         skill.skill_proficiency === 'intermediate',
-                      'bg-gradient-to-r from-gray-400 to-gray-500 w-1/3':
-                        skill.skill_proficiency === 'beginner',
+                      'bg-gradient-to-r from-gray-400 to-gray-500 w-1/3': skill.skill_proficiency === 'beginner',
                       'w-0': !skill.skill_proficiency,
                     }"
                   ></div>
@@ -226,12 +173,7 @@
             <div
               class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
             >
-              <svg
-                class="w-8 h-8 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -240,38 +182,22 @@
                 ></path>
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-green-800 mb-2">
-              Add New Skill
-            </h3>
-            <p class="text-green-600 text-sm">
-              Click to add a new technical skill
-            </p>
+            <h3 class="text-lg font-semibold text-green-800 mb-2">Add New Skill</h3>
+            <p class="text-green-600 text-sm">Click to add a new technical skill</p>
           </div>
         </div>
 
         <!-- Loading State -->
-        <div
-          v-if="isLoading"
-          class="flex flex-col items-center justify-center py-12"
-        >
-          <div
-            class="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mb-4"
-          ></div>
+        <div v-if="isLoading" class="flex flex-col items-center justify-center py-12">
+          <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mb-4"></div>
           <p class="text-gray-500 text-lg">Loading your skills...</p>
           <p class="text-gray-400 text-sm">Please wait a moment</p>
         </div>
 
         <!-- Empty State (if no skills after loading) -->
         <div v-else-if="skillData.length === 0" class="text-center py-12">
-          <div
-            class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center"
-          >
-            <svg
-              class="w-12 h-12 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+          <div class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -280,12 +206,8 @@
               ></path>
             </svg>
           </div>
-          <h3 class="text-lg font-medium text-gray-900 mb-2">
-            No skills found
-          </h3>
-          <p class="text-gray-500 mb-4">
-            Start by adding your first technical skill!
-          </p>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">No skills found</h3>
+          <p class="text-gray-500 mb-4">Start by adding your first technical skill!</p>
           <button
             @click="addNewSkill"
             class="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-200 font-medium"
@@ -315,13 +237,7 @@
               :disabled="isSaving"
               class="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 cursor-pointer"
             >
-              <svg
-                v-if="isSaving"
-                class="animate-spin w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg v-if="isSaving" class="animate-spin w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -391,7 +307,6 @@ const removeSkill = async (index) => {
     console.error("Failed to remove skill:", error);
   }
 };
-
 
 const saveSkills = async () => {
   try {

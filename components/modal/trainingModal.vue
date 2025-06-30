@@ -8,7 +8,11 @@
             <h2 class="text-2xl font-bold">Training</h2>
             <p class="text-blue-100 text-sm mt-1">Manage your training and certifications</p>
           </div>
-          <button @click="close" class="p-2 hover:bg-white/20 rounded-full transition-colors duration-200 cursor-pointer" aria-label="Close modal">
+          <button
+            @click="close"
+            class="p-2 hover:bg-white/20 rounded-full transition-colors duration-200 cursor-pointer"
+            aria-label="Close modal"
+          >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
@@ -27,12 +31,14 @@
           >
             <!-- Training Header -->
             <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+              <div class="flex items-center space-x-3 min-w-0">
+                <div
+                  class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center"
+                >
                   <span class="text-white font-bold text-lg">{{ index + 1 }}</span>
                 </div>
-                <div>
-                  <h3 class="font-semibold text-gray-800">
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-gray-800 break-words">
                     {{ training.training_history_course_name || `Training ${index + 1}` }}
                   </h3>
                   <p class="text-sm text-gray-500">Configure your training details</p>
@@ -179,7 +185,12 @@
               class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
             >
               <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                ></path>
               </svg>
             </div>
             <h3 class="text-lg font-semibold text-green-800 mb-2">Add New Training</h3>
