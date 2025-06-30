@@ -1,15 +1,8 @@
 <template>
-  <div
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
-    @click.self="close"
-  >
-    <div
-      class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full mx-4 overflow-hidden max-h-[90vh] flex flex-col"
-    >
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" @click.self="close">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full mx-4 overflow-hidden max-h-[90vh] flex flex-col">
       <!-- Header -->
-      <div
-        class="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6 text-white"
-      >
+      <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6 text-white">
         <div class="flex justify-between items-center">
           <div>
             <h2 class="text-2xl font-bold">Education History</h2>
@@ -20,18 +13,8 @@
             class="p-2 hover:bg-white/20 rounded-full transition-colors duration-200 cursor-pointer"
             aria-label="Close modal"
           >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              ></path>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
         </div>
@@ -40,9 +23,7 @@
       <!-- Content -->
       <div class="flex-1 overflow-y-auto p-8">
         <div v-if="isLoading" class="flex items-center justify-center py-12">
-          <div
-            class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"
-          ></div>
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           <span class="ml-3 text-gray-600">Loading education data...</span>
         </div>
 
@@ -54,20 +35,13 @@
             class="bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200"
           >
             <div class="flex justify-between items-start mb-4">
-              <h3 class="text-lg font-semibold text-gray-800">
-                Education #{{ index + 1 }}
-              </h3>
+              <h3 class="text-lg font-semibold text-gray-800">Education #{{ index + 1 }}</h3>
               <button
                 @click="removeEducation(index, education.education_history_id)"
                 class="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition-all duration-300 cursor-pointer transform hover:scale-120 ease-in-out"
                 title="Remove education"
               >
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -80,9 +54,7 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div class="space-y-2">
-                <label class="block text-sm font-medium text-gray-700"
-                  >Institution</label
-                >
+                <label class="block text-sm font-medium text-gray-700">Institution</label>
                 <input
                   v-model="education.education_history_institution"
                   type="text"
@@ -92,9 +64,7 @@
               </div>
 
               <div class="space-y-2">
-                <label class="block text-sm font-medium text-gray-700"
-                  >Major/Degree</label
-                >
+                <label class="block text-sm font-medium text-gray-700">Major/Degree</label>
                 <input
                   v-model="education.education_history_major"
                   type="text"
@@ -104,9 +74,7 @@
               </div>
 
               <div class="space-y-2">
-                <label class="block text-sm font-medium text-gray-700"
-                  >Start Year</label
-                >
+                <label class="block text-sm font-medium text-gray-700">Start Year</label>
                 <input
                   v-model="education.education_history_start_year"
                   type="number"
@@ -118,9 +86,7 @@
               </div>
 
               <div class="space-y-2">
-                <label class="block text-sm font-medium text-gray-700"
-                  >GPA</label
-                >
+                <label class="block text-sm font-medium text-gray-700">GPA</label>
                 <input
                   v-model="education.education_history_gpa"
                   type="number"
@@ -133,15 +99,16 @@
               </div>
 
               <div class="md:col-span-2 space-y-2">
-                <label class="block text-sm font-medium text-gray-700"
-                  >Notes</label
-                >
+                <label class="block text-sm font-medium text-gray-700">Notes</label>
                 <textarea
                   v-model="education.education_history_notes"
                   rows="3"
                   placeholder="Additional notes, achievements, or relevant information"
                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
                 ></textarea>
+              </div>
+              <div class="text-red-500 font-medium" v-if="err">
+                {{ err[index] }}
               </div>
             </div>
           </div>
@@ -184,11 +151,7 @@
                   {{ isSaving ? "Adding Education..." : "Add New Education" }}
                 </h3>
                 <p class="text-gray-500 text-sm mt-1">
-                  {{
-                    isSaving
-                      ? "Please wait..."
-                      : "Click to add another education entry"
-                  }}
+                  {{ isSaving ? "Please wait..." : "Click to add another education entry" }}
                 </p>
               </div>
             </div>
@@ -196,15 +159,8 @@
 
           <!-- Empty State -->
           <div v-if="educationData.length === 0" class="text-center py-12">
-            <div
-              class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4"
-            >
-              <svg
-                class="w-12 h-12 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+            <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -213,12 +169,8 @@
                 ></path>
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-gray-700 mb-2">
-              No Education Entries
-            </h3>
-            <p class="text-gray-500">
-              Start by adding your first education entry
-            </p>
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">No Education Entries</h3>
+            <p class="text-gray-500">Start by adding your first education entry</p>
           </div>
         </div>
       </div>
@@ -227,9 +179,7 @@
       <div class="bg-gray-50 px-8 py-6 border-t border-gray-200">
         <div class="flex justify-between items-center">
           <div class="text-sm text-gray-500">
-            {{ educationData.length }} skill{{
-              educationData.length !== 1 ? "s" : ""
-            }}
+            {{ educationData.length }} skill{{ educationData.length !== 1 ? "s" : "" }}
             total
           </div>
           <div class="flex space-x-3">
@@ -264,6 +214,8 @@ const emit = defineEmits(["close", "save"]);
 const educationData = ref([]);
 const isLoading = ref(true);
 const isSaving = ref(false);
+const err = ref([]);
+
 const { $axios } = useNuxtApp();
 const { showAlert } = useAlert();
 const { handleApiError } = useErrorHandler();
@@ -296,7 +248,9 @@ const addNewEducation = async () => {
     await getEducation();
   } catch (error) {
     console.error("Failed to add new Education:", error);
-    handleApiError(error, "เกิดข้อผิดพลาดในการเพิ่มข้อมูลการศึกษา");
+
+    err.value = "เกิดข้อผิดพลาดในการเพิ่มข้อมูลการศึกษา กรุณาตรวจสอบข้อมูลให้ถูกต้อง";
+    // handleApiError(error, "เกิดข้อผิดพลาดในการเพิ่มข้อมูลการศึกษา");
   } finally {
     isSaving.value = false;
   }
@@ -320,30 +274,67 @@ const parseStr = (value) => {
   return value !== null && value !== undefined ? String(value) : null;
 };
 
+const checkInput = (educationData) => {
+  for (const education of educationData.value) {
+    if (education.education_history_gpa > 4 || education.education_history_gpa < 1) {
+      err.value = "ตรวจสอบเกรดที่คุณป้อนให้ถูกต้อง";
+    }
+  }
+};
+// const saveEducation = async () => {
+//   try {
+//     isSaving.value = true;
+
+//     // Save all education entries
+//     for (const education of educationData.value) {
+//       await $axios.put(`/resume/education_history/${education.education_history_id}`, {
+//         education_history_institution: education.education_history_institution,
+//         education_history_major: education.education_history_major,
+//         education_history_start_year: parseStr(education.education_history_start_year),
+//         education_history_gpa: parseStr(education.education_history_gpa),
+//         education_history_notes: education.education_history_notes,
+//       });
+//     }
+//     showAlert("บันทึกข้อมูลสำเร็จ", "success");
+//     console.log("Education data saved successfully");
+//     emit("save", educationData.value);
+//     close();
+//   } catch (error) {
+//     console.error("Failed to save education:", error);
+//     err.value = "กรุณาตรวจสอบข้อมูลให้ถุกต้อง";
+
+//     handleApiError(error, "เกิดข้อผิดพลาดในการบันทึกข้อมูลการศึกษา");
+//   } finally {
+//     isSaving.value = false;
+//   }
+// };
 const saveEducation = async () => {
   try {
     isSaving.value = true;
-
+    err.value = [];
     // Save all education entries
-    for (const education of educationData.value) {
-      await $axios.put(
-        `/resume/education_history/${education.education_history_id}`,
-        {
-          education_history_institution:
-            education.education_history_institution,
+    for (const [index, education] of educationData.value.entries()) {
+      try {
+        await $axios.put(`/resume/education_history/${education.education_history_id}`, {
+          education_history_institution: education.education_history_institution,
           education_history_major: education.education_history_major,
-          education_history_start_year: parseStr(
-            education.education_history_start_year
-          ),
+          education_history_start_year: parseStr(education.education_history_start_year),
           education_history_gpa: parseStr(education.education_history_gpa),
           education_history_notes: education.education_history_notes,
-        }
-      );
+        });
+      } catch (error) {
+        console.error(`Failed to save education:`, error);
+        err.value[index] = "กรุณาตรวจสอบข้อมูลให้ถูกต้อง";
+        continue;
+      }
     }
-    showAlert("บันทึกข้อมูลสำเร็จ", "success");
-    console.log("Education data saved successfully");
-    emit("save", educationData.value);
-    close();
+
+    if (err.value.length === 0) {
+      showAlert("บันทึกข้อมูลสำเร็จ", "success");
+      console.log("Education data saved successfully");
+      emit("save", educationData.value);
+      close();
+    }
   } catch (error) {
     console.error("Failed to save education:", error);
     handleApiError(error, "เกิดข้อผิดพลาดในการบันทึกข้อมูลการศึกษา");
@@ -351,7 +342,6 @@ const saveEducation = async () => {
     isSaving.value = false;
   }
 };
-
 function close() {
   emit("close");
   resumeStore.fetchResume();
