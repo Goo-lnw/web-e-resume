@@ -64,9 +64,7 @@ const canvasWrapper = ref("canvasWrapper");
 async function handleConfirmDelete(value) {
   if (value && selectedStudentId.value) {
     try {
-      const response = await $axios.delete(
-        `/student/${selectedStudentId.value}/delete`
-      );
+      const response = await $axios.delete(`/student/${selectedStudentId.value}/delete`);
       if (response.status === 200) {
         showAlert("ลบข้อมูลนักเรียน/นักศึกษาแล้ว", "error");
         fetchStudent();
@@ -186,10 +184,17 @@ async function fetchNoCertExistStudent(aid) {
 }
 
 const message_modal_alert = ref("");
-async function getingmessage(message) {
+const position_modal_alert = ref("");
+const type_modal_alert = ref("");
+
+async function getingmessage(message, position, type) {
   message_modal_alert.value = message;
+  position_modal_alert.value = position;
+  type_modal_alert.value = type;
   setTimeout(() => {
     message_modal_alert.value = "";
+    position_modal_alert.value = "";
+    type_modal_alert.value = "";
   }, 1500);
 }
 
@@ -209,11 +214,13 @@ async function checkInSubmit() {
 
   const res = await $axios.post("/teacher/activity/check_in", payload);
   if (res.status === 200) {
-    getingmessage("เพิ่มนักเรียนที่เข้าร่วมกิจกรรมเรียบร้อยแล้ว");
+    getingmessage("เพิ่มนักศึกษาที่เข้าร่วมกิจกรรมเรียบร้อยแล้ว", "checkin", "success");
     await fetchNotCheckedinStudent(id_activity.value);
     await fetchCheckedinStudent(id_activity.value);
     await fetchNoCertExistStudent(id_activity.value);
   } else {
+    getingmessage("เกิดข้อผิดพลาดในการเพิ่มนักศึกษา", "checkin", "error");
+
     // showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error");
   }
 }
@@ -226,20 +233,20 @@ async function removeCheckinStudentsBtn() {
   const payload = {
     resume_id: resume_id,
   };
-  const res = await $axios.delete(
-    `/teacher/activity/student/${id_activity.value}`,
-    {
-      data: payload,
-    }
-  );
+  const res = await $axios.delete(`/teacher/activity/student/${id_activity.value}`, {
+    data: payload,
+  });
 
   if (res.status === 200) {
-    showAlert("นำชื่อออกแล้ว", "success");
+    // showAlert("นำชื่อออกแล้ว", "success");
+    getingmessage("ลบนักศึกษาที่เข้าร่วมกิจกรรมเรียบร้อยแล้ว", "assign", "success");
+
     certNotExistTableCheckbox.value = [];
     await fetchNotCheckedinStudent(id_activity.value);
     await fetchNoCertExistStudent(id_activity.value);
   } else {
-    showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error");
+    getingmessage("เกิดข้อผิดพลาดในการลบนักศึกษาที่เข้าร่วมกิจกรรม", "assign", "error");
+    // showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error",);
   }
 }
 
@@ -257,12 +264,15 @@ async function assignCertBtn() {
   const res = await $axios.post(`/teacher/activity/assign_cert`, payload);
 
   if (res.status === 200) {
-    showAlert("มอบใบ Certificate เรียบร้อยแล้ว", "success");
+    // showAlert("มอบใบ Certificate เรียบร้อยแล้ว", "success");
+    getingmessage("มอบใบ Certificate เรียบร้อยแล้ว", "assign", "success");
+
     certNotExistTableCheckbox.value = [];
     await fetchNoCertExistStudent(id_activity.value);
     await fetchCertExistStudent(id_activity.value);
   } else {
-    showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error");
+    getingmessage("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "assign", "error");
+    // showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error");
   }
 }
 
@@ -275,15 +285,14 @@ async function removeCertBtn() {
     const payload = {
       resume_id: resume_id,
     };
-    const res = await $axios.delete(
-      `/teacher/activity/student_cert/${id_activity.value}`,
-      {
-        data: payload,
-      }
-    );
+    const res = await $axios.delete(`/teacher/activity/student_cert/${id_activity.value}`, {
+      data: payload,
+    });
 
     if (res.status === 200) {
-      showAlert("ลบ certificate แล้ว", "success");
+      // showAlert("ลบ certificate แล้ว", "success");
+      getingmessage("ลบ certificate แล้ว", "checkcert", "success");
+
       removeStudentCertCheckbox.value = [];
       await fetchNotCheckedinStudent(id_activity.value);
       await fetchCheckedinStudent(id_activity.value);
@@ -294,7 +303,9 @@ async function removeCertBtn() {
     }
   } catch (error) {
     console.error(error);
-    showAlert("เกิดข้อผิดพลาดในการลบ", "error");
+    getingmessage("เกิดข้อผิดพลาดในการลบ", "checkcert", "error");
+
+    // showAlert("เกิดข้อผิดพลาดในการลบ", "error");
   }
 }
 
@@ -306,23 +317,16 @@ async function handlelCertImageChange(event) {
     if (file) {
       if (!allowedTypes.includes(file.type)) {
         event.target.value = null;
-        throw `${file.name} : File type ${
-          file.type
-        } not allowed. Allowed: ${allowedTypes.join(", ")}`;
+        throw `${file.name} : File type ${file.type} not allowed. Allowed: ${allowedTypes.join(", ")}`;
       }
       if (file.size > MAX_FILE_SIZE) {
         event.target.value = null;
-        throw `${file.name} : is larger than 5 MB : This file is ${(
-          file.size /
-          (1024 * 1024)
-        ).toFixed(2)} MB`;
+        throw `${file.name} : is larger than 5 MB : This file is ${(file.size / (1024 * 1024)).toFixed(2)} MB`;
       }
       if (event.target.name === "edit_cert_image") {
-        formEditActivity.value.activity_certificate_file =
-          event.target.files[0];
+        formEditActivity.value.activity_certificate_file = event.target.files[0];
       } else if (event.target.name === "create_cert_image") {
-        formCreateActivity.value.activity_certificate_file =
-          event.target.files[0];
+        formCreateActivity.value.activity_certificate_file = event.target.files[0];
       }
       // console.log(formCreateActivity.value.activity_certificate_file);
     }
@@ -401,10 +405,7 @@ function generateAndUploadImage(imageSrc) {
     // const desiredMaxHeight = Math.min(parentHeight, 600);
     const desiredMaxHeight = parentHeight;
 
-    const scale = Math.min(
-      desiredMaxWidth / img.width,
-      desiredMaxHeight / img.height
-    );
+    const scale = Math.min(desiredMaxWidth / img.width, desiredMaxHeight / img.height);
 
     canvas.width = img.width * scale;
     canvas.height = img.height * scale;
@@ -560,9 +561,7 @@ const notCheckedinStudentTableSelectAll = ref(false);
 
 watch(notCheckedinStudentTableSelectAll, (value) => {
   if (value) {
-    notCheckedinStudentCheckbox.value = notCheckinStudentData.value.map(
-      (s) => s.resume_id
-    );
+    notCheckedinStudentCheckbox.value = notCheckinStudentData.value.map((s) => s.resume_id);
   } else {
     notCheckedinStudentCheckbox.value = [];
   }
@@ -578,9 +577,7 @@ watch(notCheckedinStudentCheckbox, (value) => {
 
 watch(certExistStudentTableSelectAll, (value) => {
   if (value) {
-    removeStudentCertCheckbox.value = certExistStudent.value.map(
-      (s) => s.resume_id
-    );
+    removeStudentCertCheckbox.value = certExistStudent.value.map((s) => s.resume_id);
   } else {
     removeStudentCertCheckbox.value = [];
   }
@@ -596,9 +593,7 @@ watch(removeStudentCertCheckbox, (value) => {
 
 watch(certNotExistTableSelectAll, (value) => {
   if (value) {
-    certNotExistTableCheckbox.value = certNotExistStudent.value.map(
-      (s) => s.resume_id
-    );
+    certNotExistTableCheckbox.value = certNotExistStudent.value.map((s) => s.resume_id);
   } else {
     certNotExistTableCheckbox.value = [];
   }
@@ -614,27 +609,15 @@ watch(certNotExistTableCheckbox, (value) => {
 </script>
 <template>
   <div class="min-h-full bg-gradient-to-b from-blue-100 to-white rounded">
-    <div
-      class="flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8"
-    >
+    <div class="flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
       <!-- Page Header -->
       <div class="flex justify-between animate-fade-up">
-        <img
-          src="../../../assets/images/teacher2.png"
-          alt=""
-          class="w-56 h-42"
-        />
-        <h1
-          class="text-xl sm:text-2xl font-semibold text-gray-800 mt-32 sm:mb-0"
-        >
-          รายการกิจกรรม/การอบรม
-        </h1>
+        <img src="../../../assets/images/teacher2.png" alt="" class="w-56 h-42" />
+        <h1 class="text-xl sm:text-2xl font-semibold text-gray-800 mt-32 sm:mb-0">รายการกิจกรรม/การอบรม</h1>
       </div>
       <div class="rounded-lg shadow-md p-4 sm:p-6 bg-white">
         <!-- Content Header -->
-        <div
-          class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-3 sm:gap-4"
-        >
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-3 sm:gap-4">
           <!-- Search and Filter -->
           <div class="flex items-center w-full sm:w-auto">
             <div class="relative w-full">
@@ -671,29 +654,13 @@ watch(certNotExistTableCheckbox, (value) => {
 
         <!-- Activity Table -->
         <div class="overflow-x-auto">
-          <table
-            class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base"
-          >
+          <table class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base">
             <thead class="bg-gray-100 text-gray-700">
               <tr>
-                <th
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
-                >
-                  ชื่อกิจกรรม
-                </th>
-                <th
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
-                >
-                  วันเริ่มต้นกิจกรรม
-                </th>
-                <th
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
-                >
-                  วันสิ้นสุดกิจกรรม
-                </th>
-                <th
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
-                ></th>
+                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">ชื่อกิจกรรม</th>
+                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">วันเริ่มต้นกิจกรรม</th>
+                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">วันสิ้นสุดกิจกรรม</th>
+                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"></th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
@@ -702,14 +669,10 @@ watch(certNotExistTableCheckbox, (value) => {
                 :key="index + 1"
                 class="hover:bg-gray-50 dtransition-all uration-200"
               >
-                <td
-                  class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105"
-                >
+                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
                   {{ item.activity_name }}
                 </td>
-                <td
-                  class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105"
-                >
+                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
                   {{ item.activity_start_date }}
                 </td>
                 <td
@@ -717,12 +680,8 @@ watch(certNotExistTableCheckbox, (value) => {
                 >
                   {{ item.activity_end_date }}
                 </td>
-                <td
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-center space-x-1 sm:space-x-2"
-                >
-                  <div
-                    class="flex justify-center items-center space-x-1 sm:space-x-2"
-                  >
+                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center space-x-1 sm:space-x-2">
+                  <div class="flex justify-center items-center space-x-1 sm:space-x-2">
                     <button
                       @click="actionActivity(item.activity_id, 'view')"
                       class="text-green-600 hover:text-green-700 transition duration-200 cursor-pointer"
@@ -798,14 +757,10 @@ watch(certNotExistTableCheckbox, (value) => {
       :class="{ active: createActivityModalShow }"
       open
     >
-      <div
-        class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-auto"
-      >
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-auto">
         <div class="p-4 sm:p-6">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="text-lg sm:text-xl font-semibold text-gray-800">
-              เพิ่มกิจกรรม
-            </h3>
+            <h3 class="text-lg sm:text-xl font-semibold text-gray-800">เพิ่มกิจกรรม</h3>
             <button
               class="text-gray-400 hover:text-gray-600 cursor-pointer"
               @click.prevent="createActivityModalShow = false"
@@ -817,12 +772,7 @@ watch(certNotExistTableCheckbox, (value) => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
@@ -833,11 +783,7 @@ watch(certNotExistTableCheckbox, (value) => {
           >
             <div class="grid grid-cols-2 lg:grid-cols-1 gap-2">
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
-                  ชื่อกิจกรรม
-                </label>
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"> ชื่อกิจกรรม </label>
                 <input
                   required
                   v-model="formCreateActivity.activity_name"
@@ -846,10 +792,7 @@ watch(certNotExistTableCheckbox, (value) => {
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                  >ข้อมูลเพิ่มเติม</label
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">ข้อมูลเพิ่มเติม</label>
                 <textarea
                   type="text"
                   v-model="formCreateActivity.activity_description"
@@ -858,11 +801,7 @@ watch(certNotExistTableCheckbox, (value) => {
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
-                  สถานที่
-                </label>
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"> สถานที่ </label>
                 <input
                   required
                   v-model="formCreateActivity.activity_location"
@@ -871,11 +810,7 @@ watch(certNotExistTableCheckbox, (value) => {
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
-                  ผู้จัด(องค์กร)
-                </label>
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"> ผู้จัด(องค์กร) </label>
                 <input
                   required
                   v-model="formCreateActivity.activity_organization"
@@ -884,10 +819,7 @@ watch(certNotExistTableCheckbox, (value) => {
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                  >เกียรติบัตรหรือใบรับรอง</label
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">เกียรติบัตรหรือใบรับรอง</label>
                 <input
                   required
                   type="file"
@@ -899,10 +831,7 @@ watch(certNotExistTableCheckbox, (value) => {
               </div>
 
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                  >วันเริ่มต้นกิจกรรม</label
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">วันเริ่มต้นกิจกรรม</label>
                 <input
                   required
                   type="date"
@@ -911,10 +840,7 @@ watch(certNotExistTableCheckbox, (value) => {
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                  >วันสิ้นสุดกิจกรรม</label
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">วันสิ้นสุดกิจกรรม</label>
                 <input
                   required
                   type="date"
@@ -949,14 +875,10 @@ watch(certNotExistTableCheckbox, (value) => {
       :class="{ active: editActivityModalShow }"
       open
     >
-      <div
-        class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-auto"
-      >
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-auto">
         <div class="p-4 sm:p-6">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="text-lg sm:text-xl font-semibold text-gray-800">
-              แก้ไขกิจกรรม
-            </h3>
+            <h3 class="text-lg sm:text-xl font-semibold text-gray-800">แก้ไขกิจกรรม</h3>
             <button
               class="text-gray-400 hover:text-gray-600 cursor-pointer"
               @click.prevent="editActivityModalShow = false"
@@ -968,12 +890,7 @@ watch(certNotExistTableCheckbox, (value) => {
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
@@ -984,11 +901,7 @@ watch(certNotExistTableCheckbox, (value) => {
           >
             <div class="grid grid-cols-2 lg:grid-cols-1 gap-2">
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
-                  ชื่อกิจกรรม
-                </label>
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"> ชื่อกิจกรรม </label>
                 <input
                   required
                   v-model="formEditActivity.activity_name"
@@ -997,10 +910,7 @@ watch(certNotExistTableCheckbox, (value) => {
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                  >ข้อมูลเพิ่มเติม</label
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">ข้อมูลเพิ่มเติม</label>
                 <textarea
                   type="text"
                   v-model="formEditActivity.activity_description"
@@ -1009,11 +919,7 @@ watch(certNotExistTableCheckbox, (value) => {
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
-                  สถานที่
-                </label>
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"> สถานที่ </label>
                 <input
                   v-model="formEditActivity.activity_location"
                   class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
@@ -1021,11 +927,7 @@ watch(certNotExistTableCheckbox, (value) => {
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
-                  ผู้จัด(องค์กร)
-                </label>
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"> ผู้จัด(องค์กร) </label>
                 <input
                   v-model="formEditActivity.activity_organization"
                   class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
@@ -1033,10 +935,7 @@ watch(certNotExistTableCheckbox, (value) => {
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                  >เกียรติบัตรหรือใบรับรอง</label
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">เกียรติบัตรหรือใบรับรอง</label>
                 <input
                   type="file"
                   @change="handlelCertImageChange"
@@ -1047,10 +946,7 @@ watch(certNotExistTableCheckbox, (value) => {
               </div>
 
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                  >วันเริ่มต้นกิจกรรม</label
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">วันเริ่มต้นกิจกรรม</label>
                 <input
                   type="date"
                   v-model="formEditActivity.activity_start_date"
@@ -1058,10 +954,7 @@ watch(certNotExistTableCheckbox, (value) => {
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                  >วันสิ้นสุดกิจกรรม</label
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">วันสิ้นสุดกิจกรรม</label>
                 <input
                   type="date"
                   v-model="formEditActivity.activity_end_date"
@@ -1072,9 +965,7 @@ watch(certNotExistTableCheckbox, (value) => {
             <div class="flex justify-end space-x-2 sm:space-x-3 pt-3 sm:pt-4">
               <button
                 class="px-3 sm:px-4 py-1.5 sm:py-2 bg-amber-600 rounded-lg text-white hover:bg-amber-700 transition duration-200 text-sm sm:text-base cursor-pointer"
-                @click.prevent="
-                  (editActivityModalShow = false), (viewActivityData = [])
-                "
+                @click.prevent="(editActivityModalShow = false), (viewActivityData = [])"
               >
                 ปิด
               </button>
@@ -1114,34 +1005,20 @@ watch(certNotExistTableCheckbox, (value) => {
           <!-- ปุ่มปิด absolute ให้อยู่บนสุดตลอด -->
 
           <div class="overflow-x-auto">
-            <div
-              class="bg-white rounded-lg shadow mx-0 sm:mx-2 mb-4 p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6"
-            >
+            <div class="bg-white rounded-lg shadow mx-0 sm:mx-2 mb-4 p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h5 class="text-md sm:text-lg font-semibold text-gray-800 mb-1">
-                  รายละเอียด
-                </h5>
-                <p
-                  class="text-sm sm:text-base font-normal text-gray-600 break-words"
-                >
+                <h5 class="text-md sm:text-lg font-semibold text-gray-800 mb-1">รายละเอียด</h5>
+                <p class="text-sm sm:text-base font-normal text-gray-600 break-words">
                   {{ viewActivityData.activity_description }}
                 </p>
                 <div class="mt-4">
-                  <h5
-                    class="text-md sm:text-lg font-semibold text-gray-800 mb-1"
-                  >
-                    สถานที่
-                  </h5>
+                  <h5 class="text-md sm:text-lg font-semibold text-gray-800 mb-1">สถานที่</h5>
                   <p class="text-sm sm:text-base font-normal text-gray-600">
                     {{ viewActivityData.activity_location || "ไม่ระบุ" }}
                   </p>
                 </div>
                 <div class="mt-4">
-                  <h5
-                    class="text-md sm:text-lg font-semibold text-gray-800 mb-1"
-                  >
-                    ผู้จัด
-                  </h5>
+                  <h5 class="text-md sm:text-lg font-semibold text-gray-800 mb-1">ผู้จัด</h5>
                   <p class="text-sm sm:text-base font-normal text-gray-600">
                     {{ viewActivityData.activity_organization || "ไม่ระบุ" }}
                   </p>
@@ -1149,26 +1026,17 @@ watch(certNotExistTableCheckbox, (value) => {
                 <div class="flex flex-col gap-2 mt-4">
                   <p class="text-xs sm:text-sm text-green-600">
                     วันเริ่มต้นกิจกรรม :
-                    <span class="font-medium">{{
-                      viewActivityData.activity_start_date || "ไม่ระบุ"
-                    }}</span>
+                    <span class="font-medium">{{ viewActivityData.activity_start_date || "ไม่ระบุ" }}</span>
                   </p>
                   <p class="text-xs sm:text-sm text-yellow-600">
                     วันสิ้นสุดกิจกรรม :
-                    <span class="font-medium">{{
-                      viewActivityData.activity_end_date || "ไม่ระบุ"
-                    }}</span>
+                    <span class="font-medium">{{ viewActivityData.activity_end_date || "ไม่ระบุ" }}</span>
                   </p>
                 </div>
               </div>
               <div>
-                <h5 class="text-md sm:text-lg font-semibold text-gray-800 mb-1">
-                  ตัวอย่างใบ certificate
-                </h5>
-                <div
-                  v-if="viewActivityData.activity_certificate_file"
-                  class="mb-2"
-                >
+                <h5 class="text-md sm:text-lg font-semibold text-gray-800 mb-1">ตัวอย่างใบ certificate</h5>
+                <div v-if="viewActivityData.activity_certificate_file" class="mb-2">
                   <div
                     ref="canvasWrapper"
                     class="canvas-wrapper flex justify-center items-center bg-gray-50 rounded shadow"
@@ -1176,23 +1044,14 @@ watch(certNotExistTableCheckbox, (value) => {
                   >
                     <canvas
                       ref="certCanvas"
-                      style="
-                        max-width: 100%;
-                        width: 100%;
-                        height: auto;
-                        border-radius: 8px;
-                        background: #fff;
-                      "
+                      style="max-width: 100%; width: 100%; height: auto; border-radius: 8px; background: #fff"
                     ></canvas>
                   </div>
                   <div class="text-xs text-gray-500 mt-2 text-center">
-                    * สามารถลากข้อความตัวอย่างบนใบ certificate
-                    เพื่อปรับตำแหน่งได้
+                    * สามารถลากข้อความตัวอย่างบนใบ certificate เพื่อปรับตำแหน่งได้
                   </div>
                 </div>
-                <div v-else class="text-gray-400 text-center py-8">
-                  ยังไม่อัพโหลดใบ certificate
-                </div>
+                <div v-else class="text-gray-400 text-center py-8">ยังไม่อัพโหลดใบ certificate</div>
               </div>
             </div>
 
@@ -1219,9 +1078,7 @@ watch(certNotExistTableCheckbox, (value) => {
                       type="button"
                       class="px-4 py-2 hover:bg-green-800 text-white rounded transition duration-300 text-xs text-nowrap"
                       :class="[
-                        assignCertTab
-                          ? 'bg-green-700  outline-gray-400 outline-1 outline-offset-2'
-                          : 'bg-green-500',
+                        assignCertTab ? 'bg-green-700  outline-gray-400 outline-1 outline-offset-2' : 'bg-green-500',
                       ]"
                       @click="changeViewActivityTab('assign_certificate')"
                     >
@@ -1244,29 +1101,19 @@ watch(certNotExistTableCheckbox, (value) => {
 
                 <!-- เนื้อหาหลักด้านขวา -->
                 <div class="md:col-span-3">
-                  <div
-                    v-if="notCheckedinTab"
-                    class="p-4 bg-gray-100 rounded shadow my-2"
-                  >
-                    <div
-                      class="flex flex-col md:flex-row justify-between items-center"
-                    >
-                      <h5
-                        class="text-lg sm:text-lg font-semibold text-indigo-800"
-                      >
-                        จัดการ นักศึกษาที่เข้าร่วม
-                      </h5>
+                  <div v-if="notCheckedinTab" class="p-4 bg-gray-100 rounded shadow my-2">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                      <h5 class="text-lg sm:text-lg font-semibold text-indigo-800">จัดการ นักศึกษาทียังไม่เข้าร่วม</h5>
                       <p
-                        class="text-red-600 border-1 border-gray-200 text-xs"
-                        v-if="message_modal_alert.length > 0"
+                        :class="type_modal_alert === 'success' ? 'text-green-600' : 'text-red-600'"
+                        class="border-1 text-xs p-1 animate-bounce"
+                        v-if="message_modal_alert.length > 0 && position_modal_alert == 'checkin'"
                       >
                         {{ message_modal_alert }}
                       </p>
                     </div>
                     <div class="my-4">
-                      <p class="text-gray-800">
-                        นักศึกษาที่ยังไม่เข้าร่วมกิจกรรม
-                      </p>
+                      <p class="text-gray-800">นักศึกษาที่ยังไม่เข้าร่วมกิจกรรม</p>
 
                       <div class="overflow-x-auto">
                         <table
@@ -1274,40 +1121,23 @@ watch(certNotExistTableCheckbox, (value) => {
                         >
                           <thead class="bg-gray-100 text-gray-700">
                             <tr>
-                              <th
-                                class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
-                              >
-                                รหัสนักศึกษา
-                              </th>
-                              <th
-                                class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
-                              >
-                                ชื่อ
-                              </th>
-                              <th
-                                class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
-                              >
-                                <div
-                                  class="flex justify-center items-center space-x-1 sm:space-x-2"
-                                >
+                              <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">รหัสนักศึกษา</th>
+                              <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">ชื่อ</th>
+                              <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">
+                                <div class="flex justify-center items-center space-x-1 sm:space-x-2">
                                   <input
                                     type="checkbox"
                                     v-model="notCheckedinStudentTableSelectAll"
                                     id="notCheckedinStudentTableSelectAll"
                                   />
-                                  <label
-                                    class="text-gray-800"
-                                    for="notCheckedinStudentTableSelectAll"
+                                  <label class="text-gray-800" for="notCheckedinStudentTableSelectAll"
                                     >เลือกทั้งหมด</label
                                   >
                                 </div>
                               </th>
                             </tr>
                           </thead>
-                          <tbody
-                            v-if="notCheckinStudentData.length > 0"
-                            class="divide-y divide-gray-200"
-                          >
+                          <tbody v-if="notCheckinStudentData.length > 0" class="divide-y divide-gray-200">
                             <tr
                               v-for="(item, index) in notCheckinStudentData"
                               :key="index + 1"
@@ -1332,10 +1162,7 @@ watch(certNotExistTableCheckbox, (value) => {
                           </tbody>
                           <tbody v-else class="divide-y divide-gray-200">
                             <tr>
-                              <td
-                                class="py-2 sm:py-3 px-2 sm:px-4 text-center"
-                                colspan="3"
-                              >
+                              <td class="py-2 sm:py-3 px-2 sm:px-4 text-center" colspan="3">
                                 ไม่มีนักศึกษาที่ไม่เข้าร่วมกิจกรรม
                               </td>
                             </tr>
@@ -1353,15 +1180,17 @@ watch(certNotExistTableCheckbox, (value) => {
                     </div>
                   </div>
 
-                  <div
-                    v-if="assignCertTab || checkCertificateTab"
-                    class="p-4 bg-gray-100 rounded shadow my-2"
-                  >
-                    <h5
-                      class="text-lg sm:text-lg font-semibold text-indigo-800"
-                    >
-                      จัดการ Certificate
-                    </h5>
+                  <div v-if="assignCertTab || checkCertificateTab" class="p-4 bg-gray-100 rounded shadow my-2">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                      <h5 class="text-lg sm:text-lg font-semibold text-indigo-800">จัดการ นักศึกษาที่เข้าร่วม</h5>
+                      <p
+                        :class="type_modal_alert === 'success' ? 'text-green-600' : 'text-red-600'"
+                        class="border-1 text-xs p-1 animate-bounce"
+                        v-if="message_modal_alert.length > 0 && position_modal_alert == 'assign'"
+                      >
+                        {{ message_modal_alert }}
+                      </p>
+                    </div>
                     <div v-if="assignCertTab">
                       <div class="my-4">
                         <p class="text-gray-800">ยังไม่ได้รับ</p>
@@ -1371,40 +1200,21 @@ watch(certNotExistTableCheckbox, (value) => {
                           >
                             <thead class="bg-gray-100 text-gray-700">
                               <tr>
-                                <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
-                                >
-                                  รหัสนักศึกษา
-                                </th>
-                                <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
-                                >
-                                  ชื่อ
-                                </th>
-                                <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
-                                >
-                                  <div
-                                    class="flex justify-center items-center space-x-1 sm:space-x-2"
-                                  >
+                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">รหัสนักศึกษา</th>
+                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">ชื่อ</th>
+                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">
+                                  <div class="flex justify-center items-center space-x-1 sm:space-x-2">
                                     <input
                                       type="checkbox"
                                       v-model="certNotExistTableSelectAll"
                                       id="certNotExistTableSelectAll"
                                     />
-                                    <label
-                                      class="text-gray-800"
-                                      for="certNotExistTableSelectAll"
-                                      >เลือกทั้งหมด</label
-                                    >
+                                    <label class="text-gray-800" for="certNotExistTableSelectAll">เลือกทั้งหมด</label>
                                   </div>
                                 </th>
                               </tr>
                             </thead>
-                            <tbody
-                              v-if="certNotExistStudent.length > 0"
-                              class="divide-y divide-gray-200"
-                            >
+                            <tbody v-if="certNotExistStudent.length > 0" class="divide-y divide-gray-200">
                               <tr
                                 v-for="(item, index) in certNotExistStudent"
                                 :key="index + 1"
@@ -1416,9 +1226,7 @@ watch(certNotExistTableCheckbox, (value) => {
                                 <td class="py-2 sm:py-3 px-2 sm:px-4 truncate">
                                   {{ item.student_name_thai }}
                                 </td>
-                                <td
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-center"
-                                >
+                                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center">
                                   <div class="flex justify-center items-center">
                                     <input
                                       type="checkbox"
@@ -1431,10 +1239,7 @@ watch(certNotExistTableCheckbox, (value) => {
                             </tbody>
                             <tbody v-else class="divide-y divide-gray-200">
                               <tr>
-                                <td
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-center"
-                                  colspan="3"
-                                >
+                                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center" colspan="3">
                                   ได้รับครบแล้ว หรือ ยังไม่มีนักศึกษาที่เข้าร่วม
                                 </td>
                               </tr>
@@ -1444,11 +1249,7 @@ watch(certNotExistTableCheckbox, (value) => {
                         <div class="flex justify-end mt-2">
                           <button
                             @click="assignCertBtn"
-                            :class="
-                              certNotExistTableCheckbox.length === 0
-                                ? 'bg-green-800'
-                                : 'bg-green-500'
-                            "
+                            :class="certNotExistTableCheckbox.length === 0 ? 'bg-green-800' : 'bg-green-500'"
                             :disabled="certNotExistTableCheckbox.length === 0"
                             class="px-4 py-2 mx-2 text-white rounded"
                           >
@@ -1457,11 +1258,7 @@ watch(certNotExistTableCheckbox, (value) => {
                           <button
                             @click="removeCheckinStudentsBtn"
                             :disabled="certNotExistTableCheckbox.length === 0"
-                            :class="
-                              certNotExistTableCheckbox.length === 0
-                                ? 'bg-red-800'
-                                : 'bg-red-500'
-                            "
+                            :class="certNotExistTableCheckbox.length === 0 ? 'bg-red-800' : 'bg-red-500'"
                             class="px-4 py-2 mx-2 text-white rounded"
                           >
                             ลบ
@@ -1470,6 +1267,16 @@ watch(certNotExistTableCheckbox, (value) => {
                       </div>
                     </div>
                     <div v-if="checkCertificateTab">
+                      <div class="flex flex-col md:flex-row justify-between items-center">
+                        <h5 class="text-lg sm:text-lg font-semibold text-indigo-800"></h5>
+                        <p
+                          :class="type_modal_alert === 'success' ? 'text-green-600' : 'text-red-600'"
+                          class="border-1 text-xs p-1 animate-bounce"
+                          v-if="message_modal_alert.length > 0 && position_modal_alert == 'checkcert'"
+                        >
+                          {{ message_modal_alert }}
+                        </p>
+                      </div>
                       <div class="my-4">
                         <p class="text-gray-800">ได้รับแล้ว</p>
                         <div class="overflow-x-auto">
@@ -1478,40 +1285,23 @@ watch(certNotExistTableCheckbox, (value) => {
                           >
                             <thead class="bg-gray-100 text-gray-700">
                               <tr>
-                                <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
-                                >
-                                  รหัสนักศึกษา
-                                </th>
-                                <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
-                                >
-                                  ชื่อ
-                                </th>
-                                <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
-                                >
-                                  <div
-                                    class="flex justify-center items-center space-x-1 sm:space-x-2"
-                                  >
+                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">รหัสนักศึกษา</th>
+                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">ชื่อ</th>
+                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">
+                                  <div class="flex justify-center items-center space-x-1 sm:space-x-2">
                                     <input
                                       type="checkbox"
                                       v-model="certExistStudentTableSelectAll"
                                       id="certExistStudentTableSelectAll"
                                     />
-                                    <label
-                                      class="text-gray-800"
-                                      for="certExistStudentTableSelectAll"
+                                    <label class="text-gray-800" for="certExistStudentTableSelectAll"
                                       >เลือกทั้งหมด</label
                                     >
                                   </div>
                                 </th>
                               </tr>
                             </thead>
-                            <tbody
-                              v-if="certExistStudent.length > 0"
-                              class="divide-y divide-gray-200"
-                            >
+                            <tbody v-if="certExistStudent.length > 0" class="divide-y divide-gray-200">
                               <tr
                                 v-for="(item, index) in certExistStudent"
                                 :key="index + 1"
@@ -1523,9 +1313,7 @@ watch(certNotExistTableCheckbox, (value) => {
                                 <td class="py-2 sm:py-3 px-2 sm:px-4 truncate">
                                   {{ item.student_name_thai }}
                                 </td>
-                                <td
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-center"
-                                >
+                                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center">
                                   <div class="flex justify-center items-center">
                                     <input
                                       type="checkbox"
@@ -1538,10 +1326,7 @@ watch(certNotExistTableCheckbox, (value) => {
                             </tbody>
                             <tbody v-else class="divide-y divide-gray-200">
                               <tr>
-                                <td
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-center"
-                                  colspan="3"
-                                >
+                                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center" colspan="3">
                                   ได้รับครบแล้ว หรือ ยังไม่มีนักศึกษาที่เข้าร่วม
                                 </td>
                               </tr>
@@ -1552,11 +1337,7 @@ watch(certNotExistTableCheckbox, (value) => {
                           <button
                             @click="removeCertBtn"
                             :disabled="removeStudentCertCheckbox.length === 0"
-                            :class="
-                              removeStudentCertCheckbox.length === 0
-                                ? 'bg-red-800'
-                                : 'bg-red-500'
-                            "
+                            :class="removeStudentCertCheckbox.length === 0 ? 'bg-red-800' : 'bg-red-500'"
                             class="px-4 py-2 mx-2 text-white rounded"
                           >
                             ลบ Certificate
@@ -1578,17 +1359,10 @@ watch(certNotExistTableCheckbox, (value) => {
       class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full"
       open
     >
-      <div
-        class="bg-white rounded-lg shadow-lg w-full max-w-xs mx-4 sm:mx-auto p-6"
-      >
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-xs mx-4 sm:mx-auto p-6">
         <div class="flex flex-col items-center">
-          <Icon
-            name="material-symbols:warning"
-            style="width: 40px; height: 40px; color: #f59e42"
-          />
-          <h3 class="text-lg font-semibold text-gray-800 mt-2 mb-4 text-center">
-            ยืนยันการลบข้อมูลกิจกรรมที่จัด
-          </h3>
+          <Icon name="material-symbols:warning" style="width: 40px; height: 40px; color: #f59e42" />
+          <h3 class="text-lg font-semibold text-gray-800 mt-2 mb-4 text-center">ยืนยันการลบข้อมูลกิจกรรมที่จัด</h3>
           <p class="text-gray-600 text-sm mb-6 text-center">
             คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?
             <br />การดำเนินการนี้ไม่สามารถย้อนกลับได้
