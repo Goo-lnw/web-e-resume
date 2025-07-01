@@ -1253,7 +1253,7 @@ watch(certNotExistTableCheckbox, (value) => {
                             :disabled="certNotExistTableCheckbox.length === 0"
                             class="px-4 py-2 mx-2 text-white rounded"
                           >
-                            มอบCertificate
+                            มอบ Certificate
                           </button>
                           <button
                             @click="removeCheckinStudentsBtn"

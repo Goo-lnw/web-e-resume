@@ -245,7 +245,6 @@ watch(page, () => fetchStudents());
           </div>
 
           <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:ml-auto">
-            ``
             <button
               @click="actionStudent(0, 'add_activity')"
               class="space-x-1 bg-green-400 hover:bg-green-600 text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center transition duration-200 cursor-pointer text-xs sm:text-xs"
