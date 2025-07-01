@@ -185,6 +185,14 @@ async function fetchNoCertExistStudent(aid) {
   }
 }
 
+const message_modal_alert = ref("");
+async function getingmessage(message) {
+  message_modal_alert.value = message;
+  setTimeout(() => {
+    message_modal_alert.value = "";
+  }, 1500);
+}
+
 async function checkInSubmit() {
   // const selectedStudents = notCheckinStudentData.value.filter((student) => student.selected);
   // const selectedIds = selectedStudents.map((student) => student.resume_id);
@@ -201,12 +209,12 @@ async function checkInSubmit() {
 
   const res = await $axios.post("/teacher/activity/check_in", payload);
   if (res.status === 200) {
-    showAlert("เพิ่มรายชื่อนักเรียนแล้ว", "success");
+    getingmessage("เพิ่มนักเรียนที่เข้าร่วมกิจกรรมเรียบร้อยแล้ว");
     await fetchNotCheckedinStudent(id_activity.value);
     await fetchCheckedinStudent(id_activity.value);
     await fetchNoCertExistStudent(id_activity.value);
   } else {
-    showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error");
+    // showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error");
   }
 }
 
@@ -1240,15 +1248,26 @@ watch(certNotExistTableCheckbox, (value) => {
                     v-if="notCheckedinTab"
                     class="p-4 bg-gray-100 rounded shadow my-2"
                   >
-                    <h5
-                      class="text-lg sm:text-lg font-semibold text-indigo-800"
+                    <div
+                      class="flex flex-col md:flex-row justify-between items-center"
                     >
-                      จัดการ นักศึกษาที่เข้าร่วม
-                    </h5>
+                      <h5
+                        class="text-lg sm:text-lg font-semibold text-indigo-800"
+                      >
+                        จัดการ นักศึกษาที่เข้าร่วม
+                      </h5>
+                      <p
+                        class="text-red-600 border-1 border-gray-200 text-xs"
+                        v-if="message_modal_alert.length > 0"
+                      >
+                        {{ message_modal_alert }}
+                      </p>
+                    </div>
                     <div class="my-4">
                       <p class="text-gray-800">
                         นักศึกษาที่ยังไม่เข้าร่วมกิจกรรม
                       </p>
+
                       <div class="overflow-x-auto">
                         <table
                           class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base md:my-4 sm:my-2"
