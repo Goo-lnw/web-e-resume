@@ -145,12 +145,16 @@ async function HandleLogin() {
             <div class="text-red-500 font-bold" v-if="err">
               {{ err }}
             </div>
-            <button type="submit"
-              class="flex justify-center items-center py-2 sm:py-2.5 w-full bg-indigo-500 hover:bg-indigo-700 text-gray-100 rounded-lg shadow-md transition duration-500 ease-in-out cursor-pointer">
+            <button :disabled="loading" type="submit"
+              class="flex justify-center items-center py-2 sm:py-2.5 w-full bg-indigo-500 hover:bg-indigo-700 text-gray-100 rounded-lg shadow-md transition duration-500 ease-in-out cursor-pointer"
+              :class="{ 'opacity-60 cursor-not-allowed': loading }">
               เข้าสู่ระบบ
 
-              <Icon name="si:sign-in-alt-duotone" style="width: 20px; height: 20px;  padding-left: 10%;"
-                class="sm:w-5 sm:h-5 md:w-6 md:h-6" />
+              <Icon v-if="!loading" name="si:sign-in-alt-duotone" style="width: 20px; height: 20px;  padding-left: 10%;"
+              class="sm:w-5 sm:h-5 md:w-6 md:h-6" />
+
+              <Icon v-if="loading" name="line-md:loading-twotone-loop" style="width: 20px; height: 20px;  padding-left: 10%;"
+              class="sm:w-5 sm:h-5 md:w-6 md:h-6" />
 
             </button>
           </form>
