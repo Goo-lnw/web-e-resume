@@ -293,15 +293,42 @@ const isSaving = ref(false);
 const { $axios } = useNuxtApp();
 const { showAlert } = useAlert();
 
+function syncRefData(target, source) {
+  // สร้าง Set เก็บ internship_id ที่มีใน source
+  const sourceSkillIds = new Set(source.map((item) => item.internship_id));
+  console.log("Source internship_ids:", sourceSkillIds);
+
+  // กรองเฉพาะ target ที่มี internship_id อยู่ใน source
+  const filteredTarget = target.filter((targetItem) => {
+    const exists = sourceSkillIds.has(targetItem.internship_id);
+    if (!exists) {
+      console.log("Removing internship_id:", targetItem.internship_id);
+    }
+    return exists;
+  });
+
+  // สร้าง Set เก็บ internship_id ที่เหลืออยู่ใน target หลังกรอง
+  const remainingTargetIds = new Set(filteredTarget.map((item) => item.internship_id));
+
+  // เพิ่ม internship_id ใหม่จาก source ที่ไม่มีใน target
+  for (const sourceItem of source) {
+    if (!remainingTargetIds.has(sourceItem.internship_id)) {
+      console.log("Adding new internship_id:", sourceItem.internship_id);
+      filteredTarget.push(sourceItem);
+    }
+  }
+
+  return filteredTarget;
+}
+
 const getInternship = async () => {
   try {
     isLoading.value = true;
     const res = await $axios.get("/student/internship");
-    internshipData.value = res.data || [];
-    console.log("Fetched internships:", internshipData.value);
+    return res.data;
   } catch (error) {
     console.error("Failed to fetch internships:", error);
-    internshipData.value = [];
+    return [];
   } finally {
     isLoading.value = false;
   }
@@ -311,8 +338,11 @@ const addNewInternship = async () => {
   try {
     isSaving.value = true;
     const res = await $axios.post("/resume/increase_internship");
+
+    const dataInApi = await getInternship();
+    const updateData = syncRefData(internshipData.value, dataInApi);
+    internshipData.value = updateData;
     console.log("Added new internship:", res.data);
-    await getInternship();
   } catch (error) {
     console.error("Failed to add new internship:", error);
   } finally {
@@ -324,8 +354,10 @@ const removeInternship = async (index) => {
   const internship_id = index;
   try {
     await $axios.delete(`/resume/internship/${internship_id}`);
-    internshipData.value.splice(index, 1); // ลบจาก array
-    await getInternship(); // รีเฟรชข้อมูล
+    // internshipData.value.splice(index, 1); // ลบจาก array
+    const dataInApi = await getInternship();
+    const updateData = syncRefData(internshipData.value, dataInApi);
+    internshipData.value = updateData;
     console.log("Internship removed successfully");
   } catch (error) {
     console.error("Failed to remove internship:", error);
@@ -361,7 +393,7 @@ const close = () => {
   resumeStore.fetchResume();
 };
 
-onMounted(() => {
-  getInternship();
+onMounted(async () => {
+  internshipData.value = await getInternship();
 });
 </script>

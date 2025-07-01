@@ -268,7 +268,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useResumeStore } from "../../stores/resumeStore";
-import AdditionalInfoModal from "./additionalInfoModal.vue";
 
 const resumeStore = useResumeStore();
 const emit = defineEmits(["close", "save"]);
@@ -279,15 +278,43 @@ const isSaving = ref(false);
 const { $axios } = useNuxtApp();
 const { showAlert } = useAlert();
 
+function syncRefData(target, source) {
+  // สร้าง Set เก็บ training_history_id ที่มีใน source
+  const sourceSkillIds = new Set(source.map((item) => item.training_history_id));
+  console.log("Source training_history_ids:", sourceSkillIds);
+
+  // กรองเฉพาะ target ที่มี training_history_id อยู่ใน source
+  const filteredTarget = target.filter((targetItem) => {
+    const exists = sourceSkillIds.has(targetItem.training_history_id);
+    if (!exists) {
+      console.log("Removing training_history_id:", targetItem.training_history_id);
+    }
+    return exists;
+  });
+
+  // สร้าง Set เก็บ training_history_id ที่เหลืออยู่ใน target หลังกรอง
+  const remainingTargetIds = new Set(filteredTarget.map((item) => item.training_history_id));
+
+  // เพิ่ม training_history_id ใหม่จาก source ที่ไม่มีใน target
+  for (const sourceItem of source) {
+    if (!remainingTargetIds.has(sourceItem.training_history_id)) {
+      console.log("Adding new training_history_id:", sourceItem.training_history_id);
+      filteredTarget.push(sourceItem);
+    }
+  }
+
+  return filteredTarget;
+}
+
 const getTraining = async () => {
   try {
     isLoading.value = true;
     const res = await $axios.get("/student/training");
-    trainingData.value = res.data || [];
-    console.log("Fetched trainings:", trainingData.value);
+    // console.log("Fetched trainings:", trainingData.value);
+    return res.data;
   } catch (error) {
     console.error("Failed to fetch trainings:", error);
-    trainingData.value = [];
+    return [];
   } finally {
     isLoading.value = false;
   }
@@ -297,8 +324,9 @@ const addNewTraining = async () => {
   try {
     isSaving.value = true;
     const res = await $axios.post("/resume/increase_training");
-    console.log("Added new training:", res.data);
-    await getTraining();
+    const dataInApi = await getTraining();
+    const updateData = syncRefData(trainingData.value, dataInApi);
+    trainingData.value = updateData;
   } catch (error) {
     console.error("Failed to add new training:", error);
   } finally {
@@ -309,7 +337,9 @@ const addNewTraining = async () => {
 const removeTraining = async (training_history_id) => {
   try {
     await $axios.delete(`/resume/training/${training_history_id}`);
-    await getTraining();
+    const dataInApi = await getTraining();
+    const updateData = syncRefData(trainingData.value, dataInApi);
+    trainingData.value = updateData;
   } catch (error) {
     console.error("Failed to remove training:", error);
   }
@@ -360,7 +390,7 @@ const close = () => {
   resumeStore.fetchResume();
 };
 
-onMounted(() => {
-  getTraining();
+onMounted(async () => {
+  trainingData.value = await getTraining();
 });
 </script>

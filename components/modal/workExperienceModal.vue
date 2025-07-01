@@ -293,15 +293,42 @@ const isSaving = ref(false);
 const { $axios } = useNuxtApp();
 const { showAlert } = useAlert();
 
+function syncRefData(target, source) {
+  // สร้าง Set เก็บ work_experience_id ที่มีใน source
+  const sourceSkillIds = new Set(source.map((item) => item.work_experience_id));
+  console.log("Source work_experience_ids:", sourceSkillIds);
+
+  // กรองเฉพาะ target ที่มี work_experience_id อยู่ใน source
+  const filteredTarget = target.filter((targetItem) => {
+    const exists = sourceSkillIds.has(targetItem.work_experience_id);
+    if (!exists) {
+      console.log("Removing work_experience_id:", targetItem.work_experience_id);
+    }
+    return exists;
+  });
+
+  // สร้าง Set เก็บ work_experience_id ที่เหลืออยู่ใน target หลังกรอง
+  const remainingTargetIds = new Set(filteredTarget.map((item) => item.work_experience_id));
+
+  // เพิ่ม work_experience_id ใหม่จาก source ที่ไม่มีใน target
+  for (const sourceItem of source) {
+    if (!remainingTargetIds.has(sourceItem.work_experience_id)) {
+      console.log("Adding new work_experience_id:", sourceItem.work_experience_id);
+      filteredTarget.push(sourceItem);
+    }
+  }
+
+  return filteredTarget;
+}
+
 const getWorkExperience = async () => {
   try {
     isLoading.value = true;
     const res = await $axios.get("/student/work_experience");
-    workExperienceData.value = res.data || [];
-    console.log("Fetched work experiences:", workExperienceData.value);
+    return res.data;
   } catch (error) {
     console.error("Failed to fetch work experiences:", error);
-    workExperienceData.value = [];
+    return [];
   } finally {
     isLoading.value = false;
   }
@@ -312,7 +339,9 @@ const addNewWorkExperience = async () => {
     isSaving.value = true;
     const res = await $axios.post("/resume/increase_work_experience");
     console.log("Added new work experience:", res.data);
-    await getWorkExperience();
+    const dataInApi = await getWorkExperience();
+    const updateData = syncRefData(workExperienceData.value, dataInApi);
+    workExperienceData.value = updateData;
   } catch (error) {
     console.error("Failed to add new work experience:", error);
   } finally {
@@ -323,7 +352,9 @@ const addNewWorkExperience = async () => {
 const removeWorkExperience = async (work_experience_id) => {
   try {
     await $axios.delete(`/resume/work_experience/${work_experience_id}`);
-    await getWorkExperience();
+    const dataInApi = await getWorkExperience();
+    const updateData = syncRefData(workExperienceData.value, dataInApi);
+    workExperienceData.value = updateData;
   } catch (error) {
     console.error("Failed to remove work experience:", error);
   }
@@ -357,7 +388,7 @@ const close = () => {
   resumeStore.fetchResume();
 };
 
-onMounted(() => {
-  getWorkExperience();
+onMounted(async () => {
+  workExperienceData.value = await getWorkExperience();
 });
 </script>

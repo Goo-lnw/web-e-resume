@@ -220,16 +220,44 @@ const { $axios } = useNuxtApp();
 const { showAlert } = useAlert();
 const { handleApiError } = useErrorHandler();
 
+function syncRefData(target, source) {
+  // สร้าง Set เก็บ education_history_id ที่มีใน source
+  const sourceSkillIds = new Set(source.map((item) => item.education_history_id));
+  console.log("Source education_history_ids:", sourceSkillIds);
+
+  // กรองเฉพาะ target ที่มี education_history_id อยู่ใน source
+  const filteredTarget = target.filter((targetItem) => {
+    const exists = sourceSkillIds.has(targetItem.education_history_id);
+    if (!exists) {
+      console.log("Removing education_history_id:", targetItem.education_history_id);
+    }
+    return exists;
+  });
+
+  // สร้าง Set เก็บ education_history_id ที่เหลืออยู่ใน target หลังกรอง
+  const remainingTargetIds = new Set(filteredTarget.map((item) => item.education_history_id));
+
+  // เพิ่ม education_history_id ใหม่จาก source ที่ไม่มีใน target
+  for (const sourceItem of source) {
+    if (!remainingTargetIds.has(sourceItem.education_history_id)) {
+      console.log("Adding new education_history_id:", sourceItem.education_history_id);
+      filteredTarget.push(sourceItem);
+    }
+  }
+
+  return filteredTarget;
+}
+
 const getEducation = async () => {
   try {
     isLoading.value = true;
     const res = await $axios.get("/student/education");
-    educationData.value = res.data || [];
-    console.log("Fetched education:", educationData.value);
+    console.log("Fetched education:", res.data);
+    return res.data;
   } catch (error) {
     console.error("Failed to fetch education:", error);
-    educationData.value = [];
     handleApiError(error, "เกิดข้อผิดพลาดในการดึงข้อมูลการศึกษา");
+    return [];
   } finally {
     isLoading.value = false;
   }
@@ -245,7 +273,9 @@ const addNewEducation = async () => {
     console.log("Added new Education:", res.data);
 
     // Refresh the education list after adding
-    await getEducation();
+    const dataInApi = await getEducation();
+    const updateData = syncRefData(educationData.value, dataInApi);
+    educationData.value = updateData;
   } catch (error) {
     console.error("Failed to add new Education:", error);
 
@@ -340,7 +370,7 @@ function close() {
   resumeStore.fetchResume();
 }
 
-onMounted(() => {
-  getEducation();
+onMounted(async () => {
+  educationData.value = await getEducation();
 });
 </script>

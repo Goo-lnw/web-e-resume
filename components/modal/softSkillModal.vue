@@ -267,20 +267,48 @@ const isLoading = ref(true);
 const isSaving = ref(false);
 const { $axios } = useNuxtApp();
 const { showAlert } = useAlert();
+
+function syncRefData(target, source) {
+  // สร้าง Set เก็บ skill_id ที่มีใน source
+  const sourceSkillIds = new Set(source.map((item) => item.soft_skill_id));
+  console.log("Source soft_skill_ids:", sourceSkillIds);
+
+  // กรองเฉพาะ target ที่มี soft_skill_id อยู่ใน source
+  const filteredTarget = target.filter((targetItem) => {
+    const exists = sourceSkillIds.has(targetItem.soft_skill_id);
+    if (!exists) {
+      console.log("Removing soft_skill_id:", targetItem.soft_skill_id);
+    }
+    return exists;
+  });
+
+  // สร้าง Set เก็บ soft_skill_id ที่เหลืออยู่ใน target หลังกรอง
+  const remainingTargetIds = new Set(filteredTarget.map((item) => item.soft_skill_id));
+
+  // เพิ่ม soft_skill_id ใหม่จาก source ที่ไม่มีใน target
+  for (const sourceItem of source) {
+    if (!remainingTargetIds.has(sourceItem.soft_skill_id)) {
+      console.log("Adding new soft_skill_id:", sourceItem.soft_skill_id);
+      filteredTarget.push(sourceItem);
+    }
+  }
+
+  return filteredTarget;
+}
+
 const getSoftSkill = async () => {
   try {
     isLoading.value = true;
     const res = await $axios.get("/student/soft_skill");
-    softSkillData.value = res.data || [];
-    console.log("Fetched softSkill:", softSkillData.value);
+
+    return res.data;
   } catch (error) {
     console.error("Failed to fetch softSkill:", error);
-    softSkillData.value = [];
+    return [];
   } finally {
     isLoading.value = false;
   }
 };
-
 const addNewSoftSkill = async () => {
   if (isSaving.value) return;
 
@@ -291,7 +319,9 @@ const addNewSoftSkill = async () => {
     console.log("Added new soft skill:", res.data);
 
     // Refresh the skills list after adding
-    await getSoftSkill();
+    const dataInApi = await getSoftSkill();
+    const updateData = syncRefData(softSkillData.value, dataInApi);
+    softSkillData.value = updateData;
   } catch (error) {
     console.error("Failed to add new soft skill:", error);
   } finally {
@@ -304,15 +334,18 @@ const removeSoftSkill = async (index) => {
   if (!softSkill.soft_skill_id) {
     // If it's a new skill without ID, just remove from local array
     softSkillData.value.splice(index, 1);
+
     return;
   }
 
   try {
     await $axios.delete(`/resume/delete_soft_skill/${softSkill.soft_skill_id}`);
+    const dataInApi = await getSoftSkill();
+    const updateData = syncRefData(softSkillData.value, dataInApi);
+    softSkillData.value = updateData;
     console.log("Removed soft skill successfully");
-
     // Refresh the skills list after deletion
-    await getSoftSkill();
+    // await getSoftSkill();
   } catch (error) {
     console.error("Failed to remove soft skill:", error);
   }
@@ -347,7 +380,7 @@ function close() {
   resumeStore.fetchResume();
 }
 
-onMounted(() => {
-  getSoftSkill();
+onMounted(async () => {
+  softSkillData.value = await getSoftSkill();
 });
 </script>

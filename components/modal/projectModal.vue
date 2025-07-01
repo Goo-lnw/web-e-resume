@@ -274,15 +274,42 @@ const isSaving = ref(false);
 const { $axios } = useNuxtApp();
 const { showAlert } = useAlert();
 
+function syncRefData(target, source) {
+  // สร้าง Set เก็บ skill_id ที่มีใน source
+  const sourceSkillIds = new Set(source.map((item) => item.project_id));
+  console.log("Source project_ids:", sourceSkillIds);
+
+  // กรองเฉพาะ target ที่มี project_id อยู่ใน source
+  const filteredTarget = target.filter((targetItem) => {
+    const exists = sourceSkillIds.has(targetItem.project_id);
+    if (!exists) {
+      console.log("Removing project_id:", targetItem.project_id);
+    }
+    return exists;
+  });
+
+  // สร้าง Set เก็บ project_id ที่เหลืออยู่ใน target หลังกรอง
+  const remainingTargetIds = new Set(filteredTarget.map((item) => item.project_id));
+
+  // เพิ่ม project_id ใหม่จาก source ที่ไม่มีใน target
+  for (const sourceItem of source) {
+    if (!remainingTargetIds.has(sourceItem.project_id)) {
+      console.log("Adding new project_id:", sourceItem.project_id);
+      filteredTarget.push(sourceItem);
+    }
+  }
+
+  return filteredTarget;
+}
+
 const getProject = async () => {
   try {
     isLoading.value = true;
     const res = await $axios.get("/student/project");
-    projectData.value = res.data || [];
-    console.log("Fetched projects:", projectData.value);
+    return res.data;
   } catch (error) {
     console.error("Failed to fetch projects:", error);
-    projectData.value = [];
+    return [];
   } finally {
     isLoading.value = false;
   }
@@ -293,7 +320,10 @@ const addNewProject = async () => {
     isSaving.value = true;
     const res = await $axios.post("/resume/increase_project");
     console.log("Added new project:", res.data);
-    await getProject();
+
+    const dataInApi = await getProject();
+    const updateData = syncRefData(projectData.value, dataInApi);
+    projectData.value = updateData;
   } catch (error) {
     console.error("Failed to add new project:", error);
   } finally {
@@ -304,7 +334,9 @@ const addNewProject = async () => {
 const removeProject = async (project_id) => {
   try {
     await $axios.delete(`/resume/project/${project_id}`);
-    await getProject();
+    const dataInApi = await getProject();
+    const updateData = syncRefData(projectData.value, dataInApi);
+    projectData.value = updateData;
   } catch (error) {
     console.error("Failed to remove project:", error);
   }
@@ -337,7 +369,7 @@ const close = () => {
   resumeStore.fetchResume();
 };
 
-onMounted(() => {
-  getProject();
+onMounted(async () => {
+  projectData.value = await getProject();
 });
 </script>

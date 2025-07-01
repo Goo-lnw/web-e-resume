@@ -227,15 +227,45 @@ const isSaving = ref(false);
 const { $axios } = useNuxtApp();
 const { showAlert } = useAlert();
 
+function syncRefData(target, source) {
+  // สร้าง Set เก็บ additional_info_id ที่มีใน source
+  const sourceSkillIds = new Set(source.map((item) => item.additional_info_id));
+  console.log("Source additional_info_ids:", sourceSkillIds);
+
+  // กรองเฉพาะ target ที่มี additional_info_id อยู่ใน source
+  const filteredTarget = target.filter((targetItem) => {
+    const exists = sourceSkillIds.has(targetItem.additional_info_id);
+    if (!exists) {
+      console.log("Removing additional_info_id:", targetItem.additional_info_id);
+    }
+    return exists;
+  });
+
+  // สร้าง Set เก็บ additional_info_id ที่เหลืออยู่ใน target หลังกรอง
+  const remainingTargetIds = new Set(filteredTarget.map((item) => item.additional_info_id));
+
+  // เพิ่ม additional_info_id ใหม่จาก source ที่ไม่มีใน target
+  for (const sourceItem of source) {
+    if (!remainingTargetIds.has(sourceItem.additional_info_id)) {
+      console.log("Adding new additional_info_id:", sourceItem.additional_info_id);
+      filteredTarget.push(sourceItem);
+    }
+  }
+
+  return filteredTarget;
+}
+
 const getAdditionalInfo = async () => {
   try {
     isLoading.value = true;
     const res = await $axios.get("/student/additional_info");
-    additionalInfoData.value = res.data || [];
+    // additionalInfoData.value = res.data || [];
+    return res.data;
     console.log("Fetched additional info:", additionalInfoData.value);
   } catch (error) {
     console.error("Failed to fetch additional info:", error);
-    additionalInfoData.value = [];
+    // additionalInfoData.value = [];
+    return [];
   } finally {
     isLoading.value = false;
   }
@@ -245,8 +275,10 @@ const addNewAdditionalInfo = async () => {
   try {
     isSaving.value = true;
     const res = await $axios.post("/resume/increase_additional_info");
-    console.log("Added new additional info:", res.data);
-    await getAdditionalInfo();
+    // console.log("Added new additional info:", res.data);
+    const dataInApi = await getAdditionalInfo();
+    const updateData = syncRefData(additionalInfoData.value, dataInApi);
+    additionalInfoData.value = updateData;
   } catch (error) {
     console.error("Failed to add new additional info:", error);
   } finally {
@@ -257,7 +289,9 @@ const addNewAdditionalInfo = async () => {
 const removeAdditionalInfo = async (additional_info_id) => {
   try {
     await $axios.delete(`/resume/additional_info/${additional_info_id}`);
-    await getAdditionalInfo();
+    const dataInApi = await getAdditionalInfo();
+    const updateData = syncRefData(additionalInfoData.value, dataInApi);
+    additionalInfoData.value = updateData;
   } catch (error) {
     console.error("Failed to remove additional info:", error);
   }
@@ -305,7 +339,7 @@ const close = () => {
   resumeStore.fetchResume();
 };
 
-onMounted(() => {
-  getAdditionalInfo();
+onMounted(async () => {
+  additionalInfoData.value = await getAdditionalInfo();
 });
 </script>

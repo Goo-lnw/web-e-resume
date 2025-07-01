@@ -255,7 +255,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useResumeStore } from "../../stores/resumeStore";
 const resumeStore = useResumeStore();
 
@@ -267,15 +267,42 @@ const isSaving = ref(false);
 const { $axios } = useNuxtApp();
 const { showAlert } = useAlert();
 
+function syncRefData(target, source) {
+  // สร้าง Set เก็บ skill_id ที่มีใน source
+  const sourceSkillIds = new Set(source.map((item) => item.skill_id));
+  console.log("Source skill_ids:", sourceSkillIds);
+
+  // กรองเฉพาะ target ที่มี skill_id อยู่ใน source
+  const filteredTarget = target.filter((targetItem) => {
+    const exists = sourceSkillIds.has(targetItem.skill_id);
+    if (!exists) {
+      console.log("Removing skill_id:", targetItem.skill_id);
+    }
+    return exists;
+  });
+
+  // สร้าง Set เก็บ skill_id ที่เหลืออยู่ใน target หลังกรอง
+  const remainingTargetIds = new Set(filteredTarget.map((item) => item.skill_id));
+
+  // เพิ่ม skill_id ใหม่จาก source ที่ไม่มีใน target
+  for (const sourceItem of source) {
+    if (!remainingTargetIds.has(sourceItem.skill_id)) {
+      console.log("Adding new skill_id:", sourceItem.skill_id);
+      filteredTarget.push(sourceItem);
+    }
+  }
+
+  return filteredTarget;
+}
+
 const getSkill = async () => {
   try {
     isLoading.value = true;
     const res = await $axios.get("/student/skill");
-    skillData.value = res.data || [];
-    console.log("Fetched skills:", skillData.value);
+    return res.data;
   } catch (error) {
     console.error("Failed to fetch skills:", error);
-    skillData.value = [];
+    return [];
   } finally {
     isLoading.value = false;
   }
@@ -288,8 +315,13 @@ const addNewSkill = async () => {
     const res = await $axios.post("/resume/increase_skill");
     console.log("Added new skill:", res.data);
 
-    // Refresh the skills list after adding
-    await getSkill();
+    const dataInApi = await getSkill();
+    console.log("data in API", dataInApi);
+
+    const updateData = syncRefData(skillData.value, dataInApi);
+    console.log("updateData", updateData);
+
+    skillData.value = updateData;
   } catch (error) {
     console.error("Failed to add new skill:", error);
   } finally {
@@ -302,7 +334,9 @@ const removeSkill = async (index) => {
   try {
     await $axios.delete(`/resume/delete_skill/${skill_id}`);
     skillData.value.splice(index, 1);
-    await getSkill();
+    const dataInApi = await getSkill();
+    const removedData = syncRefData(skillData.value, dataInApi);
+    skillData.value = removedData;
   } catch (error) {
     console.error("Failed to remove skill:", error);
   }
@@ -331,7 +365,7 @@ function close() {
   resumeStore.fetchResume();
 }
 
-onMounted(() => {
-  getSkill();
+onMounted(async () => {
+  skillData.value = await getSkill();
 });
 </script>
