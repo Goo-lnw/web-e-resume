@@ -1,39 +1,20 @@
 <template>
-  <div
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-    @click.self="close"
-  >
-    <div
-      class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden"
-    >
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" @click.self="close">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden">
       <!-- Header -->
-      <div
-        class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4 text-white"
-      >
+      <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4 text-white">
         <div class="flex items-center justify-between">
           <div>
             <h2 class="text-2xl font-bold">Internships</h2>
-            <p class="text-blue-100 text-sm mt-1">
-              Manage your internship experiences
-            </p>
+            <p class="text-blue-100 text-sm mt-1">Manage your internship experiences</p>
           </div>
           <button
             @click="close"
             class="p-2 hover:bg-white/20 rounded-full transition-colors duration-200 cursor-pointer"
             aria-label="Close modal"
           >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              ></path>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
         </div>
@@ -50,24 +31,17 @@
           >
             <!-- Internship Header -->
             <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center space-x-3">
+              <div class="flex items-center space-x-3 min-w-0">
                 <div
                   class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center"
                 >
-                  <span class="text-white font-bold text-lg">{{
-                    index + 1
-                  }}</span>
+                  <span class="text-white font-bold text-lg">{{ index + 1 }}</span>
                 </div>
-                <div>
-                  <h3 class="font-semibold text-gray-800">
-                    {{
-                      internship.internship_company_name ||
-                      `Internship ${index + 1}`
-                    }}
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-gray-800 break-words">
+                    {{ internship.internship_company_name || `Internship ${index + 1}` }}
                   </h3>
-                  <p class="text-sm text-gray-500">
-                    Configure your internship details
-                  </p>
+                  <p class="text-sm text-gray-500">Configure your internship details</p>
                 </div>
               </div>
               <div class="flex items-center space-x-2">
@@ -76,12 +50,7 @@
                   class="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-all duration-300 cursor-pointer transform hover:scale-120 ease-in-out"
                   title="Remove internship"
                 >
-                  <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -97,15 +66,8 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <!-- Company Name -->
               <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -125,15 +87,8 @@
 
               <!-- Position -->
               <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -153,15 +108,8 @@
 
               <!-- Start Date -->
               <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -180,15 +128,8 @@
 
               <!-- End Date -->
               <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -207,15 +148,8 @@
 
               <!-- Description -->
               <div class="space-y-2 lg:col-span-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -235,15 +169,8 @@
 
               <!-- Related Files -->
               <div class="space-y-2 lg:col-span-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -272,12 +199,7 @@
             <div
               class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
             >
-              <svg
-                class="w-8 h-8 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -286,36 +208,22 @@
                 ></path>
               </svg>
             </div>
-            <h3 class="text-lg font-semibold text-green-800 mb-2">
-              Add New Internship
-            </h3>
+            <h3 class="text-lg font-semibold text-green-800 mb-2">Add New Internship</h3>
             <p class="text-green-600 text-sm">Click to add a new internship</p>
           </div>
         </div>
 
         <!-- Loading State -->
-        <div
-          v-if="isLoading"
-          class="flex flex-col items-center justify-center py-12"
-        >
-          <div
-            class="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mb-4"
-          ></div>
+        <div v-if="isLoading" class="flex flex-col items-center justify-center py-12">
+          <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mb-4"></div>
           <p class="text-gray-500 text-lg">Loading your internships...</p>
           <p class="text-gray-400 text-sm">Please wait a moment</p>
         </div>
 
         <!-- Empty State (if no internships after loading) -->
         <div v-else-if="internshipData.length === 0" class="text-center py-12">
-          <div
-            class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center"
-          >
-            <svg
-              class="w-12 h-12 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+          <div class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -324,12 +232,8 @@
               ></path>
             </svg>
           </div>
-          <h3 class="text-lg font-medium text-gray-900 mb-2">
-            No internships found
-          </h3>
-          <p class="text-gray-500 mb-4">
-            Start by adding your first internship!
-          </p>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">No internships found</h3>
+          <p class="text-gray-500 mb-4">Start by adding your first internship!</p>
           <button
             @click="addNewInternship"
             class="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-200 font-medium"
@@ -343,9 +247,7 @@
       <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
         <div class="flex items-center justify-between">
           <div class="text-sm text-gray-500">
-            {{ internshipData.length }} internship{{
-              internshipData.length !== 1 ? "s" : ""
-            }}
+            {{ internshipData.length }} internship{{ internshipData.length !== 1 ? "s" : "" }}
             total
           </div>
           <div class="flex space-x-3">
@@ -361,13 +263,7 @@
               :disabled="isSaving"
               class="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 cursor-pointer"
             >
-              <svg
-                v-if="isSaving"
-                class="animate-spin w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg v-if="isSaving" class="animate-spin w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -397,15 +293,42 @@ const isSaving = ref(false);
 const { $axios } = useNuxtApp();
 const { showAlert } = useAlert();
 
+function syncRefData(target, source) {
+  // สร้าง Set เก็บ internship_id ที่มีใน source
+  const sourceSkillIds = new Set(source.map((item) => item.internship_id));
+  console.log("Source internship_ids:", sourceSkillIds);
+
+  // กรองเฉพาะ target ที่มี internship_id อยู่ใน source
+  const filteredTarget = target.filter((targetItem) => {
+    const exists = sourceSkillIds.has(targetItem.internship_id);
+    if (!exists) {
+      console.log("Removing internship_id:", targetItem.internship_id);
+    }
+    return exists;
+  });
+
+  // สร้าง Set เก็บ internship_id ที่เหลืออยู่ใน target หลังกรอง
+  const remainingTargetIds = new Set(filteredTarget.map((item) => item.internship_id));
+
+  // เพิ่ม internship_id ใหม่จาก source ที่ไม่มีใน target
+  for (const sourceItem of source) {
+    if (!remainingTargetIds.has(sourceItem.internship_id)) {
+      console.log("Adding new internship_id:", sourceItem.internship_id);
+      filteredTarget.push(sourceItem);
+    }
+  }
+
+  return filteredTarget;
+}
+
 const getInternship = async () => {
   try {
     isLoading.value = true;
     const res = await $axios.get("/student/internship");
-    internshipData.value = res.data || [];
-    console.log("Fetched internships:", internshipData.value);
+    return res.data;
   } catch (error) {
     console.error("Failed to fetch internships:", error);
-    internshipData.value = [];
+    return [];
   } finally {
     isLoading.value = false;
   }
@@ -415,8 +338,11 @@ const addNewInternship = async () => {
   try {
     isSaving.value = true;
     const res = await $axios.post("/resume/increase_internship");
+
+    const dataInApi = await getInternship();
+    const updateData = syncRefData(internshipData.value, dataInApi);
+    internshipData.value = updateData;
     console.log("Added new internship:", res.data);
-    await getInternship();
   } catch (error) {
     console.error("Failed to add new internship:", error);
   } finally {
@@ -428,12 +354,13 @@ const removeInternship = async (index) => {
   const internship_id = index;
   try {
     await $axios.delete(`/resume/internship/${internship_id}`);
-    internshipData.value.splice(index, 1); // ลบจาก array
-    await getInternship(); // รีเฟรชข้อมูล
+    // internshipData.value.splice(index, 1); // ลบจาก array
+    const dataInApi = await getInternship();
+    const updateData = syncRefData(internshipData.value, dataInApi);
+    internshipData.value = updateData;
     console.log("Internship removed successfully");
   } catch (error) {
     console.error("Failed to remove internship:", error);
-
   }
 };
 
@@ -466,7 +393,7 @@ const close = () => {
   resumeStore.fetchResume();
 };
 
-onMounted(() => {
-  getInternship();
+onMounted(async () => {
+  internshipData.value = await getInternship();
 });
 </script>

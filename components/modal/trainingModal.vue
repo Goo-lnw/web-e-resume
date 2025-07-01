@@ -8,7 +8,11 @@
             <h2 class="text-2xl font-bold">Training</h2>
             <p class="text-blue-100 text-sm mt-1">Manage your training and certifications</p>
           </div>
-          <button @click="close" class="p-2 hover:bg-white/20 rounded-full transition-colors duration-200 cursor-pointer" aria-label="Close modal">
+          <button
+            @click="close"
+            class="p-2 hover:bg-white/20 rounded-full transition-colors duration-200 cursor-pointer"
+            aria-label="Close modal"
+          >
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
@@ -27,12 +31,14 @@
           >
             <!-- Training Header -->
             <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+              <div class="flex items-center space-x-3 min-w-0">
+                <div
+                  class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center"
+                >
                   <span class="text-white font-bold text-lg">{{ index + 1 }}</span>
                 </div>
-                <div>
-                  <h3 class="font-semibold text-gray-800">
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-gray-800 break-words">
                     {{ training.training_history_course_name || `Training ${index + 1}` }}
                   </h3>
                   <p class="text-sm text-gray-500">Configure your training details</p>
@@ -179,7 +185,12 @@
               class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
             >
               <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                ></path>
               </svg>
             </div>
             <h3 class="text-lg font-semibold text-green-800 mb-2">Add New Training</h3>
@@ -257,7 +268,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useResumeStore } from "../../stores/resumeStore";
-import AdditionalInfoModal from "./additionalInfoModal.vue";
 
 const resumeStore = useResumeStore();
 const emit = defineEmits(["close", "save"]);
@@ -268,15 +278,43 @@ const isSaving = ref(false);
 const { $axios } = useNuxtApp();
 const { showAlert } = useAlert();
 
+function syncRefData(target, source) {
+  // สร้าง Set เก็บ training_history_id ที่มีใน source
+  const sourceSkillIds = new Set(source.map((item) => item.training_history_id));
+  console.log("Source training_history_ids:", sourceSkillIds);
+
+  // กรองเฉพาะ target ที่มี training_history_id อยู่ใน source
+  const filteredTarget = target.filter((targetItem) => {
+    const exists = sourceSkillIds.has(targetItem.training_history_id);
+    if (!exists) {
+      console.log("Removing training_history_id:", targetItem.training_history_id);
+    }
+    return exists;
+  });
+
+  // สร้าง Set เก็บ training_history_id ที่เหลืออยู่ใน target หลังกรอง
+  const remainingTargetIds = new Set(filteredTarget.map((item) => item.training_history_id));
+
+  // เพิ่ม training_history_id ใหม่จาก source ที่ไม่มีใน target
+  for (const sourceItem of source) {
+    if (!remainingTargetIds.has(sourceItem.training_history_id)) {
+      console.log("Adding new training_history_id:", sourceItem.training_history_id);
+      filteredTarget.push(sourceItem);
+    }
+  }
+
+  return filteredTarget;
+}
+
 const getTraining = async () => {
   try {
     isLoading.value = true;
     const res = await $axios.get("/student/training");
-    trainingData.value = res.data || [];
-    console.log("Fetched trainings:", trainingData.value);
+    // console.log("Fetched trainings:", trainingData.value);
+    return res.data;
   } catch (error) {
     console.error("Failed to fetch trainings:", error);
-    trainingData.value = [];
+    return [];
   } finally {
     isLoading.value = false;
   }
@@ -286,8 +324,9 @@ const addNewTraining = async () => {
   try {
     isSaving.value = true;
     const res = await $axios.post("/resume/increase_training");
-    console.log("Added new training:", res.data);
-    await getTraining();
+    const dataInApi = await getTraining();
+    const updateData = syncRefData(trainingData.value, dataInApi);
+    trainingData.value = updateData;
   } catch (error) {
     console.error("Failed to add new training:", error);
   } finally {
@@ -298,7 +337,9 @@ const addNewTraining = async () => {
 const removeTraining = async (training_history_id) => {
   try {
     await $axios.delete(`/resume/training/${training_history_id}`);
-    await getTraining();
+    const dataInApi = await getTraining();
+    const updateData = syncRefData(trainingData.value, dataInApi);
+    trainingData.value = updateData;
   } catch (error) {
     console.error("Failed to remove training:", error);
   }
@@ -349,7 +390,7 @@ const close = () => {
   resumeStore.fetchResume();
 };
 
-onMounted(() => {
-  getTraining();
+onMounted(async () => {
+  trainingData.value = await getTraining();
 });
 </script>

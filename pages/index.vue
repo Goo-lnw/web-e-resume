@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({ layout: "login" });
-
+const err = ref("")
 const { showAlert } = useAlert();
 const { $axios } = useNuxtApp();
 const router = useRouter();
@@ -13,7 +13,6 @@ const loading = ref(false);
 async function HandleLogin() {
   if (loading.value) return;
   loading.value = true;
-
   try {
     const response = await $axios.post("/login", formData.value);
     const { token, data } = response.data;
@@ -26,39 +25,33 @@ async function HandleLogin() {
       const role = data?.role;
       if (role === "student") {
         showAlert("เข้าสู่ระบบสำเร็จ (นักเรียน)", "success");
-        router.push("/student");
+        navigateTo("/student", { replace: true, external: true });
       } else if (role === "teacher") {
         showAlert("เข้าสู่ระบบสำเร็จ (อาจารย์)", "success");
-        router.push("/teacher");
+        navigateTo("/teacher", { replace: true, external: true });
       } else {
         showAlert("ไม่พบสิทธิ์ในการเข้าถึงระบบ", "error");
       }
     }
-  } catch (error) {
-    console.error("Login error:", error);
-    const message = error?.response?.data?.message || "";
-    const status = error?.response?.data?.status;
-
-    if (status === 401 || status === 403 || message === "Invalid credentials") {
-      showAlert("อีเมลหรือรหัสผ่านไม่ถูกต้อง", "error");
-    } else {
-      showAlert("เกิดข้อผิดพลาดภายในระบบ กรุณาลองใหม่ภายหลัง", "error");
+  } catch (error: any) {
+    console.log(error.status);
+    if (error.status === 401) {
+      showAlert("รหัสผ่านหรือชื่อผู้ใช้ไม่ถูกต้อง", "error");
+      err.value = "รหัสผ่านหรือชื่อผู้ใช้ไม่ถูกต้อง"
     }
   }
 }
 </script>
 
-
-
 <template>
-  <div class="font-[Mitr] min-h-screen bg-gray-100 flex flex-col">
+  <div class="font-[Mitr] justify-between items-center mt-1 md:mt-25">
     <!-- Main Content -->
     <div class="flex-grow flex justify-center items-center px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
       <div
-        class="flex flex-col md:flex-row w-full max-w-sm sm:max-w-md md:max-w-4xl rounded-xl overflow-hidden shadow-xl/30 animate-fade-up animate-once animate-ease-linear bg-white">
+        class="flex flex-col md:flex-row w-full max-w-sm sm:max-w-md md:max-w-4xl rounded-xl overflow-hidden border border-gray-200  animate-fade-up animate-once animate-ease-linear bg-white">
         <!-- ส่วนข้อมูลด้านซ้าย -->
         <div
-          class="bg-gradient-to-r from-indigo-600 to-blue-500 w-full md:w-1/2 p-4 sm:p-6 md:p-12 text-white flex flex-col justify-between">
+          class="hidden bg-gradient-to-r from-indigo-600 to-blue-500 w-full md:w-1/2 p-4 sm:p-6 md:p-12 text-white md:flex flex-col justify-between">
           <div class="mb-4">
             <h1 class="text-lg sm:text-xl md:text-3xl font-bold mb-3 sm:mb-4 md:mb-6">
               ระบบ Resume อิเล็กทรอนิกส์
@@ -68,57 +61,57 @@ async function HandleLogin() {
             </p>
           </div>
           <div class="space-y-3 sm:space-y-4 md:space-y-6">
-            <div class="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6 flex-shrink-0 text-white"
                 viewBox="0 0 24 24">
                 <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                   <path d="M21.801 10A10 10 0 1 1 17 3.335" />
                   <path d="m9 11l3 3L22 4" />
                 </g>
               </svg>
-              <p class="text-xs sm:text-sm md:text-base">
+              <span class="text-sm md:text-base leading-tight">
                 สร้าง resume ที่น่าประทับใจ
-              </p>
+              </span>
             </div>
-            <div class="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6 flex-shrink-0 text-white"
                 viewBox="0 0 24 24">
                 <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                   <path d="M21.801 10A10 10 0 1 1 17 3.335" />
                   <path d="m9 11l3 3L22 4" />
                 </g>
               </svg>
-              <p class="text-xs sm:text-sm md:text-base">
+              <span class="text-sm md:text-base leading-tight">
                 เพิ่มโอกาศการเข้าทำงาน
-              </p>
+              </span>
             </div>
-            <div class="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6 flex-shrink-0 text-white"
                 viewBox="0 0 24 24">
                 <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                   <path d="M21.801 10A10 10 0 1 1 17 3.335" />
                   <path d="m9 11l3 3L22 4" />
                 </g>
               </svg>
-              <p class="text-xs sm:text-sm md:text-base">
+              <span class="text-sm md:text-base leading-tight">
                 มีพื้นที่แสดงผลผลงานในระดับมืออาชีพ
-              </p>
+              </span>
             </div>
-            <div class="flex items-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 md:w-6 md:h-6 flex-shrink-0 text-white"
                 viewBox="0 0 24 24">
                 <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                   <path d="M21.801 10A10 10 0 1 1 17 3.335" />
                   <path d="m9 11l3 3L22 4" />
                 </g>
               </svg>
-              <p class="text-xs sm:text-sm md:text-base">
+              <span class="text-sm md:text-base leading-tight">
                 แชร์ผลงานหรือโปรเจคจากในหรือนอกห้องเรียนสุดเจ๋ง
-              </p>
+              </span>
             </div>
           </div>
         </div>
-        {{ err }}
+
         <!-- ฟอร์  มล็อกอินด้านขวา -->
         <div class="w-full md:w-1/2 p-4 sm:p-6 md:p-12">
           <div class="mb-4 sm:mb-6 md:mb-8">
@@ -129,6 +122,7 @@ async function HandleLogin() {
               กรุณาเข้าสู่ระบบเพื่อเข้าจัดการ Resume ของนักเรียน/นักศึกษา
             </p>
           </div>
+
           <form @submit.prevent="HandleLogin" class="space-y-3 sm:space-y-4 md:space-y-6">
             <div>
               <label class="flex items-center text-xs sm:text-sm font-medium text-gray-700 mb-1 gap-2">
@@ -148,12 +142,19 @@ async function HandleLogin() {
               <input type="password" v-model="formData.password" placeholder="Password"
                 class="w-full px-3 sm:px-4 py-2 sm:py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-600 transition duration-200" />
             </div>
-            <button type="submit"
-              class="flex justify-center items-center py-2 sm:py-2.5 w-full bg-indigo-500 hover:bg-indigo-700 text-gray-100 rounded-lg shadow-md transition duration-500 ease-in-out cursor-pointer">
+            <div class="text-red-500 font-bold" v-if="err">
+              {{ err }}
+            </div>
+            <button :disabled="loading" type="submit"
+              class="flex justify-center items-center py-2 sm:py-2.5 w-full bg-indigo-500 hover:bg-indigo-700 text-gray-100 rounded-lg shadow-md transition duration-500 ease-in-out cursor-pointer"
+              :class="{ 'opacity-60 cursor-not-allowed': loading }">
               เข้าสู่ระบบ
 
-              <Icon name="si:sign-in-alt-duotone" style="width: 20px; height: 20px;  padding-left: 10%;"
-                class="sm:w-5 sm:h-5 md:w-6 md:h-6" />
+              <Icon v-if="!loading" name="si:sign-in-alt-duotone" style="width: 20px; height: 20px;  padding-left: 10%;"
+              class="sm:w-5 sm:h-5 md:w-6 md:h-6" />
+
+              <Icon v-if="loading" name="line-md:loading-twotone-loop" style="width: 20px; height: 20px;  padding-left: 10%;"
+              class="sm:w-5 sm:h-5 md:w-6 md:h-6" />
 
             </button>
           </form>

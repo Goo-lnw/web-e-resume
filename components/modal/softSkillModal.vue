@@ -1,39 +1,20 @@
 <template>
-  <div
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-    @click.self="close"
-  >
-    <div
-      class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden"
-    >
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" @click.self="close">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden">
       <!-- Header -->
-      <div
-        class="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4 text-white"
-      >
+      <div class="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4 text-white">
         <div class="flex items-center justify-between">
           <div>
             <h2 class="text-2xl font-bold">Soft Skills</h2>
-            <p class="text-purple-100 text-sm mt-1">
-              Manage your interpersonal abilities
-            </p>
+            <p class="text-purple-100 text-sm mt-1">Manage your interpersonal abilities</p>
           </div>
           <button
             @click="close"
             class="p-2 hover:bg-white/20 rounded-full transition-colors duration-200 cursor-pointer"
             aria-label="Close modal"
           >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              ></path>
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
         </div>
@@ -50,16 +31,11 @@
           >
             <!-- Soft Skill Header -->
             <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center space-x-3">
+              <div class="flex items-center space-x-3 min-w-0">
                 <div
                   class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center"
                 >
-                  <svg
-                    class="w-5 h-5 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -68,19 +44,15 @@
                     ></path>
                   </svg>
                 </div>
-                <div>
-                  <h3 class="font-semibold text-gray-800">
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-gray-800 break-words">
                     {{ softSkill.soft_skill_name || `Soft Skill ${index + 1}` }}
                   </h3>
-                  <p class="text-sm text-gray-500">
-                    Configure your interpersonal skill
-                  </p>
+                  <p class="text-sm text-gray-500">Configure your interpersonal skill</p>
                 </div>
               </div>
               <div class="flex items-center space-x-2">
-                <span
-                  class="px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800"
-                >
+                <span class="px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                   Soft Skill
                 </span>
                 <button
@@ -88,12 +60,7 @@
                   class="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-all duration-300 cursor-pointer transform hover:scale-120 ease-in-out"
                   title="Remove soft skill"
                 >
-                  <svg
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -109,15 +76,8 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
               <!-- Soft Skill Name -->
               <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -131,21 +91,15 @@
                   v-model="softSkill.soft_skill_name"
                   type="text"
                   placeholder="e.g., Communication, Leadership"
+                  max="50"
                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
                 />
               </div>
 
               <!-- Soft Skill Description -->
               <div class="space-y-2">
-                <label
-                  class="block text-sm font-medium text-gray-700 flex items-center space-x-2"
-                >
-                  <svg
-                    class="w-4 h-4 text-gray-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
+                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -173,21 +127,17 @@
                     class="h-2 rounded-full transition-all duration-500"
                     :class="{
                       'bg-gradient-to-r from-purple-400 to-pink-500 w-full':
-                        softSkill.soft_skill_name &&
-                        softSkill.soft_skill_description,
+                        softSkill.soft_skill_name && softSkill.soft_skill_description,
                       'bg-gradient-to-r from-purple-400 to-pink-500 w-1/2':
-                        softSkill.soft_skill_name &&
-                        !softSkill.soft_skill_description,
+                        softSkill.soft_skill_name && !softSkill.soft_skill_description,
                       'bg-gradient-to-r from-gray-400 to-gray-500 w-1/4':
-                        !softSkill.soft_skill_name &&
-                        !softSkill.soft_skill_description,
+                        !softSkill.soft_skill_name && !softSkill.soft_skill_description,
                     }"
                   ></div>
                 </div>
                 <span class="text-xs text-gray-500">
                   {{
-                    softSkill.soft_skill_name &&
-                    softSkill.soft_skill_description
+                    softSkill.soft_skill_name && softSkill.soft_skill_description
                       ? "Complete"
                       : softSkill.soft_skill_name
                       ? "Partial"
@@ -212,13 +162,7 @@
             <div
               class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
             >
-              <svg
-                v-if="!isSaving"
-                class="w-8 h-8 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg v-if="!isSaving" class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -226,13 +170,7 @@
                   d="M12 6v6m0 0v6m0-6h6m-6 0H6"
                 ></path>
               </svg>
-              <svg
-                v-else
-                class="w-6 h-6 text-white animate-spin"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg v-else class="w-6 h-6 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -245,36 +183,22 @@
               {{ isSaving ? "Adding..." : "Add New Soft Skill" }}
             </h3>
             <p class="text-purple-600 text-sm">
-              {{
-                isSaving ? "Please wait..." : "Click to add a new soft skill"
-              }}
+              {{ isSaving ? "Please wait..." : "Click to add a new soft skill" }}
             </p>
           </div>
         </div>
 
         <!-- Loading State -->
-        <div
-          v-if="isLoading"
-          class="flex flex-col items-center justify-center py-12"
-        >
-          <div
-            class="animate-spin rounded-full h-12 w-12 border-4 border-purple-600 border-t-transparent mb-4"
-          ></div>
+        <div v-if="isLoading" class="flex flex-col items-center justify-center py-12">
+          <div class="animate-spin rounded-full h-12 w-12 border-4 border-purple-600 border-t-transparent mb-4"></div>
           <p class="text-gray-500 text-lg">Loading your soft skills...</p>
           <p class="text-gray-400 text-sm">Please wait a moment</p>
         </div>
 
         <!-- Empty State (if no skills after loading) -->
         <div v-else-if="softSkillData.length === 0" class="text-center py-12">
-          <div
-            class="w-24 h-24 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center"
-          >
-            <svg
-              class="w-12 h-12 text-purple-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
+          <div class="w-24 h-24 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
+            <svg class="w-12 h-12 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -283,12 +207,8 @@
               ></path>
             </svg>
           </div>
-          <h3 class="text-lg font-medium text-gray-900 mb-2">
-            No soft skills found
-          </h3>
-          <p class="text-gray-500 mb-4">
-            Start by adding your first soft skill!
-          </p>
+          <h3 class="text-lg font-medium text-gray-900 mb-2">No soft skills found</h3>
+          <p class="text-gray-500 mb-4">Start by adding your first soft skill!</p>
           <button
             @click="addNewSoftSkill"
             class="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-lg hover:from-purple-600 hover:to-pink-700 transition-all duration-200 font-medium"
@@ -302,9 +222,7 @@
       <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
         <div class="flex items-center justify-between">
           <div class="text-sm text-gray-500">
-            {{ softSkillData.length }} soft skill{{
-              softSkillData.length !== 1 ? "s" : ""
-            }}
+            {{ softSkillData.length }} soft skill{{ softSkillData.length !== 1 ? "s" : "" }}
             total
           </div>
           <div class="flex space-x-3">
@@ -320,13 +238,7 @@
               :disabled="isSaving"
               class="px-6 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 cursor-pointer"
             >
-              <svg
-                v-if="isSaving"
-                class="animate-spin w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg v-if="isSaving" class="animate-spin w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -355,20 +267,48 @@ const isLoading = ref(true);
 const isSaving = ref(false);
 const { $axios } = useNuxtApp();
 const { showAlert } = useAlert();
+
+function syncRefData(target, source) {
+  // สร้าง Set เก็บ skill_id ที่มีใน source
+  const sourceSkillIds = new Set(source.map((item) => item.soft_skill_id));
+  console.log("Source soft_skill_ids:", sourceSkillIds);
+
+  // กรองเฉพาะ target ที่มี soft_skill_id อยู่ใน source
+  const filteredTarget = target.filter((targetItem) => {
+    const exists = sourceSkillIds.has(targetItem.soft_skill_id);
+    if (!exists) {
+      console.log("Removing soft_skill_id:", targetItem.soft_skill_id);
+    }
+    return exists;
+  });
+
+  // สร้าง Set เก็บ soft_skill_id ที่เหลืออยู่ใน target หลังกรอง
+  const remainingTargetIds = new Set(filteredTarget.map((item) => item.soft_skill_id));
+
+  // เพิ่ม soft_skill_id ใหม่จาก source ที่ไม่มีใน target
+  for (const sourceItem of source) {
+    if (!remainingTargetIds.has(sourceItem.soft_skill_id)) {
+      console.log("Adding new soft_skill_id:", sourceItem.soft_skill_id);
+      filteredTarget.push(sourceItem);
+    }
+  }
+
+  return filteredTarget;
+}
+
 const getSoftSkill = async () => {
   try {
     isLoading.value = true;
     const res = await $axios.get("/student/soft_skill");
-    softSkillData.value = res.data || [];
-    console.log("Fetched softSkill:", softSkillData.value);
+
+    return res.data;
   } catch (error) {
     console.error("Failed to fetch softSkill:", error);
-    softSkillData.value = [];
+    return [];
   } finally {
     isLoading.value = false;
   }
 };
-
 const addNewSoftSkill = async () => {
   if (isSaving.value) return;
 
@@ -379,7 +319,9 @@ const addNewSoftSkill = async () => {
     console.log("Added new soft skill:", res.data);
 
     // Refresh the skills list after adding
-    await getSoftSkill();
+    const dataInApi = await getSoftSkill();
+    const updateData = syncRefData(softSkillData.value, dataInApi);
+    softSkillData.value = updateData;
   } catch (error) {
     console.error("Failed to add new soft skill:", error);
   } finally {
@@ -392,15 +334,18 @@ const removeSoftSkill = async (index) => {
   if (!softSkill.soft_skill_id) {
     // If it's a new skill without ID, just remove from local array
     softSkillData.value.splice(index, 1);
+
     return;
   }
 
   try {
     await $axios.delete(`/resume/delete_soft_skill/${softSkill.soft_skill_id}`);
+    const dataInApi = await getSoftSkill();
+    const updateData = syncRefData(softSkillData.value, dataInApi);
+    softSkillData.value = updateData;
     console.log("Removed soft skill successfully");
-
     // Refresh the skills list after deletion
-    await getSoftSkill();
+    // await getSoftSkill();
   } catch (error) {
     console.error("Failed to remove soft skill:", error);
   }
@@ -435,7 +380,7 @@ function close() {
   resumeStore.fetchResume();
 }
 
-onMounted(() => {
-  getSoftSkill();
+onMounted(async () => {
+  softSkillData.value = await getSoftSkill();
 });
 </script>

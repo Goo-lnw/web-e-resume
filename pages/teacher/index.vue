@@ -12,6 +12,8 @@ const editData = ref(null);
 const editId = ref(null);
 const { showAlert } = useAlert();
 const { handleApiError } = useErrorHandler();
+const showModalConfirm = ref(false);
+const selectedStudentId = ref(null); // สำหรับเก็บ ID ที่จะลบ
 
 // 2️⃣ ตัวแปรเก็บข้อมูล
 const student = ref([]);
@@ -56,6 +58,12 @@ const formAdd = ref({
   student_main_id: "",
 });
 
+function clearFormAdd() {
+  formAdd.value.student_email = "";
+  formAdd.value.student_password = "";
+  formAdd.value.student_main_id = "";
+}
+
 async function fetchStudent() {
   try {
     isLoading.value = true;
@@ -78,27 +86,40 @@ async function fetchStudent() {
   }
 }
 
-async function actionStudent(params, action) {
-  try {
-    if (action === "delete" && params) {
-      console.log(params, action);
-      const response = await $axios.delete(`/student/${params}/delete`);
+async function handleConfirmDelete(value) {
+  if (value && selectedStudentId.value) {
+    try {
+      const response = await $axios.delete(
+        `/student/${selectedStudentId.value}/delete`
+      );
       if (response.status === 200) {
         showAlert("ลบข้อมูลนักเรียน/นักศึกษาแล้ว", "error");
         fetchStudent();
       }
+    } catch (err) {
+      handleApiError(err, "เกิดข้อผิดพลาดในการลบข้อมูลนักเรียน");
+    }
+  }
+  showModalConfirm.value = false; // ปิด modal ไม่ว่าจะลบหรือยกเลิก
+  selectedStudentId.value = null; // รีเซ็ต ID
+}
+
+async function actionStudent(params, action) {
+  try {
+    if (action === "delete" && params) {
+      selectedStudentId.value = params; // บันทึก ID
+      showModalConfirm.value = true;
     } else if (action === "edit" && params) {
       showModal.value = true;
       showModalAdd.value = false;
       const response_id = await $axios.get(`/student/${params}`);
-      console.log(response_id.data);
       formEdit.value.student_name = response_id.data.student_name;
       formEdit.value.student_email = response_id.data.student_email;
       formEdit.value.student_phone = response_id.data.student_phone;
       formEdit.value.student_profile_image =
         response_id.data.student_profile_image;
       editId.value = response_id.data.student_id;
-    } else if (action == "add" && params == 0) {
+    } else if (action === "add" && params == 0) {
       showModal.value = false;
       showModalAdd.value = true;
     } else if (action === "add_activity") {
@@ -126,6 +147,7 @@ async function saveEdit() {
     if (response.status === 200) {
       showAlert("แก้ไขข้อมูลนักเรียนสำเร็จ", "info");
       showModal.value = false;
+      clearFormAdd();
       fetchStudent();
     }
   } catch (err) {
@@ -142,6 +164,7 @@ async function saveAdd() {
       showModalAdd.value = false;
       showAlert("เพิ่มข้อมูลนักเรียนเรียบร้อย", "success");
     }
+    clearFormAdd();
     fetchStudent();
   } catch (err) {
     handleApiError(err, "เกิดข้อผิดพลาดในการเพิ่มข้อมูลนักเรียน");
@@ -222,11 +245,15 @@ watch(page, () => fetchStudents());
           </div>
 
           <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:ml-auto">
+            ``
             <button
               @click="actionStudent(0, 'add_activity')"
               class="space-x-1 bg-green-400 hover:bg-green-600 text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center transition duration-200 cursor-pointer text-xs sm:text-xs"
             >
-              <Icon name="ep:circle-plus-filled" style="color: white ;width: 16px; height: 16px" />
+              <Icon
+                name="ep:circle-plus-filled"
+                style="color: white; width: 16px; height: 16px"
+              />
               <span>เพิ่มกิจกรรม</span>
             </button>
 
@@ -234,7 +261,10 @@ watch(page, () => fetchStudents());
               @click="actionStudent(0, 'add')"
               class="space-x-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center transition duration-200 cursor-pointer text-xs sm:text-xs"
             >
-              <Icon name="ep:circle-plus-filled" style="color: white ;width: 16px; height: 16px" />
+              <Icon
+                name="ep:circle-plus-filled"
+                style="color: white; width: 16px; height: 16px"
+              />
               <span>เพิ่มนักเรียน/นักศึกษา</span>
             </button>
             <NuxtLink
@@ -242,7 +272,10 @@ watch(page, () => fetchStudents());
               class="space-x-1 flex items-center bg-cyan-600 text-white px-4 sm:px-6 py-2 rounded-lg shadow-md hover:bg-cyan-700 transition duration-200 gap-1 sm:gap-2 text-xs sm:text-xs"
             >
               <span>หน้ารายการ Resume</span>
-              <Icon name="ep:right" style="color: white ;width: 16px; height: 16px" />
+              <Icon
+                name="ep:right"
+                style="color: white; width: 16px; height: 16px"
+              />
             </NuxtLink>
           </div>
         </div>
@@ -384,6 +417,48 @@ watch(page, () => fetchStudents());
       </div>
     </div>
 
+    <!-- Confirm Delete Dialog -->
+    <dialog
+      v-if="showModalConfirm"
+      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full"
+      open
+    >
+      <div
+        class="bg-white rounded-lg shadow-lg w-full max-w-xs mx-4 sm:mx-auto p-6"
+      >
+        <div class="flex flex-col items-center">
+          <Icon
+            name="material-symbols:warning"
+            style="width: 40px; height: 40px; color: #f59e42"
+          />
+          <h3 class="text-lg font-semibold text-gray-800 mt-2 mb-4 text-center">
+            ยืนยันการลบข้อมูลนักเรียน/นักศึกษา
+          </h3>
+          <p class="text-gray-600 text-sm mb-6 text-center">
+            คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?
+            <br />การดำเนินการนี้ไม่สามารถย้อนกลับได้
+          </p>
+          <div class="flex justify-center gap-3 w-full">
+            <button
+              class="px-4 py-2 bg-gray-300 rounded-lg text-gray-700 hover:bg-gray-400 transition duration-200 text-sm w-1/2"
+              @click="showModalConfirm = false"
+            >
+              ยกเลิก
+            </button>
+            <button
+              class="px-4 py-2 bg-red-600 rounded-lg text-white hover:bg-red-700 transition duration-200 text-sm w-1/2"
+              @click="
+                handleConfirmDelete(true);
+                showModalConfirm = false;
+              "
+            >
+              ลบ
+            </button>
+          </div>
+        </div>
+      </div>
+    </dialog>
+
     <!-- Edit Modal -->
     <dialog
       v-if="showModal"
@@ -519,7 +594,6 @@ watch(page, () => fetchStudents());
                 name="mingcute:close-line"
                 style="width: 24px; height: 24px; padding-left: 10%"
                 class="sm:w-5 sm:h-5 md:w-6 md:h-6 transform hover:scale-125 transition-transform duration-200"
-       
               />
               <!-- <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -607,22 +681,27 @@ watch(page, () => fetchStudents());
 .modal {
   transition: opacity 0.25s ease;
 }
+
 .modal-container {
   transition: transform 0.25s ease;
 }
+
 .modal.active {
   opacity: 1;
   pointer-events: auto;
 }
+
 .modal.active .modal-container {
   transform: scale(1);
 }
+
 /* อนิเมชันสำหรับ fade-up */
 @keyframes fade-up {
   from {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -639,11 +718,13 @@ watch(page, () => fetchStudents());
     opacity: 0;
     transform: translateX(20px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
   }
 }
+
 .animate-slide-in-right {
   animation: slide-in-right 0.5s ease-out;
 }
