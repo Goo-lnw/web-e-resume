@@ -1,28 +1,49 @@
 <template>
-  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4" @click.self="close">
-    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden">
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+    @click.self="close"
+  >
+    <div
+      class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden"
+    >
       <!-- Header -->
-      <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4 text-white">
+      <div
+        class="bg-gradient-to-r from-blue-600 to-purple-600 px-2 py-2 md:px-6 md:py-4 text-white"
+      >
         <div class="flex items-center justify-between">
           <div>
-            <h2 class="text-2xl font-bold">Technical Skills</h2>
-            <p class="text-blue-100 text-sm mt-1">Manage your technical proficiencies</p>
+            <h2 class="text-md md:text-2xl font-bold">ทักษะเฉพาะทาง</h2>
+            <p class="text-blue-100 text-sm mt-1">
+              Manage your technical proficiencies
+            </p>
           </div>
           <button
             @click="close"
             class="p-2 hover:bg-white/20 rounded-full transition-colors duration-200 cursor-pointer"
             aria-label="Close modal"
           >
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
             </svg>
           </button>
         </div>
       </div>
 
       <!-- Content -->
-      <div class="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
-        <div class="space-y-4">
+      <div
+        class="p-2 md:p-4 overflow-y-auto space-y-1 max-h-[calc(90vh-120px)]"
+      >
+        <div class="">
           <!-- Existing Skills -->
           <div
             v-for="(skill, index) in skillData"
@@ -33,25 +54,32 @@
             <div class="flex items-center justify-between mb-4">
               <div class="flex items-center space-x-3 min-w-0">
                 <div
-                  class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center"
+                  class="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center"
                 >
-                  <span class="text-white font-bold text-lg">{{ index + 1 }}</span>
+                  <span class="text-white font-bold text-lg">{{
+                    index + 1
+                  }}</span>
                 </div>
                 <div class="flex-1 min-w-0">
-                  <h3 class="font-semibold text-gray-800 break-words">
-                    {{ skill.skill_name || `Skill ${index + 1}` }}
+                  <h3 class="font-normal text-gray-800 break-words">
+                    {{ skill.skill_name || `ทักษะที่ ${index + 1}` }}
                   </h3>
-                  <p class="text-sm text-gray-500">Configure your technical skill</p>
+                  <p class="text-xs text-nowrap text-gray-500">
+                    กำหนดรายละเอียดทักษะของคุณ
+                  </p>
                 </div>
               </div>
 
-              <div class="flex items-center space-x-2">
+              <div class="flex items-center space-x-1 md:space-x-2 mb-3">
                 <span
-                  class="px-3 py-1 rounded-full text-xs font-medium"
+                  class="px-2 py-1 rounded-full text-xs font-medium"
                   :class="{
-                    'bg-green-100 text-green-800': skill.skill_proficiency === 'advanced',
-                    'bg-yellow-100 text-yellow-800': skill.skill_proficiency === 'intermediate',
-                    'bg-gray-100 text-gray-800': skill.skill_proficiency === 'beginner',
+                    'bg-green-100 text-green-800':
+                      skill.skill_proficiency === 'advanced',
+                    'bg-yellow-100 text-yellow-800':
+                      skill.skill_proficiency === 'intermediate',
+                    'bg-gray-100 text-gray-800':
+                      skill.skill_proficiency === 'beginner',
                   }"
                 >
                   {{ skill.skill_proficiency || "Not set" }}
@@ -61,7 +89,12 @@
                   class="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-all duration-300 cursor-pointer transform hover:scale-120 ease-in-out"
                   title="Remove skill"
                 >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg
+                    class="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -77,85 +110,72 @@
             <div class="grid sm:grid-cols-1 md:grid-cols-3 gap-4">
               <!-- Skill Name -->
               <div class="space-y-2">
-                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
-                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    ></path>
-                  </svg>
-                  <span>Skill Name</span>
-                </label>
-                <input
-                  v-model="skill.skill_name"
-                  type="text"
-                  placeholder="e.g., JavaScript, Python"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
-                />
+              <label
+                class="text-sm font-medium text-gray-700 flex items-center space-x-2"
+              >
+                <icon name="mdi:format-list-bulleted" class="w-4 h-4" />
+                <span>ชื่อทักษะ</span>
+              </label>
+              <input
+                v-model="skill.skill_name"
+                type="text"
+                placeholder="เช่น JavaScript, Python"
+                class="w-full text-xs px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
+              />
               </div>
 
               <!-- Skill Type -->
               <div class="space-y-2">
-                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
-                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-                    ></path>
-                  </svg>
-                  <span>Category</span>
-                </label>
-                <select
-                  v-model="skill.skill_type"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400 cursor-pointer"
-                >
-                  <option value="">Select type</option>
-                  <option value="language">Programming Language</option>
-                  <option value="software">Software/Tool</option>
-                </select>
+              <label
+                class="text-sm font-medium text-gray-700 flex items-center space-x-2"
+              >
+                <icon name="hugeicons:all-bookmark" class="w-4 h-4" />
+                <span>หมวดหมู่</span>
+              </label>
+              <select
+                v-model="skill.skill_type"
+                class="w-full text-xs px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
+              >
+                <option value="">เลือกหมวดหมู่</option>
+                <option value="language">ภาษาโปรแกรม</option>
+                <option value="software">ซอฟต์แวร์/เครื่องมือ</option>
+              </select>
               </div>
 
               <!-- Proficiency -->
               <div class="space-y-2">
-                <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
-                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M13 10V3L4 14h7v7l9-11h-7z"
-                    ></path>
-                  </svg>
-                  <span>Proficiency Level</span>
-                </label>
-                <select
-                  v-model="skill.skill_proficiency"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400 cursor-pointer"
-                >
-                  <option value="">Select level</option>
-                  <option value="beginner">🟡 Beginner</option>
-                  <option value="intermediate">🟠 Intermediate</option>
-                  <option value="advanced">🟢 Advanced</option>
-                </select>
+              <label
+                class="text-sm font-medium text-gray-700 flex items-center space-x-2"
+              >
+                <icon name="hugeicons:ranking" class="w-4 h-4" />
+                <span>ระดับความเชี่ยวชาญ</span>
+              </label>
+              <select
+                v-model="skill.skill_proficiency"
+                class="w-full text-xs px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
+              >
+                <option value="">เลือกระดับ</option>
+                <option value="beginner">🟡 เริ่มต้น</option>
+                <option value="intermediate">🟠 พื้นฐาน</option>
+                <option value="advanced">🟢 ระดับสูง</option>
+              </select>
               </div>
             </div>
 
             <!-- Progress Bar (Visual indicator) -->
             <div class="mt-4">
               <div class="flex items-center space-x-3">
-                <span class="text-sm text-gray-600">Progress:</span>
+                <span class="text-sm text-gray-600">คววามเชียวชาญ</span>
                 <div class="flex-1 bg-gray-200 rounded-full h-2">
                   <div
                     class="h-2 rounded-full transition-all duration-500"
                     :class="{
-                      'bg-gradient-to-r from-green-400 to-green-600 w-full': skill.skill_proficiency === 'advanced',
+                      'bg-gradient-to-r from-green-400 to-green-600 w-full':
+                        skill.skill_proficiency === 'advanced',
                       'bg-gradient-to-r from-yellow-400 to-orange-500 w-2/3':
                         skill.skill_proficiency === 'intermediate',
-                      'bg-gradient-to-r from-gray-400 to-gray-500 w-1/3': skill.skill_proficiency === 'beginner',
+                      'bg-gradient-to-r from-yellow-200 to-yellow-500 w-1/3':
+                        skill.skill_proficiency === 'beginner',
                       'w-0': !skill.skill_proficiency,
                     }"
                   ></div>
@@ -167,37 +187,47 @@
         <!-- Add New Skill Card -->
         <div
           @click="addNewSkill"
-          class="group bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border-2 border-dashed border-green-300 hover:border-green-400 rounded-xl p-8 transition-all duration-300 hover:shadow-md cursor-pointer"
+          class="group bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100 border-2 border-dashed border-green-300 hover:border-green-400 rounded-xl p-2 md:p-4 transition-all duration-300 hover:shadow-md cursor-pointer"
         >
           <div class="flex flex-col items-center justify-center text-center">
             <div
-              class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
+              class="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
             >
-              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                ></path>
-              </svg>
+              <icon
+                name="hugeicons:plus-sign-circle"
+                class="w-6 h-6 text-white"
+              />
             </div>
-            <h3 class="text-lg font-semibold text-green-800 mb-2">Add New Skill</h3>
-            <p class="text-green-600 text-sm">Click to add a new technical skill</p>
+            <h3 class="text-xs md:text-md font-semibold text-green-800 mb-2">
+              เพิ่มทักษะ
+            </h3>
+            <p class="text-green-600 text-xs">คลิกเพื่อเพิ่มทักษะ</p>
           </div>
         </div>
 
         <!-- Loading State -->
-        <div v-if="isLoading" class="flex flex-col items-center justify-center py-12">
-          <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mb-4"></div>
+        <div
+          v-if="isLoading"
+          class="flex flex-col items-center justify-center py-12"
+        >
+          <div
+            class="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mb-4"
+          ></div>
           <p class="text-gray-500 text-lg">Loading your skills...</p>
           <p class="text-gray-400 text-sm">Please wait a moment</p>
         </div>
 
         <!-- Empty State (if no skills after loading) -->
         <div v-else-if="skillData.length === 0" class="text-center py-12">
-          <div class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-            <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div
+            class="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center"
+          >
+            <svg
+              class="w-12 h-12 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -206,8 +236,14 @@
               ></path>
             </svg>
           </div>
-          <h3 class="text-lg font-medium text-gray-900 mb-2">No skills found</h3>
-          <p class="text-gray-500 mb-4">Start by adding your first technical skill!</p>
+          <h3
+            class="text-xs md:text-md lg:text-lg font-medium text-gray-900 mb-2"
+          >
+            No skills found
+          </h3>
+          <p class="text-gray-500 mb-4">
+            Start by adding your first technical skill!
+          </p>
           <button
             @click="addNewSkill"
             class="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-200 font-medium"
@@ -221,31 +257,28 @@
       <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
         <div class="flex items-center justify-between">
           <div class="text-sm text-gray-500">
-            {{ skillData.length }} skill{{ skillData.length !== 1 ? "s" : "" }}
-            total
+            ทักษะทั้งหมด {{ skillData.length }} ทักษะ
           </div>
           <div class="flex space-x-3">
             <button
               @click="close"
               :disabled="isSaving"
-              class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              class="px-2 py-1 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
-              Cancel
+              ยกเลิก
             </button>
             <button
               @click="saveSkills"
               :disabled="isSaving"
-              class="px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 cursor-pointer"
+              class="px-2 py-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 cursor-pointer"
             >
-              <svg v-if="isSaving" class="animate-spin w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              <span>{{ isSaving ? "Saving..." : "Save Changes" }}</span>
+              <icon
+                v-if="isSaving"
+                name="svg-spinners:180-ring-with-bg"
+                class="w-4 h-4"
+              />
+
+              <span>{{ isSaving ? "กำลังบันทึก..." : "บันทึก" }}</span>
             </button>
           </div>
         </div>
@@ -282,7 +315,9 @@ function syncRefData(target, source) {
   });
 
   // สร้าง Set เก็บ skill_id ที่เหลืออยู่ใน target หลังกรอง
-  const remainingTargetIds = new Set(filteredTarget.map((item) => item.skill_id));
+  const remainingTargetIds = new Set(
+    filteredTarget.map((item) => item.skill_id)
+  );
 
   // เพิ่ม skill_id ใหม่จาก source ที่ไม่มีใน target
   for (const sourceItem of source) {

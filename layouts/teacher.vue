@@ -28,7 +28,7 @@
         <div class="flex justify-between items-center h-14 sm:h-16 w-full">
           <!-- Logo Section -->
           <div class="flex items-center shrink-0 animate-fade-fade-down">
-            <img src="../assets/images/Eresumem-logo-removebg.png" alt=""
+            <Nuxtimg src="./images/Eresumem-logo-removebg.png" alt=""
               class="h-16 w-28 sm:h-20 sm:w-32 lg:h-24 lg:w-40 object-contain" />
           </div>
 

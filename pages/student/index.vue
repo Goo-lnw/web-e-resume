@@ -43,14 +43,14 @@ function getProficiencyColor(proficiency) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-100 py-8">
+  <div class="min-h-screen bg-slate-100 py-4 sm:py-8">
     <div v-if="loading" class="flex justify-center items-center min-h-screen">
       <div
-        class="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-800"
+        class="animate-spin rounded-full h-16 w-16 sm:h-32 sm:w-32 border-b-2 border-gray-800"
       ></div>
     </div>
 
-    <div v-else-if="error" class="max-w-4xl mx-auto px-4">
+    <div v-else-if="error" class="max-w-4xl mx-auto px-2 sm:px-4">
       <div
         class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded"
       >
@@ -59,42 +59,44 @@ function getProficiencyColor(proficiency) {
     </div>
 
     <!-- Resume Paper Container -->
-    <div v-else class="max-w-7xl mx-auto px-2 sm:px-4">
+    <div v-else class="max-w-7xl mx-auto px-1 sm:px-2 md:px-4">
       <div class="" style="min-height: 11in">
         <!-- Paper Content -->
-        <div class="p-4 sm:p-6 lg:p-12">
+        <div class="p-2 sm:p-4 md:p-6 lg:p-12">
           <!-- Header Section -->
           <div
             class="h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-t-lg"
           ></div>
           <div
-            class="text-center bg-white border-gray-800 pb-4 lg:pb-2 mb-2 lg:mb-4 shadow-lg rounded p-4"
+            class="text-center bg-white border-gray-800 pb-4 lg:pb-2 mb-2 lg:mb-4 shadow-lg rounded p-2 sm:p-4"
           >
-            <div class="flex items-center mb-3 lg:mb-4 gap-4">
+            <div
+              class="flex flex-col sm:flex-row items-center mb-3 lg:mb-4 gap-2 sm:gap-4"
+            >
               <img
                 v-if="resumeStore.student.student_profile_image"
                 :src="resumeStore.student.student_profile_image"
                 :alt="resumeStore.student.student_name"
-                class="w-24 h-24 sm:w-32 md:w-40 lg:w-46 lg:h-64 border-2 border-gray-300 object-cover justify-self-start"
+                class="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 border-1 border-gray-300 object-cover"
               />
-              <div class="text-start">
+              <div class="text-start w-full">
                 <h1
                   v-if="resumeStore.student.student_name_thai"
-                  class="text-3xl sm:text-3xl lg:text-3xl font-bold text-blue-900 mb-3"
+                  class="text-2xl sm:text-3xl font-bold text-blue-900 mb-2 sm:mb-3"
                 >
                   {{ resumeStore.student.student_name_thai }}
                 </h1>
                 <p
-                  class="text-xl sm:text-xl lg:text-xl font-bold text-blue-900 mb-2 tracking-wide"
+                  class="text-lg sm:text-xl font-bold text-blue-900 mb-1 sm:mb-2 tracking-wide"
                 >
                   {{ resumeStore.student.student_name }}
                 </p>
-                <p class="text-2xl lg:text-xl text-gray-800 mb-3 lg:mb-4">
+                <p class="text-base sm:text-xl text-gray-800 mb-2 sm:mb-3">
                   {{ resumeStore.student.position || "Full Stack Developer" }}
                 </p>
                 <div
                   v-if="resumeStore.student.student_email"
-                  class="flex items-center text-sm lg:text-sm text-gray-900 mb-3 lg:mb-4"
+                  class="flex items-center text-xs sm:text-sm text-gray-900 mb-2 sm:mb-3"
                 >
                   <svg
                     class="w-4 h-4 mr-2"
@@ -112,7 +114,7 @@ function getProficiencyColor(proficiency) {
                 </div>
                 <div
                   v-if="resumeStore.student.student_phone"
-                  class="flex items-center text-sm lg:text-sm text-gray-900 mb-3 lg:mb-4"
+                  class="flex items-center text-xs sm:text-sm text-gray-900 mb-2 sm:mb-3"
                 >
                   <svg
                     class="w-4 h-4 mr-2"
@@ -127,7 +129,7 @@ function getProficiencyColor(proficiency) {
                 </div>
                 <div
                   v-if="resumeStore.student.student_main_id"
-                  class="flex items-center text-sm lg:text-sm text-gray-900 mb-3 lg:mb-4"
+                  class="flex items-center text-xs sm:text-sm text-gray-900 mb-2 sm:mb-3"
                 >
                   <svg
                     class="w-4 h-4 mr-2"
@@ -144,7 +146,7 @@ function getProficiencyColor(proficiency) {
                 </div>
                 <div
                   v-if="resumeStore.student.github"
-                  class="flex items-center text-sm lg:text-sm text-gray-900 mb-3 lg:mb-4"
+                  class="flex items-center text-xs sm:text-sm text-gray-900 mb-2 sm:mb-3"
                 >
                   <svg
                     class="w-4 h-4 mr-2"
@@ -168,18 +170,18 @@ function getProficiencyColor(proficiency) {
           </div>
 
           <!-- Two Column Layout -->
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-            <!-- Left Column (1/3 width on desktop, full width on mobile) -->
-            <div class="lg:col-span-1 space-y-4 lg:space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+            <!-- Left Column -->
+            <div class="lg:col-span-1 space-y-3 sm:space-y-4 lg:space-y-6">
               <!-- Personal Information -->
-              <div class="bg-white shadow-lg rounded-lg p-6">
+              <div class="bg-white shadow-lg rounded-lg p-3 sm:p-6">
                 <h2
                   class="text-base text-shadow-sm text-blue-800 lg:text-lg font-bold mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
                   Personal Information
                 </h2>
                 <div
-                  class="border-l-4 border-blue-600 pl-4 space-y-2 text-xs sm:text-sm"
+                  class="border-l-4 border-blue-600 pl-3 sm:pl-4 space-y-2 text-xs sm:text-sm"
                 >
                   <div
                     v-if="resumeStore.student.nationality"
@@ -240,7 +242,7 @@ function getProficiencyColor(proficiency) {
               <!-- Contact & Social -->
               <div
                 v-if="resumeStore.student.facebook || resumeStore.student.line"
-                class="bg-white shadow-lg rounded-lg p-6"
+                class="bg-white shadow-lg rounded-lg p-3 sm:p-6"
               >
                 <h2
                   class="text-base lg:text-lg text-shadow-sm font-bold text-green-600 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
@@ -248,7 +250,7 @@ function getProficiencyColor(proficiency) {
                   Social Media
                 </h2>
                 <div
-                  class="border-l-4 border-green-600 pl-4 space-y-2 text-xs sm:text-sm"
+                  class="border-l-4 border-green-600 pl-3 sm:pl-4 space-y-2 text-xs sm:text-sm"
                 >
                   <div
                     v-if="resumeStore.student.facebook"
@@ -290,7 +292,7 @@ function getProficiencyColor(proficiency) {
               <!-- Hobbies & Interests -->
               <div
                 v-if="resumeStore.student.hobby"
-                class="bg-white shadow-lg rounded-lg p-6"
+                class="bg-white shadow-lg rounded-lg p-3 sm:p-6"
               >
                 <h2
                   class="text-base lg:text-lg font-bold text-yellow-500 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
@@ -298,14 +300,14 @@ function getProficiencyColor(proficiency) {
                   Hobbies & Interests
                 </h2>
                 <p
-                  class="border-l-4 border-yellow-500 pl-4 text-xs sm:text-sm text-gray-700 leading-relaxed"
+                  class="border-l-4 border-yellow-500 pl-3 sm:pl-4 text-xs sm:text-sm text-gray-700 leading-relaxed"
                 >
                   {{ resumeStore.student.hobby }}
                 </p>
               </div>
 
               <!-- Technical Skills -->
-              <div class="bg-white shadow-lg rounded-lg p-6">
+              <div class="bg-white shadow-lg rounded-lg p-3 sm:p-6">
                 <h2
                   class="text-base lg:text-lg font-bold text-shadow-sm text-blue-800 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
@@ -348,14 +350,14 @@ function getProficiencyColor(proficiency) {
               </div>
 
               <!-- Soft Skills -->
-              <div class="bg-white shadow-lg rounded-lg p-6">
+              <div class="bg-white shadow-lg rounded-lg p-3 sm:p-6">
                 <h2
                   class="text-base lg:text-lg font-bold text-shadow-sm text-violet-800 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
                   Soft Skills
                 </h2>
                 <div
-                  class="border-l-4 border-violet-600 pl-4 space-y-2 lg:space-y-3"
+                  class="border-l-4 border-violet-600 pl-3 sm:pl-4 space-y-2 lg:space-y-3"
                 >
                   <div
                     v-for="softSkill in resumeStore.softSkills"
@@ -375,14 +377,14 @@ function getProficiencyColor(proficiency) {
               </div>
 
               <!-- Education -->
-              <div class="bg-white shadow-lg rounded-lg p-6">
+              <div class="bg-white shadow-lg rounded-lg p-3 sm:p-6">
                 <h2
                   class="text-base lg:text-lg font-bold text-indigo-800 mb-2 lg:mb-3 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
                   Education
                 </h2>
                 <div
-                  class="space-y-2 lg:space-y-3 border-l-4 border-indigo-600 pl-4"
+                  class="space-y-2 lg:space-y-3 border-l-4 border-indigo-600 pl-3 sm:pl-4"
                 >
                   <div
                     v-for="edu in resumeStore.education"
@@ -413,17 +415,17 @@ function getProficiencyColor(proficiency) {
               </div>
             </div>
 
-            <!-- Right Column (2/3 width on desktop, full width on mobile) -->
-            <div class="lg:col-span-2 space-y-4 lg:space-y-6">
+            <!-- Right Column -->
+            <div class="lg:col-span-2 space-y-3 sm:space-y-4 lg:space-y-6">
               <!-- Work Experience -->
-              <div class="bg-white shadow-lg rounded-lg p-6">
+              <div class="bg-white shadow-lg rounded-lg p-3 sm:p-6">
                 <h2
                   class="text-base lg:text-lg font-bold text-blue-800 text-shadow-sm mb-3 lg:mb-4 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
                   Professional Experience
                 </h2>
                 <div
-                  class="border-l-4 border-blue-600 pl-4 space-y-3 lg:space-y-4"
+                  class="border-l-4 border-blue-600 pl-3 sm:pl-4 space-y-3 lg:space-y-4"
                 >
                   <div
                     v-for="work in resumeStore.workExperience"
@@ -445,8 +447,7 @@ function getProficiencyColor(proficiency) {
                         </p>
                       </div>
                       <span class="text-xs text-gray-600 font-medium">
-                        {{ formatDate(work.work_experience_start_date) }}
-                        -
+                        {{ formatDate(work.work_experience_start_date) }} -
                         {{ formatDate(work.work_experience_end_date) }}
                       </span>
                     </div>
@@ -459,8 +460,7 @@ function getProficiencyColor(proficiency) {
                       v-if="work.work_experience_highlight"
                       class="text-xs lg:text-sm text-gray-800 font-medium mb-2"
                     >
-                      •
-                      {{ work.work_experience_highlight }}
+                      • {{ work.work_experience_highlight }}
                     </div>
                   </div>
                 </div>
@@ -469,7 +469,7 @@ function getProficiencyColor(proficiency) {
               <!-- Internships -->
               <div
                 v-if="resumeStore.internships?.length"
-                class="bg-white shadow-lg rounded-lg p-6"
+                class="bg-white shadow-lg rounded-lg p-3 sm:p-6"
               >
                 <h2
                   class="text-base lg:text-lg font-bold text-shadow-sm text-orange-800 mb-3 lg:mb-4 pb-1 border-b border-gray-400 uppercase tracking-wide"
@@ -477,7 +477,7 @@ function getProficiencyColor(proficiency) {
                   Internships
                 </h2>
                 <div
-                  class="border-l-4 border-orange-800 pl-4 space-y-3 lg:space-y-4"
+                  class="border-l-4 border-orange-800 pl-3 sm:pl-4 space-y-3 lg:space-y-4"
                 >
                   <div
                     v-for="internship in resumeStore.internships"
@@ -499,8 +499,7 @@ function getProficiencyColor(proficiency) {
                         </p>
                       </div>
                       <span class="text-xs text-gray-600 font-medium">
-                        {{ formatDate(internship.internship_start_date) }}
-                        -
+                        {{ formatDate(internship.internship_start_date) }} -
                         {{ formatDate(internship.internship_end_date) }}
                       </span>
                     </div>
@@ -512,11 +511,11 @@ function getProficiencyColor(proficiency) {
               </div>
 
               <!-- Projects -->
-              <div class="bg-white shadow-lg rounded-lg p-6">
+              <div class="bg-white shadow-lg rounded-lg p-3 sm:p-6">
                 <h2
                   class="text-base lg:text-lg font-bold text-gray-900 mb-3 lg:mb-4 pb-1 border-b border-gray-400 uppercase tracking-wide"
                 >
-                Projects
+                  Projects
                 </h2>
                 <div class="space-y-3 lg:space-y-4">
                   <div
@@ -524,7 +523,7 @@ function getProficiencyColor(proficiency) {
                     :key="project.project_name"
                   >
                     <div
-                      class="border border-gray-200 roundend-lg p-4 flex flex-col sm:flex-row sm:justify-between sm:items-start mb-1 space-y-1 sm:space-y-0"
+                      class="border border-gray-200 rounded-lg p-2 sm:p-4 flex flex-col sm:flex-row sm:justify-between sm:items-start mb-1 space-y-1 sm:space-y-0"
                     >
                       <h3
                         class="text-sm lg:text-base font-bold text-orange-900"
@@ -541,17 +540,17 @@ function getProficiencyColor(proficiency) {
                       </a>
                     </div>
                     <p
-                      class="text-xs lg:text-sm font-semibold text-gray-700 mb-1 pl-4"
+                      class="text-xs lg:text-sm font-semibold text-gray-700 mb-1 pl-2 sm:pl-4"
                     >
                       {{ project.project_technology_used }}
                     </p>
                     <p
-                      class="text-xs lg:text-sm text-gray-700 mb-2 leading-relaxed pl-4"
+                      class="text-xs lg:text-sm text-gray-700 mb-2 leading-relaxed pl-2 sm:pl-4"
                     >
                       {{ project.project_description }}
                     </p>
                     <p
-                      class="text-xs lg:text-sm text-blue-800 font-medium pl-4"
+                      class="text-xs lg:text-sm text-blue-800 font-medium pl-2 sm:pl-4"
                     >
                       • {{ project.project_impact }}
                     </p>
@@ -562,7 +561,7 @@ function getProficiencyColor(proficiency) {
               <!-- Training -->
               <div
                 v-if="resumeStore.training?.length"
-                class="bg-white shadow-lg rounden-lg p-6"
+                class="bg-white shadow-lg rounded-lg p-3 sm:p-6"
               >
                 <h2
                   class="text-base lg:text-lg font-bold text-yellow-700 mb-3 lg:mb-4 pb-1 border-b border-gray-400 uppercase tracking-wide"
@@ -611,7 +610,7 @@ function getProficiencyColor(proficiency) {
               <!-- Additional Info -->
               <div
                 v-if="resumeStore.additionalInfo?.length"
-                class="bg-white shadow-lg p-6"
+                class="bg-white shadow-lg rounded-lg p-3 sm:p-6"
               >
                 <h2
                   class="text-base lg:text-lg font-bold text-yellow-700 mb-3 lg:mb-4 pb-1 border-b border-gray-400 uppercase tracking-wide"
@@ -648,7 +647,9 @@ function getProficiencyColor(proficiency) {
           </div>
 
           <!-- Resume Status Footer -->
-          <div class="mt-6 lg:mt-8 pt-3 lg:pt-4 border-t border-gray-300">
+          <div
+            class="mt-4 sm:mt-6 lg:mt-8 pt-2 sm:pt-3 lg:pt-4 border-t border-gray-300"
+          >
             <div
               class="flex flex-col sm:flex-row sm:justify-between sm:items-center text-xs text-gray-600 space-y-2 sm:space-y-0"
             >
@@ -658,11 +659,11 @@ function getProficiencyColor(proficiency) {
                   {{ resumeStore.resume.resume_status || "Draft" }}
                 </span>
               </div>
-              <div class="flex space-x-4">
-                <span
-                  >Submitted:
-                  {{ formatDate(resumeStore.resume.submitted_at) }}</span
-                >
+              <div class="flex flex-col sm:flex-row sm:space-x-4">
+                <span>
+                  Submitted:
+                  {{ formatDate(resumeStore.resume.submitted_at) }}
+                </span>
                 <span v-if="resumeStore.resume.approved_at">
                   Approved:
                   {{ formatDate(resumeStore.resume.approved_at) }}
