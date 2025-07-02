@@ -12,7 +12,6 @@
             class="h-16 w-25 object-contain"
           />
         </div>
-
         <!-- Center Navigation -->
         <div
           class="hidden sm:flex items-center space-x-1 md:space-x-2 lg:space-x-3 animate-fade-fade-down"
@@ -26,9 +25,25 @@
               style="height: 24px; width: 24px"
               class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
             />
+
+            <!-- <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
+              >
+                <path
+                  fill="currentColor"
+                  d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1"
+                />
+              </svg> -->
+
+            <!--bottom indicator -->
             <div
               class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300 ease-out"
             ></div>
+            <!-- Tooltip -->
             <div
               class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none"
             >
@@ -36,10 +51,9 @@
             </div>
           </NuxtLink>
 
-          <!-- ✅ Fixed Dropdown Menu for iPad/Desktop -->
-          <div class="relative hidden sm:flex" id="desktop-dropdown">
+          <!-- Dropdown Menu -->
+          <div class="relative group hidden sm:flex">
             <button
-              @click="isDesktopDropdownOpen = !isDesktopDropdownOpen"
               class="flex flex-col items-center justify-center p-2 lg:p-3 rounded-lg transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200 cursor-pointer"
             >
               <Icon
@@ -50,18 +64,74 @@
             </button>
 
             <div
-              v-if="isDesktopDropdownOpen"
-              class="absolute top-full mt-2 w-48 bg-white shadow-lg rounded-md z-50"
+              class="absolute top-full mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-50"
             >
               <ul class="text-sm text-gray-800">
-                <li><button @click="showSkillModal = true; isDesktopDropdownOpen = false" class="block px-4 py-2 w-full text-left hover:bg-slate-200">Technical Skills</button></li>
-                <li><button @click="showSoftSkillModal = true; isDesktopDropdownOpen = false" class="block px-4 py-2 w-full text-left hover:bg-slate-200">Soft Skill</button></li>
-                <li><button @click="showEducationModal = true; isDesktopDropdownOpen = false" class="block px-4 py-2 w-full text-left hover:bg-slate-200">Education</button></li>
-                <li><button @click="showProjectModal = true; isDesktopDropdownOpen = false" class="block px-4 py-2 w-full text-left hover:bg-slate-200">Projects</button></li>
-                <li><button @click="showWorkExperienceModal = true; isDesktopDropdownOpen = false" class="block px-4 py-2 w-full text-left hover:bg-slate-200">Work Experience</button></li>
-                <li><button @click="showInternshipModal = true; isDesktopDropdownOpen = false" class="block px-4 py-2 w-full text-left hover:bg-slate-200">Internships</button></li>
-                <li><button @click="showTrainingModal = true; isDesktopDropdownOpen = false" class="block px-4 py-2 w-full text-left hover:bg-slate-200">Training</button></li>
-                <li><button @click="showAdditionalInfoModal = true; isDesktopDropdownOpen = false" class="block px-4 py-2 w-full text-left hover:bg-slate-200">Additional Info</button></li>
+                <li>
+                  <button
+                    @click="showSkillModal = true"
+                    class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
+                  >
+                    Technical Skills
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    @click="showSoftSkillModal = true"
+                    class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
+                  >
+                    Soft Skill
+                  </button>
+                </li>
+                <li>
+                  <button
+                    @click="showEducationModal = true"
+                    class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
+                  >
+                    Education
+                  </button>
+                </li>
+                <li>
+                  <button
+                    @click="showProjectModal = true"
+                    class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
+                  >
+                    Projects
+                  </button>
+                </li>
+                <li>
+                  <button
+                    @click="showWorkExperienceModal = true"
+                    class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
+                  >
+                    Work Experience
+                  </button>
+                </li>
+                <li>
+                  <button
+                    @click="showInternshipModal = true"
+                    class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
+                  >
+                    Internships
+                  </button>
+                </li>
+                <li>
+                  <button
+                    @click="showTrainingModal = true"
+                    class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
+                  >
+                    Training
+                  </button>
+                </li>
+                <li>
+                  <button
+                    @click="showAdditionalInfoModal = true"
+                    class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
+                  >
+                    Additional Info
+                  </button>
+                </li>
               </ul>
             </div>
           </div>
@@ -98,22 +168,161 @@
               class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-50"
             >
               <ul class="text-sm text-gray-800">
-                <li><button @click="showSkillModal = true" class="block px-4 py-2 w-full text-left hover:bg-gray-100">Technical Skills</button></li>
-                <li><button @click="showSoftSkillModal = true" class="block px-4 py-2 w-full text-left hover:bg-gray-100">Soft Skill</button></li>
-                <li><button @click="showEducationModal = true" class="block px-4 py-2 w-full text-left hover:bg-gray-100">Education</button></li>
-                <li><button @click="showProjectModal = true" class="block px-4 py-2 w-full text-left hover:bg-gray-100">Projects</button></li>
-                <li><button @click="showWorkExperienceModal = true" class="block px-4 py-2 w-full text-left hover:bg-slate-200">Work Experience</button></li>
-                <li><button @click="showInternshipModal = true" class="block px-4 py-2 w-full text-left hover:bg-slate-200">Internships</button></li>
-                <li><button @click="showTrainingModal = true" class="block px-4 py-2 w-full text-left hover:bg-slate-200">Training</button></li>
-                <li><button @click="showAdditionalInfoModal = true" class="block px-4 py-2 w-full text-left hover:bg-slate-200">Additional Info</button></li>
+                <li>
+                  <button
+                    @click="showSkillModal = true"
+                    class="block px-4 py-2 w-full text-left hover:bg-gray-100"
+                  >
+                    Technical Skills
+                  </button>
+                </li>
+                <li>
+                  <button
+                    @click="showSoftSkillModal = true"
+                    class="block px-4 py-2 w-full text-left hover:bg-gray-100"
+                  >
+                    Soft Skill
+                  </button>
+                </li>
+                <li>
+                  <button
+                    @click="showEducationModal = true"
+                    class="block px-4 py-2 w-full text-left hover:bg-gray-100"
+                  >
+                    Education
+                  </button>
+                </li>
+                <li>
+                  <button
+                    @click="showProjectModal = true"
+                    class="block px-4 py-2 w-full text-left hover:bg-gray-100"
+                  >
+                    Projects
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    @click="showWorkExperienceModal = true"
+                    class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
+                  >
+                    Work Experience
+                  </button>
+                </li>
+                <li>
+                  <button
+                    @click="showInternshipModal = true"
+                    class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
+                  >
+                    Internships
+                  </button>
+                </li>
+                <li>
+                  <button
+                    @click="showTrainingModal = true"
+                    class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
+                  >
+                    Training
+                  </button>
+                </li>
+                <li>
+                  <button
+                    @click="showAdditionalInfoModal = true"
+                    class="block px-4 py-2 w-full text-left hover:bg-slate-200 cursor-pointer"
+                  >
+                    Additional Info
+                  </button>
+                </li>
               </ul>
             </div>
           </div>
         </div>
 
-        <!-- Profile (Desktop & Mobile เดิม) -->
-        <!-- ...คงไว้เหมือนเดิม ไม่มีปัญหา -->
-        <!-- ละไว้เพื่อความสั้น ถ้าต้องการรวมก็แจ้งได้ครับ -->
+        <!-- Right Side Controls -->
+        <!-- Desktop Profile Dropdown -->
+        <div
+          class="hidden sm:flex items-center space-x-1 sm:space-x-2 lg:space-x-3 animate-fade-fade-down"
+        >
+          <!-- Profile Button -->
+          <div class="group relative">
+            <span
+              class="flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200 cursor-pointer"
+            >
+              <Icon
+                name="mdi:account-reactivate"
+                style="height: 20px; width: 20px"
+                class="text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
+              />
+            </span>
+
+            <div
+              class="absolute top-full mt-2 w-48 bg-white shadow-lg rounded-md overflow-hidden opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-50"
+            >
+              <ul class="text-sm text-gray-800">
+                <li>
+                  <NuxtLink
+                    to="/student/edit_profile"
+                    class="block px-4 py-2 w-full text-left hover:bg-gray-200"
+                  >
+                    แก้ไขโปรไฟล์
+                  </NuxtLink>
+                </li>
+
+                <li>
+                  <button
+                    @click.prevent="logout()"
+                    class="block px-4 py-2 w-full text-left hover:bg-gray-200 cursor-pointer"
+                  >
+                    ออกจากระบบ
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Profile Dropdown -->
+        <div class="flex sm:hidden items-center">
+          <div class="relative">
+            <button
+              @click="isProfileDropdownOpen = !isProfileDropdownOpen"
+              class="flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200"
+            >
+              <Icon
+                name="mdi:account-reactivate"
+                style="height: 20px; width: 20px"
+                class="text-gray-600 group-hover:text-blue-600 transition-colors duration-200"
+              />
+            </button>
+            <div
+              v-if="isProfileDropdownOpen"
+              class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-50"
+            >
+              <ul class="text-sm text-gray-800">
+                <li>
+                  <NuxtLink
+                    to="/student/edit_profile"
+                    class="block px-4 py-2 w-full text-left hover:bg-gray-200"
+                    @click="isProfileDropdownOpen = false"
+                  >
+                    แก้ไขโปรไฟล์
+                  </NuxtLink>
+                </li>
+                <li>
+                  <button
+                    @click.prevent="
+                      logout();
+                      isProfileDropdownOpen = false;
+                    "
+                    class="block px-4 py-2 w-full text-left hover:bg-gray-200 cursor-pointer"
+                  >
+                    ออกจากระบบ
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
     <div class="w-full pt-16">
