@@ -650,8 +650,8 @@ watch(certNotExistTableCheckbox, (value) => {
     >
       <!-- Page Header -->
       <div class="flex justify-between animate-fade-up">
-        <img
-          src="../../../assets/images/teacher2.png"
+        <Nuxtimg
+          src=".././images/teacher2.png"
           alt=""
           class="w-56 h-42"
         />
@@ -708,22 +708,22 @@ watch(certNotExistTableCheckbox, (value) => {
             <thead class="bg-gray-100 text-gray-700">
               <tr>
                 <th
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
+                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap"
                 >
                   ชื่อกิจกรรม
                 </th>
                 <th
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
+                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap"
                 >
                   วันเริ่มต้นกิจกรรม
                 </th>
                 <th
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
+                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap"
                 >
                   วันสิ้นสุดกิจกรรม
                 </th>
                 <th
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
+                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap"
                 ></th>
               </tr>
             </thead>
@@ -1314,17 +1314,17 @@ watch(certNotExistTableCheckbox, (value) => {
                           <thead class="bg-gray-100 text-gray-700">
                             <tr>
                               <th
-                                class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
+                                class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap font-normal"
                               >
                                 รหัสนักศึกษา
                               </th>
                               <th
-                                class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
+                                class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap font-normal"
                               >
                                 ชื่อ
                               </th>
                               <th
-                                class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
+                                class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap font-normal"
                               >
                                 <div
                                   class="flex justify-center items-center space-x-1 sm:space-x-2"
@@ -1335,7 +1335,7 @@ watch(certNotExistTableCheckbox, (value) => {
                                     id="notCheckedinStudentTableSelectAll"
                                   />
                                   <label
-                                    class="text-gray-800"
+                                    class="text-gray-800 whitespace-nowrap text-xs sm:text-sm"
                                     for="notCheckedinStudentTableSelectAll"
                                     >เลือกทั้งหมด</label
                                   >
@@ -1384,7 +1384,7 @@ watch(certNotExistTableCheckbox, (value) => {
                       <div class="flex justify-end mt-2">
                         <button
                           @click="checkInSubmit"
-                          class="px-4 py-2 text-white rounded bg-indigo-500 hover:bg-indigo-800"
+                          class="px-2 text-xs py-2 md:text-sm text-white rounded bg-indigo-500 hover:bg-indigo-800"
                         >
                           เพิ่ม
                         </button>
@@ -1429,17 +1429,19 @@ watch(certNotExistTableCheckbox, (value) => {
                             <thead class="bg-gray-100 text-gray-700">
                               <tr>
                                 <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
+                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium font-normal sm:font-semibold"
                                 >
-                                  รหัสนักศึกษา
+                                  <span class="block sm:inline"
+                                    >รหัสนักศึกษา</span
+                                  >
                                 </th>
                                 <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
+                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium font-normal sm:font-semibold"
                                 >
-                                  ชื่อ
+                                  <span class="block sm:inline">ชื่อ</span>
                                 </th>
                                 <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
+                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium font-normal sm:font-semibold"
                                 >
                                   <div
                                     class="flex justify-center items-center space-x-1 sm:space-x-2"
@@ -1448,9 +1450,10 @@ watch(certNotExistTableCheckbox, (value) => {
                                       type="checkbox"
                                       v-model="certNotExistTableSelectAll"
                                       id="certNotExistTableSelectAll"
+                                      class="w-4 h-4 sm:w-5 sm:h-5"
                                     />
                                     <label
-                                      class="text-gray-800"
+                                      class="text-gray-800 text-xs text-nowrap sm:text-sm font-normal"
                                       for="certNotExistTableSelectAll"
                                       >เลือกทั้งหมด</label
                                     >
@@ -1507,7 +1510,7 @@ watch(certNotExistTableCheckbox, (value) => {
                                 : 'bg-green-500'
                             "
                             :disabled="certNotExistTableCheckbox.length === 0"
-                            class="px-4 py-2 mx-2 text-white rounded"
+                            class="px-2 py-2 text-xs font-normal md:text-md mx-2 text-white rounded"
                           >
                             มอบ Certificate
                           </button>
@@ -1519,7 +1522,7 @@ watch(certNotExistTableCheckbox, (value) => {
                                 ? 'bg-red-800'
                                 : 'bg-red-500'
                             "
-                            class="px-4 py-2 mx-2 text-white rounded"
+                            class="px-2 py-2 text-xs font-normal md:text-md mx-2 text-white rounded"
                           >
                             ลบ
                           </button>
@@ -1557,17 +1560,17 @@ watch(certNotExistTableCheckbox, (value) => {
                             <thead class="bg-gray-100 text-gray-700">
                               <tr>
                                 <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
+                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-normal sm:font-semibold"
                                 >
                                   รหัสนักศึกษา
                                 </th>
                                 <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
+                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-normal sm:font-semibold"
                                 >
                                   ชื่อ
                                 </th>
                                 <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
+                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-normal sm:font-semibold"
                                 >
                                   <div
                                     class="flex justify-center items-center space-x-1 sm:space-x-2"
@@ -1576,9 +1579,10 @@ watch(certNotExistTableCheckbox, (value) => {
                                       type="checkbox"
                                       v-model="certExistStudentTableSelectAll"
                                       id="certExistStudentTableSelectAll"
+                                      class="w-4 h-4 sm:w-5 sm:h-5"
                                     />
                                     <label
-                                      class="text-gray-800"
+                                      class="text-gray-800 text-xs text-nowrap sm:text-sm font-normal"
                                       for="certExistStudentTableSelectAll"
                                       >เลือกทั้งหมด</label
                                     >
@@ -1635,7 +1639,7 @@ watch(certNotExistTableCheckbox, (value) => {
                                 ? 'bg-red-800'
                                 : 'bg-red-500'
                             "
-                            class="px-4 py-2 mx-2 text-white rounded"
+                            class="px-2 py-2 text-xs font-normal mx-2 text-white rounded"
                           >
                             ลบ Certificate
                           </button>

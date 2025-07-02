@@ -183,7 +183,7 @@ watch(page, () => fetchStudents());
       class="flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8"
     >
       <div class="flex justify-between animate-fade-up">
-        <img src="../../assets/images/teacher2.png" alt="" class="w-56 h-42" />
+        <Nuxtimg src="./images/teacher2.png" alt="" class="w-56 h-42" />
         <h1
           class="text-xl sm:text-2xl font-semibold text-gray-800 mt-32 sm:mb-0"
         >

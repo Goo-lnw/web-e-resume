@@ -238,8 +238,8 @@ async function HandleLogin() {
         </div>
         <!-- รูปภาพ student_1.png -->
         <div class="w-full md:w-1/3 relative mt-4 md:mt-0 animate-fade-up">
-          <img
-            src="../assets/images/student_1.png"
+          <Nuxtimg
+            src="./images/student_1.png"
             alt="Teacher 3D"
             class="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[250px] h-auto object-contain mx-auto md:absolute md:bottom-0 md:right-0"
           />

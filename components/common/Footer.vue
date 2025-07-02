@@ -3,27 +3,39 @@
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <!--Grid-->
       <div
-        class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 gap-y-8 md:gap-8 py-10 max-w-sm mx-auto sm:max-w-3xl lg:max-w-full">
+        class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 gap-y-8 md:gap-8 py-10 max-w-sm mx-auto sm:max-w-3xl lg:max-w-full"
+      >
         <div class="col-span-full mb-10 lg:col-span-2 lg:mb-0">
-          <a href="https://it.bru.ac.th/" class="flex justify-center lg:justify-start">
-            <img src="../../assets/images/logo-it-bru-Photoroom.png" alt="" class="w-26 h-26" />
+          <a
+            href="https://it.bru.ac.th/"
+            class="flex justify-center lg:justify-start"
+          >
+            <NuxtImg
+              src="./images/logo-it-bru-Photoroom.png"
+              alt=""
+              class="w-26 h-26"
+            />
           </a>
-
         </div>
         <div class="col-span-full mb-10 lg:col-span-2 lg:mb-0">
-          <a href="https://www.bru.ac.th/venue/bru/" class="flex justify-center lg:justify-start">
-            <img src="../../assets/images/bru-web-logo-en.png" alt="" class="h-26" />
+          <a
+            href="https://www.bru.ac.th/venue/bru/"
+            class="flex justify-center lg:justify-start"
+          >
+            <NuxtImg src="./images/bru-web-logo-en.png" alt="" class="h-26" />
           </a>
-
         </div>
         <!--End Col-->
         <div class="lg:mx-auto text-left">
           <h4 class="text-lg text-gray-900 font-medium mb-7">E-Resume</h4>
           <ul class="text-sm transition-all duration-500">
             <li class="mb-6">
-              <NuxtLink href="/teacher" class="text-gray-600 hover:text-gray-900">หน้าแรก</NuxtLink>
+              <NuxtLink
+                href="/teacher"
+                class="text-gray-600 hover:text-gray-900"
+                >หน้าแรก</NuxtLink
+              >
             </li>
-
           </ul>
         </div>
         <!--End Col-->
@@ -31,19 +43,31 @@
           <h4 class="text-lg text-gray-900 font-medium mb-7">ข้อมูลข่าวสาร</h4>
           <ul class="text-sm transition-all duration-500">
             <li class="mb-6">
-              <NuxtLink href="https://www.facebook.com/it.bru.ac.th" class="text-gray-600 hover:text-gray-900">
-                เพจเฟสบุ๊คสาขา</NuxtLink>
+              <NuxtLink
+                href="https://www.facebook.com/it.bru.ac.th"
+                class="text-gray-600 hover:text-gray-900"
+              >
+                เพจเฟสบุ๊คสาขา</NuxtLink
+              >
             </li>
             <li class="mb-6">
-              <NuxtLink href="https://it.bru.ac.th/" class="text-gray-600 hover:text-gray-900">เว็บไซต์</NuxtLink>
+              <NuxtLink
+                href="https://it.bru.ac.th/"
+                class="text-gray-600 hover:text-gray-900"
+                >เว็บไซต์</NuxtLink
+              >
             </li>
           </ul>
         </div>
       </div>
       <div class="flex mb-4 space-x-4 sm:justify-between lg:mt-0">
-        <div class="flex items-center justify-center flex-col lg:justify-between lg:flex-row">
-          <span class="text-sm text-gray-500">©<NuxtLink href="/">E-Resume</NuxtLink> 2025, All rights
-            reserved.</span>
+        <div
+          class="flex items-center justify-center flex-col lg:justify-between lg:flex-row"
+        >
+          <span class="text-sm text-gray-500"
+            >©<NuxtLink href="/">E-Resume</NuxtLink> 2025, All rights
+            reserved.</span
+          >
         </div>
         <div class="flex gap-2 flex-row lg:flex-row items-center">
           <!-- <NuxtLink href="https://it.bru.ac.th/"
