@@ -66,7 +66,7 @@
                       for="student_profile_image"
                       class="text-xs font-medium text-gray-700 flex justify-start items-center"
                     >
-                      รูปชุดนักศึกษา
+                      เพิ่มรูปชุดนักศึกษา
                     </label>
                   </div>
                 </div>
@@ -104,7 +104,7 @@
                       for="graduation_gown"
                       class="text-xs font-medium text-gray-700 flex justify-start items-center"
                     >
-                      รูปชุดครุย
+                      เพิ่มรูปชุดครุย
                     </label>
                   </div>
                 </div>
@@ -142,7 +142,7 @@
                       for="graduation_gown"
                       class="text-xs font-medium text-gray-700 flex justify-start items-center"
                     >
-                      เพิ่มชุดสุภาพ
+                      เพิ่มรูปชุดสุภาพ
                     </label>
                   </div>
                 </div>

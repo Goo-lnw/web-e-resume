@@ -1,36 +1,17 @@
 <template>
   <div class="font-[Mitr]">
 
-    <!-- ----modal -->
-      <!-- <div class="bg-red-500 p-2 w-full justify-end flex">
-        <dialog :open="confirm" class="rounded-lg shadow-lg p-6 bg-white animate-fade-in" @close="confirm = false">
-          <form method="dialog" class="flex flex-col items-center space-y-4" @submit.prevent>
-            <div class="text-lg font-semibold text-gray-800">ยืนยันการออกจากระบบ</div>
-            <div class="text-gray-600">คุณต้องการออกจากระบบหรือไม่?</div>
-            <div class="flex space-x-4 mt-2">
-              <button type="button" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
-                @click="logout(true)">
-                ออกจากระบบ
-              </button>
-              <button type="button" class="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition"
-                @click="confirm = false">
-                ยกเลิก
-              </button>
-            </div>
-          </form>
-        </dialog>
-      </div> -->
-    <!--  -->
+  
 
     <nav
       class="text-white shadow-xl fixed top-0 left-0 right-0 z-50 animate-fade-fade-down bg-white/95 backdrop-blur-sm">
       <div class="container max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 flex justify-between items-center">
         <div class="flex justify-between items-center h-14 sm:h-16 w-full">
           <!-- Logo Section -->
-          <div class="flex items-center shrink-0 animate-fade-fade-down">
-            <Nuxtimg src="./images/Eresumem-logo-removebg.png" alt=""
+          
+            <NuxtImg src="./images/Eresumem-logo-removebg.png" alt="logo-eresume"
               class="h-16 w-28 sm:h-20 sm:w-32 lg:h-24 lg:w-40 object-contain" />
-          </div>
+   
 
           <!-- Center Navigation -->
           <div class="hidden sm:flex items-center space-x-1 md:space-x-2 lg:space-x-3 animate-fade-fade-down">
