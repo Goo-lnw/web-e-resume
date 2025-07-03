@@ -1,28 +1,17 @@
 <template>
-  <nav
-    class="animate-fade-down bg-blue-600 shadow-lg sticky top-0 z-10 min-h-16"
-  >
-    <div
-      class="container mx-auto px-4 flex justify-between items-center flex-wrap md:flex-nowrap"
-    >
+  <nav class="animate-fade-down  border-b border-gray-200 sticky top-0 z-10 min-h-16">
+    <div class="container mx-auto px-4 flex justify-between items-center flex-wrap md:flex-nowrap">
       <!-- โลโก้ -->
       <div class="flex items-center gap-4 flex-shrink-0">
         <NuxtLink to="/" class="flex items-center">
-          <NuxtImg
-            src="./images/logo-it-bru-Photoroom.png"
-            alt="logo-bru"
-            class="h-12 animate-fade-down"
-          />
+          <NuxtImg src="./images/logo-it-bru-Photoroom.png" alt="logo-bru" class="h-12 animate-fade-down" />
         </NuxtLink>
-        <NuxtImg
-          src="./images/Eresumem-logo-removebg.png"
-          alt="logo-eresume"
-          class="h-18 w-28 filter brightness-0 invert animate-fade-down"
-        />
+        <NuxtImg src="./images/Eresumem-logo-removebg.png" alt="logo-eresume"
+          class="h-18 w-28    animate-fade-down" />
       </div>
     </div>
   </nav>
-  <div style="font-family: 'Mitr', sans-serif" class="">
+  <div style="font-family: 'Mitr', sans-serif" class="md:mt-[-50px]">
     <slot />
   </div>
 </template>
