@@ -41,17 +41,19 @@
             <div class="flex items-center space-x-6">
               <div class="flex items-center gap-5 w-full">
                 <img
-                  v-if="previewImag_student_profile_imagee"
-                  :src="previewImag_student_profile_imagee"
+                  v-if="previewImage_student_profile_image"
+                  :src="previewImage_student_profile_image"
                   alt="Preview"
                   class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100"
                 />
+
                 <img
                   v-else-if="studentData.student_profile_image"
                   :src="studentData.student_profile_image"
                   :alt="studentData.student_name"
                   class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100"
                 />
+
                 <NuxtImg
                   v-else
                   src="./images/avatars.png"
@@ -552,7 +554,7 @@ definePageMeta({
 import { ref, onMounted } from "vue";
 import { useResumeStore } from "../../../stores/resumeStore";
 const resumeStore = useResumeStore();
-const previewImag_student_profile_imagee = ref(null);
+const previewImage_student_profile_image = ref(null);
 const previewImage_graduation_gown = ref(null);
 const previewImage_suit = ref(null);
 // State
@@ -633,7 +635,7 @@ const handlelImageInputChange = async (event) => {
       }
       if (event.target.name === "student_profile_image") {
         selectedImage.value.student_profile_image = event.target.files[0];
-        previewImag_student_profile_imagee.value = URL.createObjectURL(file);
+        previewImage_student_profile_image.value = URL.createObjectURL(file);
       }
       if (event.target.name === "graduation_gown") {
         selectedImage.value.graduation_gown = event.target.files[0];
@@ -656,13 +658,12 @@ const saveStudent = async (event) => {
 
     // Prepare data for API
     const formData = new FormData();
-    // Append image files if selected
+    // loop image data in selectedImages and append to formData kub
     for (const [key, file] of Object.entries(selectedImage.value)) {
-      if (file) {
-        formData.append(key, file);
-      }
+      if (!file) continue;
+      console.log(file);
+      formData.append(key, file);
     }
-    // Prepare student data (exclude image fields)
     const updateData = JSON.stringify({
       student_name: studentData.value.student_name,
       student_name_thai: studentData.value.student_name_thai,
@@ -686,30 +687,21 @@ const saveStudent = async (event) => {
       position: studentData.value.position,
     });
     formData.append("student_profile_data", updateData);
-
     const updatedResult = await $axios.put("/student/edit_profile", formData);
-    const uploadedImageResult = updatedResult.data;
-
-    // Update image fields in studentData if upload succeeded
-    if (uploadedImageResult.success && uploadedImageResult.imagesData) {
+    const uploadedImageResult = await updatedResult.data;
+    // check uploadedImage & Update result then
+    // loop to set image name in to studentData ref kub
+    if (uploadedImageResult.success) {
       for (const imageField in uploadedImageResult.imagesData) {
-        if (Object.prototype.hasOwnProperty.call(studentData.value, imageField)) {
-          studentData.value[imageField] = uploadedImageResult.imagesData[imageField];
-          const inputEl = event.target.querySelector(`#${imageField}`);
-          if (inputEl) inputEl.value = null;
+        if (imageField in studentData.value) {
+          studentData.value[imageField] =
+            uploadedImageResult.imagesData[imageField];
+          event.target.querySelector(`#${imageField}`).value = null;
         }
       }
-      // Reset previews and selected images after successful upload
-      selectedImage.value = {
-        student_profile_image: null,
-        graduation_gown: null,
-        suit: null,
-      };
-      previewImag_student_profile_imagee.value = null;
-      previewImage_graduation_gown.value = null;
-      previewImage_suit.value = null;
     }
 
+    console.log("Student profile updated successfully");
     originalData.value = { ...studentData.value };
     resumeStore.fetchResume();
 
@@ -719,8 +711,8 @@ const saveStudent = async (event) => {
       showSuccess.value = false;
     }, 3000);
   } catch (error) {
-    showNotiError("Failed to save student profile");
     console.error("Failed to save student profile:", error);
+    // You might want to show an error message to the user
   } finally {
     isSaving.value = false;
   }
@@ -738,8 +730,12 @@ const formattedDateOfBirth = computed({
 
 const resetForm = () => {
   studentData.value = { ...originalData.value };
-  selectedImage.value = {};
-  previewImag_student_profile_imagee.value = null;
+  selectedImage.value = {
+    student_profile_image: null,
+    graduation_gown: null,
+    suit: null,
+  };
+  previewImage_student_profile_image.value = null;
   previewImage_graduation_gown.value = null;
   previewImage_suit.value = null;
   showSuccess_reset.value = true;
@@ -750,8 +746,7 @@ const resetForm = () => {
 const showNotiError = async (detail) => {
   errorDetail.value = detail;
   showError.value = true;
-
-  setInterval(() => {
+  setTimeout(() => {
     showError.value = false;
   }, 4000);
 };
