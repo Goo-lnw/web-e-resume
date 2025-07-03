@@ -656,12 +656,23 @@ const saveStudent = async (event) => {
   try {
     isSaving.value = true;
 
+    // เช็คขนาดไฟล์รวมก่อนส่ง (ป้องกัน 413)
+    const MAX_TOTAL_SIZE = 8 * 1024 * 1024; // 8MB (ปรับตาม server)
+    let totalSize = 0;
+    for (const file of Object.values(selectedImage.value)) {
+      if (file) totalSize += file.size;
+    }
+    if (totalSize > MAX_TOTAL_SIZE) {
+      showNotiError("ไฟล์รวมกันใหญ่เกิน 8MB กรุณาเลือกไฟล์ที่เล็กลง");
+      isSaving.value = false;
+      return;
+    }
+
     // Prepare data for API
     const formData = new FormData();
     // loop image data in selectedImages and append to formData kub
     for (const [key, file] of Object.entries(selectedImage.value)) {
       if (!file) continue;
-      console.log(file);
       formData.append(key, file);
     }
     const updateData = JSON.stringify({
@@ -687,7 +698,15 @@ const saveStudent = async (event) => {
       position: studentData.value.position,
     });
     formData.append("student_profile_data", updateData);
-    const updatedResult = await $axios.post("/student/edit_profile", formData);
+
+    // เพิ่ม header limit ถ้า backend รองรับ (optional)
+    const updatedResult = await $axios.post("/student/edit_profile", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      // ถ้าใช้ axios บางเวอร์ชัน อาจต้องเพิ่ม maxBodyLength
+      maxBodyLength: 100 * 1024 * 1024, // 10MB
+    });
     const uploadedImageResult = await updatedResult.data;
     // check uploadedImage & Update result then
     // loop to set image name in to studentData ref kub
@@ -701,7 +720,6 @@ const saveStudent = async (event) => {
       }
     }
 
-    console.log("Student profile updated successfully");
     originalData.value = { ...studentData.value };
     resumeStore.fetchResume();
 
@@ -711,8 +729,13 @@ const saveStudent = async (event) => {
       showSuccess.value = false;
     }, 3000);
   } catch (error) {
+    // เพิ่ม error message กรณี 413
+    if (error.response && error.response.status === 413) {
+      showNotiError("ขนาดไฟล์ที่อัปโหลดใหญ่เกินไป (413)");
+    } else {
+      showNotiError("บันทึกข้อมูลไม่สำเร็จ");
+    }
     console.error("Failed to save student profile:", error);
-    // You might want to show an error message to the user
   } finally {
     isSaving.value = false;
   }
