@@ -296,7 +296,8 @@
     "saving": "Saving changes...",
     "success": "Profile updated successfully!",
     "error": "An error occurred",
-    "default": "Default"
+    "default": "Default",
+    "showSuccess_reset": "Profile reset successfully!"
   },
   "skill_modal": {
     "title": "Technical Skills",

@@ -508,6 +508,21 @@
           {{ $t("edit_profile.success") }}
         </div>
       </div>
+      <div
+        v-if="showSuccess_reset"
+        class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-300 z-50"
+      >
+        <div class="flex items-center">
+          <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+          {{ $t("edit_profile.showSuccess_reset") }}
+        </div>
+      </div>
 
       <!-- Error Message (Top Right) -->
       <div
@@ -572,6 +587,7 @@ const originalData = ref({});
 const isLoading = ref(false);
 const isSaving = ref(false);
 const showSuccess = ref(false);
+const showSuccess_reset = ref(false);
 const showError = ref(false);
 const errorDetail = ref(null);
 // Composables
@@ -697,7 +713,6 @@ const saveStudent = async (event) => {
     }, 3000);
   } catch (error) {
     console.error("Failed to save student profile:", error);
-    // You might want to show an error message to the user
   } finally {
     isSaving.value = false;
   }
@@ -719,6 +734,10 @@ const resetForm = () => {
   previewImag_student_profile_imagee.value = null;
   previewImage_graduation_gown.value = null;
   previewImage_suit.value = null;
+  showSuccess_reset.value = true;
+  setTimeout(() => {
+    showSuccess_reset.value = false;
+  }, 3000);
 };
 const showNotiError = async (detail) => {
   errorDetail.value = detail;
