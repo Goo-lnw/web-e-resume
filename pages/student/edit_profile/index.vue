@@ -96,8 +96,7 @@
                 <div class="flex-1">
                   <div class="border border-gray-300 rounded-lg flex justify-start items-center p-2">
                     <input id="suit" type="file" name="suit" class="hidden" @change="handlelImageInputChange" />
-                    <label for="suit"
-                      class="text-xs font-medium text-gray-700 flex justify-start items-center">
+                    <label for="suit" class="text-xs font-medium text-gray-700 flex justify-start items-center">
                       เพิ่มรูปชุดสุภาพ
                     </label>
                   </div>
@@ -445,7 +444,7 @@ const handlelImageInputChange = async (event) => {
       }
     }
   } catch (error) {
-    showNotiError(error);
+    showNotiError("ประเภทไฟล์ไม่ถูกต้อง กรุณาใช้ .png .jpeg ");
     console.error(error);
   }
 };
