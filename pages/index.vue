@@ -51,7 +51,7 @@ async function HandleLogin() {
         class="flex flex-col md:flex-row w-full max-w-sm sm:max-w-md md:max-w-4xl rounded-xl overflow-hidden border border-gray-200 animate-fade-up animate-once animate-ease-linear bg-white">
         <!-- ส่วนข้อมูลด้านซ้าย -->
         <div
-          class="hidden bg-gradient-to-r from-indigo-600 to-blue-500 w-full md:w-1/2 p-4 sm:p-6 md:p-12 text-white md:flex flex-col justify-between">
+          class="hidden bg-gradient-to-r bg-indigo-500  w-full md:w-1/2 p-4 sm:p-6 md:p-12 text-white md:flex flex-col justify-between">
           <div class="mb-4">
             <h1 class="text-md  md:text-xl text-nowrap font-bold mb-3">
               ระบบ Resume อิเล็กทรอนิกส์
