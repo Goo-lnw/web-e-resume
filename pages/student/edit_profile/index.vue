@@ -714,7 +714,7 @@ const formattedDateOfBirth = computed({
 });
 
 const resetForm = () => {
-  bnm, (studentData.value = { ...originalData.value });
+  studentData.value = { ...originalData.value };
   selectedImage.value = {};
   previewImag_student_profile_imagee.value = null;
   previewImage_graduation_gown.value = null;
