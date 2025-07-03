@@ -67,7 +67,7 @@
                     {{ skill.skill_name || `ทักษะที่ ${index + 1}` }}
                   </h3>
                   <p class="text-xs text-nowrap text-gray-500">
-                    กำหนดรายละเอียดทักษะของคุณ
+                    {{ $t("skill_modal.skill_detail") }}
                   </p>
                 </div>
               </div>
@@ -248,7 +248,7 @@
       <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
         <div class="flex items-center justify-between">
           <div class="text-sm text-gray-500">
-            {{ $t("skill_modal.total_skills", { count: skillData.length }) }}
+            {{ $t("skill_modal.total_skills") }}{{ skillData.length }}
           </div>
           <div class="flex space-x-3">
             <button
