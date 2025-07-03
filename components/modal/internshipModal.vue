@@ -5,8 +5,8 @@
             <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-2 py-2 md:px-6 md:py-4 text-white">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h2 class="text-md md:text-2xl font-bold">ประสบการณ์ฝึกงาน</h2>
-                        <p class="text-blue-100 text-sm mt-1">จัดการประสบการณ์ฝึกงานของคุณ</p>
+                        <h2 class="text-md md:text-2xl font-bold">{{ $t('internship_modal.title') }}</h2>
+                        <p class="text-blue-100 text-sm mt-1">{{ $t('internship_modal.subtitle') }}</p>
                     </div>
                     <button @click="close" class="p-2 hover:bg-white/20 rounded-full transition-colors duration-200 cursor-pointer" aria-label="Close modal">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -33,16 +33,16 @@
                                 </div>
                                 <div class="flex-1 min-w-0">
                                     <h3 class="font-semibold text-gray-800 break-words">
-                                        {{ internship.internship_company_name || `Internship ${index + 1}` }}
+                                        {{ internship.internship_company_name || $t('internship_modal.internship_no', { n: index + 1 }) }}
                                     </h3>
-                                    <p class="text-xs text-nowrap text-gray-500">กำหนดรายละเอียดการฝึกงานของคุณ</p>
+                                    <p class="text-xs text-nowrap text-gray-500">{{ $t('internship_modal.internship_detail') }}</p>
                                 </div>
                             </div>
                             <div class="flex items-center space-x-1 md:space-x-2 mb-3">
                                 <button
                                     @click="removeInternship(internship.internship_id)"
                                     class="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-all duration-300 cursor-pointer transform hover:scale-120 ease-in-out"
-                                    title="Remove internship"
+                                    :title="$t('internship_modal.remove_internship')"
                                 >
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -57,12 +57,12 @@
                             <div class="space-y-2">
                                 <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
                                     <icon name="mdi:format-list-bulleted" class="w-4 h-4" />
-                                    <span>ชื่อองค์กรณ์/บริษัท</span>
+                                    <span>{{ $t('internship_modal.company_name') }}</span>
                                 </label>
                                 <input
                                     v-model="internship.internship_company_name"
                                     type="text"
-                                    placeholder="เช่น Startup Inc."
+                                    :placeholder="$t('internship_modal.company_name_placeholder')"
                                     class="w-full text-xs px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
                                 />
                             </div>
@@ -71,12 +71,12 @@
                             <div class="space-y-2">
                                 <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
                                     <icon name="hugeicons:id" class="w-4 h-4" />
-                                    <span>ตำแหน่ง</span>
+                                    <span>{{ $t('internship_modal.position') }}</span>
                                 </label>
                                 <input
                                     v-model="internship.internship_position"
                                     type="text"
-                                    placeholder="e.g., Intern Developer"
+                                    :placeholder="$t('internship_modal.position_placeholder')"
                                     class="w-full text-xs px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
                                 />
                             </div>
@@ -85,7 +85,7 @@
                             <div class="space-y-2">
                                 <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
                                     <icon name="hugeicons:calendar-03" class="w-4 h-4" />
-                                    <span>วันที่เริ่มการฝึกงาน</span>
+                                    <span>{{ $t('internship_modal.start_date') }}</span>
                                 </label>
                                 <input
                                     v-model="internship.internship_start_date"
@@ -98,7 +98,7 @@
                             <div class="space-y-2">
                                 <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
                                     <icon name="hugeicons:calendar-03" class="w-4 h-4" />
-                                    <span>วันสิ้นสุดการฝึกงาน</span>
+                                    <span>{{ $t('internship_modal.end_date') }}</span>
                                 </label>
                                 <input
                                     v-model="internship.internship_end_date"
@@ -111,11 +111,11 @@
                             <div class="space-y-2 col-span-2">
                                 <label class="block text-sm font-medium text-gray-700 flex items-center space-x-2">
                                     <icon name="hugeicons:profile" class="w-4 h-4" />
-                                    <span>รายละเอียด</span>
+                                    <span>{{ $t('internship_modal.description') }}</span>
                                 </label>
                                 <textarea
                                     v-model="internship.internship_description"
-                                    placeholder="รายละเอียดเกี่ยวกับการฝึกงาน เช่น โครงการที่ทำ, ทักษะที่เรียนรู้, ผลลัพธ์ที่ได้"
+                                    :placeholder="$t('internship_modal.description_placeholder')"
                                     class="w-full text-xs px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
                                     rows="4"
                                 ></textarea>
@@ -127,12 +127,12 @@
                                     <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
                                     </svg>
-                                    <span>ผลงานที่เกี่ยวข้อง</span>
+                                    <span>{{ $t('internship_modal.related_files') }}</span>
                                 </label>
                                 <input
                                     v-model="internship.internship_related_files"
                                     type="url"
-                                    placeholder="เช่น https://drive.google.com/your-files"
+                                    :placeholder="$t('internship_modal.related_files_placeholder')"
                                     class="w-full text-xs px-2 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-white hover:border-gray-400"
                                 />
                             </div>
@@ -146,20 +146,18 @@
                     >
                         <div class="flex flex-col items-center justify-center text-center">
                             <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
+                                <icon name="hugeicons:plus-sign-circle" class="w-6 h-6 text-white" />
                             </div>
-                            <h3 class="text-lg font-semibold text-green-800 mb-2">Add New Internship</h3>
-                            <p class="text-green-600 text-sm">Click to add a new internship</p>
+                            <h3 class="text-lg font-semibold text-green-800 mb-2">{{ $t('internship_modal.add_new_internship') }}</h3>
+                            <p class="text-green-600 text-sm">{{ $t('internship_modal.add_internship_hint') }}</p>
                         </div>
                     </div>
 
                     <!-- Loading State -->
                     <div v-if="isLoading" class="flex flex-col items-center justify-center py-12">
                         <div class="animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent mb-4"></div>
-                        <p class="text-gray-500 text-lg">Loading your internships...</p>
-                        <p class="text-gray-400 text-sm">Please wait a moment</p>
+                        <p class="text-gray-500 text-lg">{{ $t('internship_modal.loading') }}</p>
+                        <p class="text-gray-400 text-sm">{{ $t('internship_modal.loading_hint') }}</p>
                     </div>
                 </div>
             </div>
@@ -167,10 +165,12 @@
             <!-- Footer -->
             <div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
                 <div class="flex items-center justify-between">
-                    <div class="text-sm text-gray-500">ประสบการณ์ฝึกงานทั้งหมด {{ internshipData.length }} รายการ</div>
+                    <div class="text-sm text-gray-500">
+                        {{ $t('internship_modal.total_internships', { count: internshipData.length }) }}
+                    </div>
                     <div class="flex space-x-3">
                         <button @click="close" :disabled="isSaving" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
-                            ยกเลิก
+                            {{ $t('internship_modal.cancel') }}
                         </button>
                         <button
                             @click="saveInternships"
@@ -180,7 +180,7 @@
                             <svg v-if="isSaving" class="animate-spin w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            <span>{{ isSaving ? "กำลังบันทึก..." : "บันทึกการเปลี่ยนแปลง" }}</span>
+                            <span>{{ isSaving ? $t('internship_modal.saving') : $t('internship_modal.save') }}</span>
                         </button>
                     </div>
                 </div>

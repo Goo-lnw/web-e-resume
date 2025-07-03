@@ -22,12 +22,12 @@
                 class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200" />
 
               <div
-                class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300 ease-out">
+                class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-300 ease-out">
               </div>
               <!-- Tooltip -->
               <div
                 class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-                หน้าแรก
+                 {{ $t('teacher.nav_home') }}
               </div>
             </NuxtLink>
 
@@ -38,12 +38,12 @@
 
 
               <div
-                class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300 ease-out">
+                class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-300 ease-out">
               </div>
               <!-- Tooltip -->
               <div
                 class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-                รายการ
+                 {{ $t('teacher.nav_resume_list') }}
               </div>
             </NuxtLink>
           </div>
@@ -64,9 +64,9 @@
 
             </NuxtLink>
           </div>
-
           <!-- Right Side Controls -->
           <div class="flex items-center space-x-1 sm:space-x-2 lg:space-x-3 animate-fade-fade-down">
+            <LanguageChange />
             <!-- Profile Button -->
             <div class="group relative" @click.prevent="Hendlelogout()""
             > 
@@ -80,10 +80,11 @@
               <!-- Tooltip -->
               <div
                 class="absolute -bottom-9 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-                ออกจากระบบ
+                {{ $t('teacher.logout') }}
               </div>
             </div>
           </div>
+          
         </div>
       </div>
     </nav>

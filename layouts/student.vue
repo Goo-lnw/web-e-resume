@@ -1,7 +1,6 @@
 <template>
   <div class="font-[Mitr]">
-    <nav
-      class="text-white shadow-sm fixed top-0 left-0 right-0 z-50 animate-fade-fade-down bg-white/95 backdrop-blur-sm">
+    <nav class="text-white shadow-sm fixed top-0 left-0 right-0 z-50 animate-fade-fade-down bg-white/95 backdrop-blur-sm">
       <div class="flex justify-center gap-2 items-center w-full">
         <!-- Logo -->
         <NuxtImg src="./images/Eresumem-logo-removebg.png" alt="" class="h-16 w-25 object-contain" />
@@ -11,13 +10,10 @@
           class="group relative flex flex-col items-center justify-center p-2 lg:p-3 rounded-lg transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200 cursor-pointer">
           <Icon name="mdi:home" style="height: 24px; width: 24px"
             class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200" />
-          <div
-            class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300 ease-out">
-          </div>
+          <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-300 ease-out"></div>
           <!-- Tooltip -->
-          <div
-            class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-            หน้าแรก
+          <div class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+            {{ $t('student.home') }}
           </div>
         </NuxtLink>
 
@@ -27,70 +23,66 @@
             class="flex flex-col items-center justify-center p-2 lg:p-3 rounded-lg transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200 cursor-pointer">
             <Icon name="uil:comment-plus" style="height: 24px; width: 24px"
               class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200" />
-            <div
-              class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300 ease-out">
-            </div>
+            <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-300 ease-out"></div>
             <!-- Tooltip -->
-            <div
-              class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-              เพิ่มข้อมูล
+            <div class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+              {{ $t('student.add_section') }}
             </div>
           </button>
-
           <!-- Dropdown Menu -->
-            <div v-if="isDesktopDropdownOpen"
+          <div v-if="isDesktopDropdownOpen"
             class="absolute top-12 left-1/2 transform -translate-x-1/2 bg-white shadow-lg rounded-md z-50 border border-gray-200 min-w-48">
             <ul class="text-sm text-gray-800 py-1">
               <li>
-              <button @click="showSkillModal = true; isDesktopDropdownOpen = false"
-                class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
-                ทักษะทางเทคนิค
-              </button>
+                <button @click="showSkillModal = true; isDesktopDropdownOpen = false"
+                  class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
+                  {{ $t('student.add_skill') }}
+                </button>
               </li>
               <li>
-              <button @click="showSoftSkillModal = true; isDesktopDropdownOpen = false"
-                class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
-                ทักษะทั่วไป (Soft Skill)
-              </button>
+                <button @click="showSoftSkillModal = true; isDesktopDropdownOpen = false"
+                  class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
+                  {{ $t('student.add_soft_skill') }}
+                </button>
               </li>
               <li>
-              <button @click="showEducationModal = true; isDesktopDropdownOpen = false"
-                class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
-                การศึกษา
-              </button>
+                <button @click="showEducationModal = true; isDesktopDropdownOpen = false"
+                  class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
+                  {{ $t('student.add_education') }}
+                </button>
               </li>
               <li>
-              <button @click="showProjectModal = true; isDesktopDropdownOpen = false"
-                class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
-                โครงงาน
-              </button>
+                <button @click="showProjectModal = true; isDesktopDropdownOpen = false"
+                  class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
+                  {{ $t('student.add_project') }}
+                </button>
               </li>
               <li>
-              <button @click="showWorkExperienceModal = true; isDesktopDropdownOpen = false"
-                class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
-                ประสบการณ์ทำงาน
-              </button>
+                <button @click="showWorkExperienceModal = true; isDesktopDropdownOpen = false"
+                  class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
+                  {{ $t('student.add_work_experience') }}
+                </button>
               </li>
               <li>
-              <button @click="showInternshipModal = true; isDesktopDropdownOpen = false"
-                class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
-                ฝึกงาน
-              </button>
+                <button @click="showInternshipModal = true; isDesktopDropdownOpen = false"
+                  class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
+                  {{ $t('student.add_internship') }}
+                </button>
               </li>
               <li>
-              <button @click="showTrainingModal = true; isDesktopDropdownOpen = false"
-                class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
-                การอบรม
-              </button>
+                <button @click="showTrainingModal = true; isDesktopDropdownOpen = false"
+                  class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
+                  {{ $t('student.add_training') }}
+                </button>
               </li>
               <li>
-              <button @click="showAdditionalInfoModal = true; isDesktopDropdownOpen = false"
-                class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
-                ข้อมูลเพิ่มเติม
-              </button>
+                <button @click="showAdditionalInfoModal = true; isDesktopDropdownOpen = false"
+                  class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
+                  {{ $t('student.add_additional_info') }}
+                </button>
               </li>
             </ul>
-            </div>
+          </div>
         </div>
 
         <!-- Profile Dropdown -->
@@ -99,16 +91,12 @@
             class="flex flex-col items-center justify-center p-2 lg:p-3 rounded-lg transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200 cursor-pointer">
             <Icon name="mdi:account-reactivate" style="height: 24px; width: 24px"
               class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200" />
-            <div
-              class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300 ease-out">
-            </div>
+            <div class="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-blue-400 group-hover:w-full transition-all duration-300 ease-out"></div>
             <!-- Tooltip -->
-            <div
-              class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-              โปรไฟล์
+            <div class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+              {{ $t('student.profile') }}
             </div>
           </button>
-
           <!-- Profile Dropdown Menu -->
           <div v-if="isProfileDropdownOpen"
             class="absolute top-12 right-0 bg-white shadow-lg rounded-md z-50 border border-gray-200 min-w-48">
@@ -117,21 +105,19 @@
                 <NuxtLink to="/student/edit_profile"
                   class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200"
                   @click="isProfileDropdownOpen = false">
-                  แก้ไขโปรไฟล์
+                  {{ $t('student.edit_profile') }}
                 </NuxtLink>
               </li>
               <li>
-                <button @click.prevent="
-                  logout();
-                isProfileDropdownOpen = false;
-                "
+                <button @click.prevent="logout(); isProfileDropdownOpen = false;"
                   class="block px-4 py-2 w-full text-left hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
-                  ออกจากระบบ
+                  {{ $t('student.logout') }}
                 </button>
               </li>
             </ul>
           </div>
         </div>
+        <LanguageChange />
       </div>
     </nav>
     <div class="w-full pt-16">

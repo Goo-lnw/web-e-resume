@@ -650,15 +650,11 @@ watch(certNotExistTableCheckbox, (value) => {
     >
       <!-- Page Header -->
       <div class="flex justify-between animate-fade-up">
-        <Nuxtimg
-          src=".././images/teacher2.png"
-          alt=""
-          class="w-56 h-42"
-        />
+        <Nuxtimg src=".././images/teacher2.png" alt="" class="w-56 h-42" />
         <h1
           class="text-xl sm:text-2xl font-semibold text-gray-800 mt-32 sm:mb-0"
         >
-          รายการกิจกรรม/การอบรม
+          {{ $t("activity.page_title") }}
         </h1>
       </div>
       <div class="rounded-lg shadow-md p-4 sm:p-6 bg-white">
@@ -669,12 +665,29 @@ watch(certNotExistTableCheckbox, (value) => {
           <!-- Search and Filter -->
           <div class="flex items-center w-full sm:w-auto">
             <div class="relative w-full">
-              <!-- <input type="text" placeholder="ค้นหานักเรียน/นักศึกษา..." class="pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg shadow-lg w-full text-sm sm:text-base" />
-              <div class="absolute left-2 sm:left-3 top-2 sm:top-2.5 text-gray-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <input
+                type="text"
+                :placeholder="$t('activity.placeholder_search')"
+                class="pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg w-full text-sm sm:text-base"
+              />
+              <div
+                class="absolute left-2 sm:left-3 top-2 sm:top-2.5 text-gray-400"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4 sm:h-5 sm:w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
                 </svg>
-              </div> -->
+              </div>
             </div>
           </div>
 
@@ -695,7 +708,7 @@ watch(certNotExistTableCheckbox, (value) => {
                   clip-rule="evenodd"
                 />
               </svg>
-              เพิ่มกิจกรรม
+              {{ $t("activity.add_activity") }}
             </button>
           </div>
         </div>
@@ -835,7 +848,7 @@ watch(certNotExistTableCheckbox, (value) => {
         <div class="p-4 sm:p-6">
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg sm:text-xl font-semibold text-gray-800">
-              เพิ่มกิจกรรม
+              {{ $t("activity.add_activity") }}
             </h3>
             <button
               class="text-gray-400 hover:text-gray-600 cursor-pointer"
@@ -867,64 +880,66 @@ watch(certNotExistTableCheckbox, (value) => {
                 <label
                   class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
                 >
-                  ชื่อกิจกรรม
+                  {{ $t("activity.activity_name") }}
                 </label>
                 <input
                   required
                   v-model="formCreateActivity.activity_name"
                   class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                  placeholder="ชื่อกิจกรรม"
+                  :placeholder="$t('activity.activity_name')"
                 />
               </div>
               <div>
                 <label
                   class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                  >ข้อมูลเพิ่มเติม</label
                 >
+                  {{ $t("activity.activity_description") }}
+                </label>
                 <textarea
                   type="text"
                   v-model="formCreateActivity.activity_description"
                   class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                  placeholder="ข้อมูลเพิ่มเติม"
+                  :placeholder="$t('activity.activity_description')"
                 />
               </div>
               <div>
                 <label
                   class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
                 >
-                  สถานที่
+                  {{ $t("activity.activity_location") }}
                 </label>
                 <input
                   required
                   v-model="formCreateActivity.activity_location"
                   class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                  placeholder="สถานที่"
+                  :placeholder="$t('activity.activity_location')"
                 />
               </div>
               <div>
                 <label
                   class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
                 >
-                  ผู้จัด(องค์กร)
+                  {{ $t("activity.activity_organization") }}
                 </label>
                 <input
                   required
                   v-model="formCreateActivity.activity_organization"
                   class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                  placeholder="ผู้จัด(องค์กร)"
+                  :placeholder="$t('activity.activity_organization')"
                 />
               </div>
               <div>
                 <label
                   class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                  >เกียรติบัตรหรือใบรับรอง</label
                 >
+                  {{ $t("activity.activity_certificate") }}
+                </label>
                 <input
                   required
                   type="file"
                   @change="handlelCertImageChange"
                   class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                  placeholder="ใบรับรอง/เกียรติบัตร"
+                  :placeholder="$t('activity.activity_certificate')"
                   name="create_cert_image"
                 />
               </div>
@@ -932,7 +947,8 @@ watch(certNotExistTableCheckbox, (value) => {
               <div>
                 <label
                   class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                  >วันเริ่มต้นกิจกรรม</label
+                >
+                  {{ $t("activity.activity_start_date") }}</label
                 >
                 <input
                   required
@@ -944,7 +960,8 @@ watch(certNotExistTableCheckbox, (value) => {
               <div>
                 <label
                   class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                  >วันสิ้นสุดกิจกรรม</label
+                >
+                  {{ $t("activity.activity_end_date") }}</label
                 >
                 <input
                   required
@@ -959,13 +976,13 @@ watch(certNotExistTableCheckbox, (value) => {
                 class="px-3 sm:px-4 py-1.5 sm:py-2 bg-amber-600 rounded-lg text-white hover:bg-amber-700 transition duration-200 text-sm sm:text-base cursor-pointer"
                 @click.prevent="createActivityModalShow = false"
               >
-                ปิด
+                {{ $t("activity.close") }}
               </button>
               <button
                 type="submit"
                 class="px-3 sm:px-4 py-1.5 sm:py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer"
               >
-                บันทึก
+                {{ $t("activity.save") }}
               </button>
             </div>
           </form>
@@ -986,7 +1003,7 @@ watch(certNotExistTableCheckbox, (value) => {
         <div class="p-4 sm:p-6">
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg sm:text-xl font-semibold text-gray-800">
-              แก้ไขกิจกรรม
+              {{ $t("activity.edit_activity") }}
             </h3>
             <button
               class="text-gray-400 hover:text-gray-600 cursor-pointer"
@@ -1018,70 +1035,72 @@ watch(certNotExistTableCheckbox, (value) => {
                 <label
                   class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
                 >
-                  ชื่อกิจกรรม
+                  {{ $t("activity.activity_name") }}
                 </label>
                 <input
                   required
                   v-model="formEditActivity.activity_name"
                   class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                  placeholder="ชื่อกิจกรรม"
+                  :placeholder="$t('activity.activity_name')"
                 />
               </div>
               <div>
                 <label
                   class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                  >ข้อมูลเพิ่มเติม</label
                 >
+                  {{ $t("activity.activity_description") }}
+                </label>
                 <textarea
                   type="text"
                   v-model="formEditActivity.activity_description"
                   class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                  placeholder="ข้อมูลเพิ่มเติม"
+                  :placeholder="$t('activity.activity_description')"
                 />
               </div>
               <div>
                 <label
                   class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
                 >
-                  สถานที่
+                  {{ $t("activity.activity_location") }}
                 </label>
                 <input
                   v-model="formEditActivity.activity_location"
                   class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                  placeholder="สถานที่"
+                  :placeholder="$t('activity.activity_location')"
                 />
               </div>
               <div>
                 <label
                   class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
                 >
-                  ผู้จัด(องค์กร)
+                  {{ $t("activity.activity_organization") }}
                 </label>
                 <input
                   v-model="formEditActivity.activity_organization"
                   class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                  placeholder="ผู้จัด(องค์กร)"
+                  :placeholder="$t('activity.activity_organization')"
                 />
               </div>
               <div>
                 <label
                   class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                  >เกียรติบัตรหรือใบรับรอง</label
                 >
+                  {{ $t("activity.activity_certificate") }}
+                </label>
                 <input
                   type="file"
                   @change="handlelCertImageChange"
                   class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                  placeholder="ใบรับรอง/เกียรติบัตร"
+                  :placeholder="$t('activity.activity_certificate')"
                   name="edit_cert_image"
                 />
               </div>
-
               <div>
                 <label
                   class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                  >วันเริ่มต้นกิจกรรม</label
                 >
+                  {{ $t("activity.activity_start_date") }}
+                </label>
                 <input
                   type="date"
                   v-model="formEditActivity.activity_start_date"
@@ -1091,8 +1110,9 @@ watch(certNotExistTableCheckbox, (value) => {
               <div>
                 <label
                   class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                  >วันสิ้นสุดกิจกรรม</label
                 >
+                  {{ $t("activity.activity_end_date") }}
+                </label>
                 <input
                   type="date"
                   v-model="formEditActivity.activity_end_date"
@@ -1107,13 +1127,13 @@ watch(certNotExistTableCheckbox, (value) => {
                   (editActivityModalShow = false), (viewActivityData = [])
                 "
               >
-                ปิด
+                {{ $t("activity.close") }}
               </button>
               <button
                 type="submit"
                 class="px-3 sm:px-4 py-1.5 sm:py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer"
               >
-                บันทึก
+                {{ $t("activity.save") }}
               </button>
             </div>
           </form>
@@ -1142,15 +1162,13 @@ watch(certNotExistTableCheckbox, (value) => {
               {{ viewActivityData.activity_name }}
             </h3>
           </div>
-          <!-- ปุ่มปิด absolute ให้อยู่บนสุดตลอด -->
-
           <div class="overflow-x-auto">
             <div
               class="bg-white rounded-lg shadow mx-0 sm:mx-2 mb-4 p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6"
             >
               <div>
                 <h5 class="text-md sm:text-lg font-semibold text-gray-800 mb-1">
-                  รายละเอียด
+                  {{ $t("activity.detail") }}
                 </h5>
                 <p
                   class="text-sm sm:text-base font-normal text-gray-600 break-words"
@@ -1161,40 +1179,52 @@ watch(certNotExistTableCheckbox, (value) => {
                   <h5
                     class="text-md sm:text-lg font-semibold text-gray-800 mb-1"
                   >
-                    สถานที่
+                    {{ $t("activity.activity_location") }}
                   </h5>
                   <p class="text-sm sm:text-base font-normal text-gray-600">
-                    {{ viewActivityData.activity_location || "ไม่ระบุ" }}
+                    {{
+                      viewActivityData.activity_location ||
+                      $t("activity.not_specified")
+                    }}
                   </p>
                 </div>
                 <div class="mt-4">
                   <h5
                     class="text-md sm:text-lg font-semibold text-gray-800 mb-1"
                   >
-                    ผู้จัด
+                    {{ $t("activity.activity_organization") }}
                   </h5>
                   <p class="text-sm sm:text-base font-normal text-gray-600">
-                    {{ viewActivityData.activity_organization || "ไม่ระบุ" }}
+                    {{
+                      viewActivityData.activity_organization ||
+                      $t("activity.not_specified")
+                    }}
                   </p>
                 </div>
                 <div class="flex flex-col gap-2 mt-4">
                   <p class="text-xs sm:text-sm text-green-600">
-                    วันเริ่มต้นกิจกรรม :
-                    <span class="font-medium">{{
-                      viewActivityData.activity_start_date || "ไม่ระบุ"
-                    }}</span>
+                    {{ $t("activity.activity_start_date") }} :
+                    <span class="font-medium">
+                      {{
+                        viewActivityData.activity_start_date ||
+                        $t("activity.not_specified")
+                      }}
+                    </span>
                   </p>
                   <p class="text-xs sm:text-sm text-yellow-600">
-                    วันสิ้นสุดกิจกรรม :
-                    <span class="font-medium">{{
-                      viewActivityData.activity_end_date || "ไม่ระบุ"
-                    }}</span>
+                    {{ $t("activity.activity_end_date") }} :
+                    <span class="font-medium">
+                      {{
+                        viewActivityData.activity_end_date ||
+                        $t("activity.not_specified")
+                      }}
+                    </span>
                   </p>
                 </div>
               </div>
               <div>
                 <h5 class="text-md sm:text-lg font-semibold text-gray-800 mb-1">
-                  ตัวอย่างใบ certificate
+                  {{ $t("activity.cert_example") }}
                 </h5>
                 <div
                   v-if="viewActivityData.activity_certificate_file"
@@ -1217,12 +1247,11 @@ watch(certNotExistTableCheckbox, (value) => {
                     ></canvas>
                   </div>
                   <div class="text-xs text-gray-500 mt-2 text-center">
-                    * สามารถลากข้อความตัวอย่างบนใบ certificate
-                    เพื่อปรับตำแหน่งได้
+                    {{ $t("activity.cert_drag_hint") }}
                   </div>
                 </div>
                 <div v-else class="text-gray-400 text-center py-8">
-                  ยังไม่อัพโหลดใบ certificate
+                  {{ $t("activity.no_cert_uploaded") }}
                 </div>
               </div>
             </div>
@@ -1232,7 +1261,7 @@ watch(certNotExistTableCheckbox, (value) => {
                 <!-- ปุ่มเมนูด้านซ้าย -->
                 <div class="md:col-span-1">
                   <div class="flex flex-col space-y-2">
-                    <span>จัดการนักศึกษา</span>
+                    <span>{{ $t("activity.manage_students") }}</span>
                     <button
                       type="button"
                       class="px-4 py-2 text-white hover:bg-yellow-800 rounded transition duration-300 text-xs text-nowrap"
@@ -1243,9 +1272,9 @@ watch(certNotExistTableCheckbox, (value) => {
                       ]"
                       @click="changeViewActivityTab('not_checked_in')"
                     >
-                      นักศึกษาที่ยังไม่เข้าร่วมกิจกรรม
+                      {{ $t("activity.students_not_checked_in") }}
                     </button>
-                    <span>จัดการ Certificate</span>
+                    <span>{{ $t("activity.manage_certificate") }}</span>
                     <button
                       type="button"
                       class="px-4 py-2 hover:bg-green-800 text-white rounded transition duration-300 text-xs text-nowrap"
@@ -1256,7 +1285,7 @@ watch(certNotExistTableCheckbox, (value) => {
                       ]"
                       @click="changeViewActivityTab('assign_certificate')"
                     >
-                      มอบ Certificate
+                      {{ $t("activity.assign_certificate") }}
                     </button>
                     <button
                       type="button"
@@ -1268,7 +1297,7 @@ watch(certNotExistTableCheckbox, (value) => {
                       ]"
                       @click="changeViewActivityTab('check_certificate')"
                     >
-                      ตรวจสอบ Certificate
+                      {{ $t("activity.check_certificate") }}
                     </button>
                   </div>
                 </div>
@@ -1285,7 +1314,7 @@ watch(certNotExistTableCheckbox, (value) => {
                       <h5
                         class="text-lg sm:text-lg font-semibold text-indigo-800"
                       >
-                        จัดการ นักศึกษาทียังไม่เข้าร่วม
+                        {{ $t("activity.manage_not_checkedin_students") }}
                       </h5>
                       <p
                         :class="
@@ -1304,7 +1333,7 @@ watch(certNotExistTableCheckbox, (value) => {
                     </div>
                     <div class="my-4">
                       <p class="text-gray-800">
-                        นักศึกษาที่ยังไม่เข้าร่วมกิจกรรม
+                        {{ $t("activity.students_not_checked_in") }}
                       </p>
 
                       <div class="overflow-x-auto">
@@ -1316,12 +1345,12 @@ watch(certNotExistTableCheckbox, (value) => {
                               <th
                                 class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap font-normal"
                               >
-                                รหัสนักศึกษา
+                                {{ $t("activity.student_id") }}
                               </th>
                               <th
                                 class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap font-normal"
                               >
-                                ชื่อ
+                                {{ $t("activity.student_name") }}
                               </th>
                               <th
                                 class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap font-normal"
@@ -1337,7 +1366,7 @@ watch(certNotExistTableCheckbox, (value) => {
                                   <label
                                     class="text-gray-800 whitespace-nowrap text-xs sm:text-sm"
                                     for="notCheckedinStudentTableSelectAll"
-                                    >เลือกทั้งหมด</label
+                                    >{{ $t("activity.select_all") }}</label
                                   >
                                 </div>
                               </th>
@@ -1375,7 +1404,7 @@ watch(certNotExistTableCheckbox, (value) => {
                                 class="py-2 sm:py-3 px-2 sm:px-4 text-center"
                                 colspan="3"
                               >
-                                ไม่มีนักศึกษาที่ไม่เข้าร่วมกิจกรรม
+                                {{ $t("activity.no_data") }}
                               </td>
                             </tr>
                           </tbody>
@@ -1386,7 +1415,7 @@ watch(certNotExistTableCheckbox, (value) => {
                           @click="checkInSubmit"
                           class="px-2 text-xs py-2 md:text-sm text-white rounded bg-indigo-500 hover:bg-indigo-800"
                         >
-                          เพิ่ม
+                          {{ $t("activity.add") }}
                         </button>
                       </div>
                     </div>
@@ -1402,7 +1431,7 @@ watch(certNotExistTableCheckbox, (value) => {
                       <h5
                         class="text-lg sm:text-lg font-semibold text-indigo-800"
                       >
-                        จัดการ นักศึกษาที่เข้าร่วม
+                        {{ $t("activity.manage_checkedin_students") }}
                       </h5>
                       <p
                         :class="
@@ -1421,7 +1450,9 @@ watch(certNotExistTableCheckbox, (value) => {
                     </div>
                     <div v-if="assignCertTab">
                       <div class="my-4">
-                        <p class="text-gray-800">ยังไม่ได้รับ</p>
+                        <p class="text-gray-800">
+                          {{ $t("activity.not_received") }}
+                        </p>
                         <div class="overflow-x-auto">
                           <table
                             class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base md:my-4 sm:my-2"
@@ -1431,14 +1462,16 @@ watch(certNotExistTableCheckbox, (value) => {
                                 <th
                                   class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium font-normal sm:font-semibold"
                                 >
-                                  <span class="block sm:inline"
-                                    >รหัสนักศึกษา</span
-                                  >
+                                  <span class="block sm:inline">
+                                    {{ $t("activity.student_id") }}
+                                  </span>
                                 </th>
                                 <th
                                   class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium font-normal sm:font-semibold"
                                 >
-                                  <span class="block sm:inline">ชื่อ</span>
+                                  <span class="block sm:inline">
+                                    {{ $t("activity.student_name") }}
+                                  </span>
                                 </th>
                                 <th
                                   class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium font-normal sm:font-semibold"
@@ -1455,7 +1488,7 @@ watch(certNotExistTableCheckbox, (value) => {
                                     <label
                                       class="text-gray-800 text-xs text-nowrap sm:text-sm font-normal"
                                       for="certNotExistTableSelectAll"
-                                      >เลือกทั้งหมด</label
+                                      >{{ $t("activity.select_all") }}</label
                                     >
                                   </div>
                                 </th>
@@ -1495,7 +1528,7 @@ watch(certNotExistTableCheckbox, (value) => {
                                   class="py-2 sm:py-3 px-2 sm:px-4 text-center"
                                   colspan="3"
                                 >
-                                  ได้รับครบแล้ว หรือ ยังไม่มีนักศึกษาที่เข้าร่วม
+                                  {{ $t("activity.assign_cert_empty") }}
                                 </td>
                               </tr>
                             </tbody>
@@ -1512,7 +1545,7 @@ watch(certNotExistTableCheckbox, (value) => {
                             :disabled="certNotExistTableCheckbox.length === 0"
                             class="px-2 py-2 text-xs font-normal md:text-md mx-2 text-white rounded"
                           >
-                            มอบ Certificate
+                            {{ $t("activity.assign_cert") }}
                           </button>
                           <button
                             @click="removeCheckinStudentsBtn"
@@ -1524,7 +1557,7 @@ watch(certNotExistTableCheckbox, (value) => {
                             "
                             class="px-2 py-2 text-xs font-normal md:text-md mx-2 text-white rounded"
                           >
-                            ลบ
+                            {{ $t("activity.remove") }}
                           </button>
                         </div>
                       </div>
@@ -1535,7 +1568,9 @@ watch(certNotExistTableCheckbox, (value) => {
                       >
                         <h5
                           class="text-lg sm:text-lg font-semibold text-indigo-800"
-                        ></h5>
+                        >
+                          <!-- สามารถใส่หัวข้อได้ เช่น {{ $t('activity.checked_in_students') }} -->
+                        </h5>
                         <p
                           :class="
                             type_modal_alert === 'success'
@@ -1552,7 +1587,9 @@ watch(certNotExistTableCheckbox, (value) => {
                         </p>
                       </div>
                       <div class="my-4">
-                        <p class="text-gray-800">ได้รับแล้ว</p>
+                        <p class="text-gray-800">
+                          {{ $t("activity.received") }}
+                        </p>
                         <div class="overflow-x-auto">
                           <table
                             class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base md:my-4 sm:my-2"
@@ -1562,12 +1599,12 @@ watch(certNotExistTableCheckbox, (value) => {
                                 <th
                                   class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-normal sm:font-semibold"
                                 >
-                                  รหัสนักศึกษา
+                                  {{ $t("activity.student_id") }}
                                 </th>
                                 <th
                                   class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-normal sm:font-semibold"
                                 >
-                                  ชื่อ
+                                  {{ $t("activity.student_name") }}
                                 </th>
                                 <th
                                   class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-normal sm:font-semibold"
@@ -1584,7 +1621,7 @@ watch(certNotExistTableCheckbox, (value) => {
                                     <label
                                       class="text-gray-800 text-xs text-nowrap sm:text-sm font-normal"
                                       for="certExistStudentTableSelectAll"
-                                      >เลือกทั้งหมด</label
+                                      >{{ $t("activity.select_all") }}</label
                                     >
                                   </div>
                                 </th>
@@ -1624,7 +1661,7 @@ watch(certNotExistTableCheckbox, (value) => {
                                   class="py-2 sm:py-3 px-2 sm:px-4 text-center"
                                   colspan="3"
                                 >
-                                  ได้รับครบแล้ว หรือ ยังไม่มีนักศึกษาที่เข้าร่วม
+                                  {{ $t("activity.checked_in_empty") }}
                                 </td>
                               </tr>
                             </tbody>
@@ -1641,7 +1678,7 @@ watch(certNotExistTableCheckbox, (value) => {
                             "
                             class="px-2 py-2 text-xs font-normal mx-2 text-white rounded"
                           >
-                            ลบ Certificate
+                            {{ $t("activity.remove_cert") }}
                           </button>
                         </div>
                       </div>

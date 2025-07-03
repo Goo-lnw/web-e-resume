@@ -12,7 +12,15 @@ export default defineNuxtConfig({
     "@nuxt/scripts",
     "@nuxt/test-utils",
     "@nuxt/ui",
+    "@nuxtjs/i18n",
   ],
+  i18n: {
+    locales: [
+      { code: "en", name: "English", file: "en.json" },
+      { code: "th", name: "ไทย", file: "th.json" },
+    ],
+    defaultLocale: "en",
+  },
   css: ["~/assets/css/main.css"],
   vite: {
     plugins: [tailwindcss()],

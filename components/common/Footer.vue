@@ -33,28 +33,29 @@
               <NuxtLink
                 href="/teacher"
                 class="text-gray-600 hover:text-gray-900"
-                >หน้าแรก</NuxtLink
+                >{{ $t("footer.home") }}</NuxtLink
               >
             </li>
           </ul>
         </div>
         <!--End Col-->
         <div class="lg:mx-auto text-left">
-          <h4 class="text-lg text-gray-900 font-medium mb-7">ข้อมูลข่าวสาร</h4>
+          <h4 class="text-lg text-gray-900 font-medium mb-7">{{ $t("footer.information") }}</h4>
           <ul class="text-sm transition-all duration-500">
             <li class="mb-6">
               <NuxtLink
                 href="https://www.facebook.com/it.bru.ac.th"
                 class="text-gray-600 hover:text-gray-900"
               >
-                เพจเฟสบุ๊คสาขา</NuxtLink
+                {{ $t("footer.facebook_page") }}</NuxtLink
               >
             </li>
             <li class="mb-6">
               <NuxtLink
                 href="https://it.bru.ac.th/"
                 class="text-gray-600 hover:text-gray-900"
-                >เว็บไซต์</NuxtLink
+              >
+                {{ $t("footer.website") }}</NuxtLink
               >
             </li>
           </ul>
@@ -64,10 +65,9 @@
         <div
           class="flex items-center justify-center flex-col lg:justify-between lg:flex-row"
         >
-          <span class="text-sm text-gray-500"
-            >©<NuxtLink href="/">E-Resume</NuxtLink> 2025, All rights
-            reserved.</span
-          >
+          <span class="text-sm text-gray-500">{{
+            $t("footer.copyright")
+          }}</span>
         </div>
         <div class="flex gap-2 flex-row lg:flex-row items-center">
           <!-- <NuxtLink href="https://it.bru.ac.th/"
