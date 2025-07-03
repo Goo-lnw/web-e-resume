@@ -656,20 +656,18 @@ const saveStudent = async (event) => {
 
     // Prepare data for API
     const formData = new FormData();
-    // loop image data in selectedImages and append to formData kub
+    // Append image files if selected
     for (const [key, file] of Object.entries(selectedImage.value)) {
-      if (!file) continue;
-      console.log(file);
-      formData.append(key, file);
+      if (file) {
+        formData.append(key, file);
+      }
     }
+    // Prepare student data (exclude image fields)
     const updateData = JSON.stringify({
       student_name: studentData.value.student_name,
       student_name_thai: studentData.value.student_name_thai,
       student_email: studentData.value.student_email,
       student_phone: studentData.value.student_phone,
-      student_profile_image: studentData.value.student_profile_image,
-      graduation_gown: studentData.value.graduation_gown,
-      suit: studentData.value.suit,
       religion: studentData.value.religion,
       nationality: studentData.value.nationality,
       date_of_birth: studentData.value.date_of_birth,
@@ -688,21 +686,30 @@ const saveStudent = async (event) => {
       position: studentData.value.position,
     });
     formData.append("student_profile_data", updateData);
+
     const updatedResult = await $axios.put("/student/edit_profile", formData);
-    const uploadedImageResult = await updatedResult.data;
-    // check uploadedImage & Update result then
-    // loop to set image name in to studentData ref kub
-    if (uploadedImageResult.success) {
+    const uploadedImageResult = updatedResult.data;
+
+    // Update image fields in studentData if upload succeeded
+    if (uploadedImageResult.success && uploadedImageResult.imagesData) {
       for (const imageField in uploadedImageResult.imagesData) {
-        if (imageField in studentData.value) {
-          studentData.value[imageField] =
-            uploadedImageResult.imagesData[imageField];
-          event.target.querySelector(`#${imageField}`).value = null;
+        if (Object.prototype.hasOwnProperty.call(studentData.value, imageField)) {
+          studentData.value[imageField] = uploadedImageResult.imagesData[imageField];
+          const inputEl = event.target.querySelector(`#${imageField}`);
+          if (inputEl) inputEl.value = null;
         }
       }
+      // Reset previews and selected images after successful upload
+      selectedImage.value = {
+        student_profile_image: null,
+        graduation_gown: null,
+        suit: null,
+      };
+      previewImag_student_profile_imagee.value = null;
+      previewImage_graduation_gown.value = null;
+      previewImage_suit.value = null;
     }
 
-    console.log("Student profile updated successfully");
     originalData.value = { ...studentData.value };
     resumeStore.fetchResume();
 
@@ -712,6 +719,7 @@ const saveStudent = async (event) => {
       showSuccess.value = false;
     }, 3000);
   } catch (error) {
+    showNotiError("Failed to save student profile");
     console.error("Failed to save student profile:", error);
   } finally {
     isSaving.value = false;
