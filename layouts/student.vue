@@ -1,4 +1,5 @@
 <template>
+
     <div class="font-[Mitr]">
         <nav class="text-white shadow-sm fixed top-0 left-0 right-0 z-50 animate-fade-fade-down bg-white/95 backdrop-blur-sm">
             <div class="flex justify-center gap-2 items-center w-full">
@@ -167,6 +168,7 @@
             <Alert />
             <slot />
         </div>
+
     </div>
     <Footer />
     <SkillModal v-if="showSkillModal" @close="showSkillModal = false" />
@@ -188,6 +190,8 @@ import workExperienceModal from "../components/modal/workExperienceModal.vue";
 import internshipModal from "../components/modal/internshipModal.vue";
 import trainingModal from "../components/modal/trainingModal.vue";
 import additionalInfoModal from "../components/modal/additionalInfoModal.vue";
+import { onMounted, onBeforeUnmount } from "vue";
+const isDesktopDropdownOpen = ref(false);
 const isProfileDropdownOpen = ref(false);
 const showSkillModal = ref(false);
 const showSoftSkillModal = ref(false);
@@ -197,15 +201,39 @@ const showWorkExperienceModal = ref(false);
 const showInternshipModal = ref(false);
 const showTrainingModal = ref(false);
 const showAdditionalInfoModal = ref(false);
-
-const isDropdownOpen = ref(false);
 const { $axios } = useNuxtApp();
-
 const router = useRouter();
-
 import { useResumeStore } from "../stores/resumeStore";
 import Footer from "~/components/common/Footer.vue";
-const resumeStore = useResumeStore();
+
+import { watch } from "vue";
+
+watch(isDesktopDropdownOpen, (desktopOpen) => {
+  if (desktopOpen) {
+    isProfileDropdownOpen.value = false;
+  }
+});
+
+watch(isProfileDropdownOpen, (profileOpen) => {
+  if (profileOpen) {
+    isDesktopDropdownOpen.value = false;
+  }
+});
+
+onMounted(() => {
+  document.addEventListener("click", handleOutsideClick);
+});
+
+onBeforeUnmount(() => {
+  document.removeEventListener("click", handleOutsideClick);
+});
+
+function handleOutsideClick(event) {
+  const dropdown = document.getElementById("desktop-dropdown");
+  if (dropdown && !dropdown.contains(event.target)) {
+    isDesktopDropdownOpen.value = false;
+  }
+}
 
 async function logout() {
     try {
