@@ -719,11 +719,6 @@ const resetForm = () => {
   previewImag_student_profile_imagee.value = null;
   previewImage_graduation_gown.value = null;
   previewImage_suit.value = null;
-
-  showSuccess.value = true;
-  setTimeout(() => {
-    showSuccess.value = false;
-  }, 1500);
 };
 const showNotiError = async (detail) => {
   errorDetail.value = detail;
