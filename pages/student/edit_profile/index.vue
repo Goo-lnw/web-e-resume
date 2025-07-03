@@ -687,7 +687,7 @@ const saveStudent = async (event) => {
       position: studentData.value.position,
     });
     formData.append("student_profile_data", updateData);
-    const updatedResult = await $axios.put("/student/edit_profile", formData);
+    const updatedResult = await $axios.post("/student/edit_profile", formData);
     const uploadedImageResult = await updatedResult.data;
     // check uploadedImage & Update result then
     // loop to set image name in to studentData ref kub
