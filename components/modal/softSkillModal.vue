@@ -150,16 +150,20 @@
                 <div class="flex items-center justify-between">
                     <div class="text-sm text-gray-500">ทักษะทั้งหมด {{ softSkillData.length }} ทักษะ</div>
                     <div class="flex space-x-3">
-                        <button @click="close" :disabled="isSaving" class="px-2 py-1 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+                        <button
+                            @click="close"
+                            :disabled="isSaving"
+                            class="px-2 py-1 text-xs border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                        >
                             ยกเลิก
                         </button>
                         <button
                             @click="saveSoftSkills"
                             :disabled="isSaving"
-                            class="px-2 py-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 cursor-pointer"
+                            class="px-2 py-1 text-xs bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 cursor-pointer"
                         >
                             <icon v-if="isSaving" name="svg-spinners:180-ring-with-bg" class="w-4 h-4" />
-                            <span>{{ isSaving ? "Saving..." : "Save Changes" }}</span>
+                            <span>{{ isSaving ? "กำลังบันทึก..." : "บันทึกการเปลี่ยนแปลง" }}</span>
                         </button>
                     </div>
                 </div>

@@ -129,19 +129,16 @@
             <!-- Footer -->
             <div class="bg-gray-50 px-8 py-6 border-t border-gray-200">
                 <div class="flex justify-between items-center">
-                    <div class="text-sm text-gray-500">
-                        {{ educationData.length }} skill{{ educationData.length !== 1 ? "s" : "" }}
-                        total
-                    </div>
+                    <div class="text-sm text-gray-500">จำนวนทั้งหมด {{ educationData.length }} รายการ</div>
                     <div class="flex space-x-3">
-                        <button @click="close" class="px-6 py-3 text-gray-100 hover:text-white bg-gray-600 rounded-lg font-medium transition-colors duration-200 cursor-pointer hover:bg-gray-700">Cancel</button>
+                        <button @click="close" class="px-2 py-1 text-xs border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">ยกเลิก</button>
                         <button
                             @click="saveEducation"
                             :disabled="isSaving"
-                            class="px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 cursor-pointer"
+                            class="px-2 py-1 text-xs bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 cursor-pointer"
                             :class="{ 'animate-pulse': isSaving }"
                         >
-                            {{ isSaving ? "Saving..." : "Save Changes" }}
+                            {{ isSaving ? "กำลังบันทึก..." : "บันทึกการเปลี่ยนแปลง" }}
                         </button>
                     </div>
                 </div>
