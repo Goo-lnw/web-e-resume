@@ -187,7 +187,7 @@ watch(page, () => fetchStudents());
         <h1
           class="text-xl sm:text-2xl font-semibold text-gray-800 mt-32 sm:mb-0"
         >
-          รายการข้อมูลนักเรียน/นักศึกษา
+          {{ $t("teacher.student_list_title") }}
         </h1>
       </div>
 
@@ -196,7 +196,7 @@ watch(page, () => fetchStudents());
         <div
           class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"
         ></div>
-        <span class="ml-3 text-gray-600">กำลังโหลดข้อมูล...</span>
+        <span class="ml-3 text-gray-600"> {{ $t("teacher.loading") }}</span>
       </div>
 
       <!-- Error State -->
@@ -212,13 +212,13 @@ watch(page, () => fetchStudents());
               clip-rule="evenodd"
             ></path>
           </svg>
-          {{ error }}
+          {{ $t("teacher.error") }}
         </div>
         <button
           @click="fetchStudent"
           class="mt-2 text-sm text-red-600 hover:text-red-800 underline"
         >
-          ลองใหม่อีกครั้ง
+          {{ $t("teacher.retry") }}
         </button>
       </div>
 
@@ -233,7 +233,7 @@ watch(page, () => fetchStudents());
               <input
                 v-model="searchQuery"
                 type="text"
-                placeholder="ค้นหานักเรียน/นักศึกษา..."
+                :placeholder="$t('teacher.search_placeholder')"
                 class="pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg shadow-lg w-full text-sm sm:text-base"
               />
               <div
@@ -253,7 +253,7 @@ watch(page, () => fetchStudents());
                 name="ep:circle-plus-filled"
                 style="color: white; width: 16px; height: 16px"
               />
-              <span>เพิ่มกิจกรรม</span>
+              <span>{{ $t("teacher.add_activity") }}</span>
             </button>
 
             <button
@@ -264,13 +264,13 @@ watch(page, () => fetchStudents());
                 name="ep:circle-plus-filled"
                 style="color: white; width: 16px; height: 16px"
               />
-              <span>เพิ่มนักเรียน/นักศึกษา</span>
+              <span>{{ $t("teacher.add_student") }}</span>
             </button>
             <NuxtLink
               to="/teacher/resume_list"
               class="space-x-1 flex items-center bg-cyan-600 text-white px-4 sm:px-6 py-2 rounded-lg shadow-md hover:bg-cyan-700 transition duration-200 gap-1 sm:gap-2 text-xs sm:text-xs"
             >
-              <span>หน้ารายการ Resume</span>
+              <span>{{ $t("teacher.resume_list") }}</span>
               <Icon
                 name="ep:right"
                 style="color: white; width: 16px; height: 16px"
@@ -289,22 +289,22 @@ watch(page, () => fetchStudents());
                 <th
                   class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
                 >
-                  รหัสนักศึกษา
+                  {{ $t("teacher.student_id") }}
                 </th>
                 <th
                   class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
                 >
-                  ชื่อ-นามสกุล
+                  {{ $t("teacher.student_name") }}
                 </th>
                 <th
                   class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
                 >
-                  อีเมล
+                  {{ $t("teacher.student_email") }}
                 </th>
                 <th
                   class="py-2 sm:py-3 px-2 sm:px-4 text-center text-xs sm:text-sm"
                 >
-                  จัดการ
+                  {{ $t("teacher.manage") }}
                 </th>
               </tr>
             </thead>
@@ -346,21 +346,6 @@ watch(page, () => fetchStudents());
                       "
                       class="sm:w-5 sm:h-5 md:w-6 md:h-6 transform hover:scale-125 transition-transform duration-200"
                     />
-
-                    <!-- <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-4 w-4 sm:h-5 sm:w-5 transform hover:scale-125 transition-transform duration-200"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                      />
-                    </svg> -->
                   </button>
                   <button
                     @click="actionStudent(item.student_id, 'delete')"
@@ -376,20 +361,6 @@ watch(page, () => fetchStudents());
                       "
                       class="sm:w-5 sm:h-5 md:w-6 md:h-6 transform hover:scale-125 transition-transform duration-200"
                     />
-                    <!-- <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-4 w-4 sm:h-5 sm:w-5 transform hover:scale-125 transition-transform duration-200"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                      />
-                    </svg> -->
                   </button>
                 </td>
               </tr>
@@ -401,22 +372,21 @@ watch(page, () => fetchStudents());
               :disabled="page <= 1"
               class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
             >
-              Prev
+              {{ $t("teacher.prev") }}
             </button>
-            <span>Page {{ page }} / {{ totalPages }}</span>
+            <span>{{ $t("teacher.page") }} {{ page }} / {{ totalPages }}</span>
             <button
               @click="page++"
               :disabled="page >= totalPages"
               class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
             >
-              Next
+              {{ $t("teacher.next") }}
             </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Confirm Delete Dialog -->
     <dialog
       v-if="showModalConfirm"
       class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full"
@@ -431,18 +401,17 @@ watch(page, () => fetchStudents());
             style="width: 40px; height: 40px; color: #f59e42"
           />
           <h3 class="text-lg font-semibold text-gray-800 mt-2 mb-4 text-center">
-            ยืนยันการลบข้อมูลนักเรียน/นักศึกษา
+            {{ $t("teacher.confirm_delete_title") }}
           </h3>
           <p class="text-gray-600 text-sm mb-6 text-center">
-            คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?
-            <br />การดำเนินการนี้ไม่สามารถย้อนกลับได้
+            {{ $t("teacher.confirm_delete_text") }}
           </p>
           <div class="flex justify-center gap-3 w-full">
             <button
               class="px-4 py-2 bg-gray-300 rounded-lg text-gray-700 hover:bg-gray-400 transition duration-200 text-sm w-1/2"
               @click="showModalConfirm = false"
             >
-              ยกเลิก
+              {{ $t("teacher.cancel") }}
             </button>
             <button
               class="px-4 py-2 bg-red-600 rounded-lg text-white hover:bg-red-700 transition duration-200 text-sm w-1/2"
@@ -451,7 +420,7 @@ watch(page, () => fetchStudents());
                 showModalConfirm = false;
               "
             >
-              ลบ
+              {{ $t("teacher.confirm") }}
             </button>
           </div>
         </div>
@@ -471,7 +440,7 @@ watch(page, () => fetchStudents());
         <div class="p-4 sm:p-6">
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg sm:text-xl font-semibold text-gray-800">
-              แก้ไขข้อมูลนักเรียน
+              {{ $t("teacher.edit_modal_title") }}
             </h3>
             <button
               class="text-red-400 hover:text-red-600 cursor-pointer"
@@ -493,62 +462,62 @@ watch(page, () => fetchStudents());
               <label
                 class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
               >
-                ชื่อ-นามสกุล
+                {{ $t("teacher.label_fullname") }}
               </label>
               <input
                 v-model="formEdit.student_name"
                 class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                placeholder="ชื่อ-นามสกุล"
+                :placeholder="$t('teacher.label_fullname')"
               />
             </div>
             <div>
               <label
                 class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
               >
-                อีเมล
+                {{ $t("teacher.label_email") }}
               </label>
               <input
                 v-model="formEdit.student_email"
                 class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                placeholder="youremail@gmail.com"
+                :placeholder="$t('teacher.label_email')"
               />
             </div>
             <div>
               <label
                 class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
               >
-                รหัสผ่าน
+                {{ $t("teacher.label_password") }}
               </label>
               <input
                 v-model="formEdit.student_password"
                 type="password"
                 class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                placeholder="รหัสผ่าน"
+                :placeholder="$t('teacher.label_password')"
               />
             </div>
             <div>
               <label
                 class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
               >
-                รหัสผ่านใหม่
+                {{ $t("teacher.label_new_password") }}
               </label>
               <input
                 v-model="formEdit.student_old_password"
                 type="password"
                 class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                placeholder="รหัสผ่านใหม่"
+                :placeholder="$t('teacher.label_new_password')"
               />
             </div>
             <div>
               <label
                 class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
               >
-                เบอร์โทร
+                {{ $t("teacher.label_phone") }}
               </label>
               <input
                 v-model="formEdit.student_phone"
                 class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                placeholder="เบอร์โทรศัพท์"
+                :placeholder="$t('teacher.label_phone')"
               />
             </div>
             <div class="flex justify-end space-x-2 sm:space-x-3 pt-3 sm:pt-4">
@@ -556,13 +525,13 @@ watch(page, () => fetchStudents());
                 class="px-3 sm:px-4 py-1.5 sm:py-2 bg-amber-600 rounded-lg text-white hover:bg-amber-700 transition duration-200 text-sm sm:text-base cursor-pointer"
                 @click.prevent="showModal = false"
               >
-                ปิด
+                {{ $t("teacher.close") }}
               </button>
               <button
                 type="submit"
                 class="px-3 sm:px-4 py-1.5 sm:py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer"
               >
-                บันทึก
+                {{ $t("teacher.save") }}
               </button>
             </div>
           </form>
@@ -583,7 +552,7 @@ watch(page, () => fetchStudents());
         <div class="p-4 sm:p-6">
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg sm:text-xl font-semibold text-gray-800">
-              เพิ่มนักเรียน/นักศึกษา
+              {{ $t("teacher.add_modal_title") }}
             </h3>
             <button
               class="text-red-400 hover:text-red-600 cursor-pointer"
@@ -594,20 +563,6 @@ watch(page, () => fetchStudents());
                 style="width: 24px; height: 24px; padding-left: 10%"
                 class="sm:w-5 sm:h-5 md:w-6 md:h-6 transform hover:scale-125 transition-transform duration-200"
               />
-              <!-- <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 sm:h-6 sm:w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg> -->
             </button>
           </div>
           <form
@@ -619,40 +574,40 @@ watch(page, () => fetchStudents());
               <label
                 class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
               >
-                อีเมล
+                {{ $t("teacher.label_email") }}
               </label>
               <input
                 v-model="formAdd.student_email"
                 class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                placeholder="youremail@gmail.com"
+                :placeholder="$t('teacher.label_email')"
               />
             </div>
             <div>
               <label
                 class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
               >
-                รหัสผ่าน
+                {{ $t("teacher.label_password") }}
               </label>
               <input
                 v-model="formAdd.student_password"
                 type="password"
                 class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                placeholder="รหัสผ่าน"
+                :placeholder="$t('teacher.placeholder_password')"
               />
-              <p class="text-xs text-gray-500 mt-1">
-                รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัวอักษร
+              <p class="text-xs text-red-400 mt-1">
+                {{ $t("teacher.password_rule") }}
               </p>
             </div>
             <div>
               <label
                 class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
               >
-                รหัสนักเรียน/นักศึกษา
+                {{ $t("teacher.student_main_id") }}
               </label>
               <input
                 v-model="formAdd.student_main_id"
                 class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                placeholder="เช่น 6412345678"
+                :placeholder="$t('teacher.student_main_id')"
               />
             </div>
             <div class="flex justify-end space-x-2 sm:space-x-3 pt-3 sm:pt-4">
@@ -660,13 +615,13 @@ watch(page, () => fetchStudents());
                 class="px-3 sm:px-4 py-1.5 sm:py-2 bg-amber-500 rounded-lg text-white hover:bg-amber-600 transition duration-200 text-sm sm:text-base cursor-pointer"
                 @click.prevent="showModalAdd = false"
               >
-                ปิด
+                {{ $t("teacher.close") }}
               </button>
               <button
                 type="submit"
                 class="px-3 sm:px-4 py-1.5 sm:py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer"
               >
-                บันทึก
+                {{ $t("teacher.save") }}
               </button>
             </div>
           </form>

@@ -5,19 +5,26 @@
       <div class="bg-white rounded-lg border border-gray-200 mb-1">
         <div class="px-3 py-3 border-b border-gray-200 sm:px-6">
           <h1 class="text-xl sm:text-2xl font-bold text-gray-900">
-            แก้ไขโปรไฟล์
+            {{ $t("edit_profile.title") }}
           </h1>
           <p class="text-xs sm:text-sm text-gray-600 mt-1">
-            อัปเดตข้อมูลส่วนตัวของคุณ
+            {{ $t("edit_profile.subtitle") }}
           </p>
         </div>
       </div>
 
       <!-- Loading State -->
-      <div v-if="isLoading" class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
+      <div
+        v-if="isLoading"
+        class="bg-white rounded-lg shadow-sm border border-gray-200 p-8"
+      >
         <div class="flex items-center justify-center">
-          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-          <span class="ml-3 text-gray-600">กำลังโหลด...</span>
+          <div
+            class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"
+          ></div>
+          <span class="ml-3 text-gray-600">{{
+            $t("edit_profile.loading")
+          }}</span>
         </div>
       </div>
 
@@ -27,77 +34,129 @@
         <div class="bg-white rounded-lg border border-gray-200">
           <div class="px-2 py-2 border-b border-gray-200">
             <h2 class="text-md font-semibold text-gray-900">
-              จัดการรูปโปรไฟล์
+              {{ $t("edit_profile.profile_image_section") }}
             </h2>
           </div>
-
           <div class="p-2">
             <div class="flex items-center space-x-6">
               <div class="flex items-center gap-5 w-full">
-
-                <img v-if="previewImag_student_profile_imagee" :src="previewImag_student_profile_imagee" alt="Preview"
-                  class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100" />
-                <img v-else-if="studentData.student_profile_image" :src="studentData.student_profile_image"
-                  :alt="studentData.student_name" class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100" />
-                <NuxtImg v-else src="./images/avatars.png"
-                  class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100" />
-
-
-
+                <img
+                  v-if="previewImag_student_profile_imagee"
+                  :src="previewImag_student_profile_imagee"
+                  alt="Preview"
+                  class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100"
+                />
+                <img
+                  v-else-if="studentData.student_profile_image"
+                  :src="studentData.student_profile_image"
+                  :alt="studentData.student_name"
+                  class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100"
+                />
+                <NuxtImg
+                  v-else
+                  src="./images/avatars.png"
+                  class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100"
+                />
                 <div class="flex-1">
-                  <div class="border border-gray-300 rounded-lg flex justify-start items-center p-2">
-                    <input id="student_profile_image" type="file" name="student_profile_image" class="hidden"
-                      placeholder="https://example.com/image.jpg" @change="handlelImageInputChange" />
-                    <label for="student_profile_image"
-                      class="text-xs font-medium text-gray-700 flex justify-start items-center">
-                      เพิ่มรูปชุดนักศึกษา
+                  <div
+                    class="border border-gray-300 rounded-lg flex justify-start items-center p-2"
+                  >
+                    <input
+                      id="student_profile_image"
+                      type="file"
+                      name="student_profile_image"
+                      class="hidden"
+                      @change="handlelImageInputChange"
+                    />
+                    <label
+                      for="student_profile_image"
+                      class="text-xs font-medium text-gray-700 flex justify-start items-center"
+                    >
+                      {{ $t("edit_profile.add_student_uniform") }}
                     </label>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
           <div class="p-2">
             <div class="flex items-center space-x-6">
               <div class="flex items-center gap-5 w-full">
-
-                <img v-if="previewImage_graduation_gown" :src="previewImage_graduation_gown" alt="Preview"
-                  class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100" />
-                <img v-else-if="studentData.graduation_gown" :src="studentData.graduation_gown"
-                  :alt="studentData.student_name" class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100" />
-                <NuxtImg v-else src="./images/avatars.png"
-                  class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100" />
-
+                <img
+                  v-if="previewImage_graduation_gown"
+                  :src="previewImage_graduation_gown"
+                  alt="Preview"
+                  class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100"
+                />
+                <img
+                  v-else-if="studentData.graduation_gown"
+                  :src="studentData.graduation_gown"
+                  :alt="studentData.student_name"
+                  class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100"
+                />
+                <NuxtImg
+                  v-else
+                  src="./images/avatars.png"
+                  class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100"
+                />
                 <div class="flex-1">
-                  <div class="border border-gray-300 rounded-lg flex justify-start items-center p-2">
-                    <input id="graduation_gown" type="file" name="graduation_gown" class="hidden"
-                      @change="handlelImageInputChange" />
-                    <label for="graduation_gown"
-                      class="text-xs font-medium text-gray-700 flex justify-start items-center">
-                      เพิ่มรูปชุดครุย
+                  <div
+                    class="border border-gray-300 rounded-lg flex justify-start items-center p-2"
+                  >
+                    <input
+                      id="graduation_gown"
+                      type="file"
+                      name="graduation_gown"
+                      class="hidden"
+                      @change="handlelImageInputChange"
+                    />
+                    <label
+                      for="graduation_gown"
+                      class="text-xs font-medium text-gray-700 flex justify-start items-center"
+                    >
+                      {{ $t("edit_profile.add_graduation_gown") }}
                     </label>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
           <div class="p-2">
             <div class="flex items-center space-x-6">
               <div class="flex items-center gap-5 w-full">
-                <img v-if="previewImage_suit" :src="previewImage_suit" alt="Preview"
-                  class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100" />
-                <img v-else-if="studentData.suit" :src="studentData.suit" :alt="studentData.student_name"
-                  class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100" />
-                <NuxtImg v-else src="./images/avatars.png"
-                  class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100" />
-
+                <img
+                  v-if="previewImage_suit"
+                  :src="previewImage_suit"
+                  alt="Preview"
+                  class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100"
+                />
+                <img
+                  v-else-if="studentData.suit"
+                  :src="studentData.suit"
+                  :alt="studentData.student_name"
+                  class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100"
+                />
+                <NuxtImg
+                  v-else
+                  src="./images/avatars.png"
+                  class="h-12 w-12 rounded-full object-cover ring-4 ring-gray-100"
+                />
                 <div class="flex-1">
-                  <div class="border border-gray-300 rounded-lg flex justify-start items-center p-2">
-                    <input id="suit" type="file" name="suit" class="hidden" @change="handlelImageInputChange" />
-                    <label for="suit" class="text-xs font-medium text-gray-700 flex justify-start items-center">
-                      เพิ่มรูปชุดสุภาพ
+                  <div
+                    class="border border-gray-300 rounded-lg flex justify-start items-center p-2"
+                  >
+                    <input
+                      id="suit"
+                      type="file"
+                      name="suit"
+                      class="hidden"
+                      @change="handlelImageInputChange"
+                    />
+                    <label
+                      for="suit"
+                      class="text-xs font-medium text-gray-700 flex justify-start items-center"
+                    >
+                      {{ $t("edit_profile.add_suit") }}
                     </label>
                   </div>
                 </div>
@@ -110,63 +169,103 @@
         <div class="bg-white rounded-lg border border-gray-200">
           <div class="px-2 py-2 border-b border-gray-200">
             <h2 class="text-md font-normal text-gray-900">
-              จัดการข้อมูลพื้นฐาน
+              {{ $t("edit_profile.basic_info_section") }}
             </h2>
           </div>
           <div class="px-2 py-2">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
               <div>
-                <label for="student_name" class="block text-sm font-normal text-gray-700 mb-2">
-                  ชื่อ-นามสกุล {{ "( ภาษาไทย )" }}
+                <label
+                  for="student_name"
+                  class="block text-sm font-normal text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.name_th") }}
                   <span class="text-red-500">*</span>
                 </label>
-                <input id="student_name" v-model="studentData.student_name" type="text" required
+                <input
+                  id="student_name"
+                  v-model="studentData.student_name"
+                  type="text"
+                  required
                   class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="กรอกชื่อ-นามสกุล" />
+                  :placeholder="$t('edit_profile.name_th')"
+                />
               </div>
-
               <div>
-                <label for="student_name_thai" class="block text-sm font-normal text-gray-700 mb-2">
-                  ชื่อ-นามสกุล {{ "( อังกฤษ )" }}
+                <label
+                  for="student_name_thai"
+                  class="block text-sm font-normal text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.name_en") }}
                 </label>
-                <input id="student_name_thai" v-model="studentData.student_name_thai" type="text"
+                <input
+                  id="student_name_thai"
+                  v-model="studentData.student_name_thai"
+                  type="text"
                   class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="ชื่อภาษาไทย" />
+                  :placeholder="$t('edit_profile.name_en')"
+                />
               </div>
-
               <div>
-                <label for="student_main_id" class="block text-sm font-normal text-gray-700 mb-2">
-                  รหัสนักศึกษา
+                <label
+                  for="student_main_id"
+                  class="block text-sm font-normal text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.student_id") }}
                 </label>
-                <input id="student_main_id" v-model="studentData.student_main_id" type="text" readonly
-                  class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
-              </div>
-
-              <div>
-                <label for="student_email" class="block text-sm font-normal text-gray-700 mb-2">
-                  อีเมล <span class="text-red-500">*</span>
-                </label>
-                <input id="student_email" v-model="studentData.student_email" type="email" required
+                <input
+                  id="student_main_id"
+                  v-model="studentData.student_main_id"
+                  type="text"
+                  readonly
                   class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="your.email@example.com" />
+                />
               </div>
-
               <div>
-                <label for="student_phone" class="block text-sm font-normal text-gray-700 mb-2">
-                  เบอร์โทรศัพท์
+                <label
+                  for="student_email"
+                  class="block text-sm font-normal text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.email") }}
+                  <span class="text-red-500">*</span>
                 </label>
-                <input id="student_phone" v-model="studentData.student_phone" type="tel"
+                <input
+                  id="student_email"
+                  v-model="studentData.student_email"
+                  type="email"
+                  required
                   class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="0801234567" />
+                  placeholder="your.email@example.com"
+                />
               </div>
-
               <div>
-                <label for="date_of_birth" class="block text-sm font-normal text-gray-700 mb-2">
-                  วันเกิด
+                <label
+                  for="student_phone"
+                  class="block text-sm font-normal text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.phone") }}
                 </label>
-
-                <input id="date_of_birth" v-model="formattedDateOfBirth" type="date"
-                  class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                <input
+                  id="student_phone"
+                  v-model="studentData.student_phone"
+                  type="tel"
+                  class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="0801234567"
+                />
+              </div>
+              <div>
+                <label
+                  for="date_of_birth"
+                  class="block text-sm font-normal text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.dob") }}
+                </label>
+                <input
+                  id="date_of_birth"
+                  v-model="formattedDateOfBirth"
+                  type="date"
+                  class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                />
               </div>
             </div>
           </div>
@@ -175,80 +274,133 @@
         <!-- Personal Details -->
         <div class="bg-white rounded-lg border border-gray-200">
           <div class="px-2 py-2 border-b border-gray-200">
-            <h2 class="text-md font-normal text-gray-900">ข้อมูลส่วนตัว</h2>
+            <h2 class="text-md font-normal text-gray-900">
+              {{ $t("edit_profile.personal_info_section") }}
+            </h2>
           </div>
           <div class="px-2 py-2">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
               <div>
-                <label for="religion" class="block text-sm font-medium text-gray-700 mb-2">
-                  ศาสนา
+                <label
+                  for="religion"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.religion") }}
                 </label>
-                <input id="religion" v-model="studentData.religion" type="text"
+                <input
+                  id="religion"
+                  v-model="studentData.religion"
+                  type="text"
                   class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="ศาสนาของคุณ" />
+                  :placeholder="$t('edit_profile.religion')"
+                />
               </div>
-
               <div>
-                <label for="nationality" class="block text-sm font-medium text-gray-700 mb-2">
-                  สัญชาติ
+                <label
+                  for="nationality"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.nationality") }}
                 </label>
-                <input id="nationality" v-model="studentData.nationality" type="text"
+                <input
+                  id="nationality"
+                  v-model="studentData.nationality"
+                  type="text"
                   class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="เช่น ไทย" />
+                  :placeholder="$t('edit_profile.nationality')"
+                />
               </div>
-
               <div>
-                <label for="ethnicity" class="block text-sm font-medium text-gray-700 mb-2">
-                  เชื้อชาติ
+                <label
+                  for="ethnicity"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.ethnicity") }}
                 </label>
-                <input id="ethnicity" v-model="studentData.ethnicity" type="text"
+                <input
+                  id="ethnicity"
+                  v-model="studentData.ethnicity"
+                  type="text"
                   class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="เชื้อชาติของคุณ" />
+                  :placeholder="$t('edit_profile.ethnicity')"
+                />
               </div>
-
               <div>
-                <label for="position" class="block text-sm font-medium text-gray-700 mb-2">
-                  ตำแหน่ง/บทบาท
+                <label
+                  for="position"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.position") }}
                 </label>
-                <input id="position" v-model="studentData.position" type="text"
+                <input
+                  id="position"
+                  v-model="studentData.position"
+                  type="text"
                   class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="ตำแหน่งหรือบทบาทของคุณ" />
+                  :placeholder="$t('edit_profile.position')"
+                />
               </div>
-
               <div>
-                <label for="weight" class="block text-sm font-medium text-gray-700 mb-2">
-                  น้ำหนัก (กก.)
+                <label
+                  for="weight"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.weight") }}
                 </label>
-                <input id="weight" v-model="studentData.weight" type="number" step="0.1"
+                <input
+                  id="weight"
+                  v-model="studentData.weight"
+                  type="number"
+                  step="0.1"
                   class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="เช่น 70.5" />
+                  :placeholder="$t('edit_profile.weight')"
+                />
               </div>
-
               <div>
-                <label for="height" class="block text-sm font-medium text-gray-700 mb-2">
-                  ส่วนสูง (ซม.)
+                <label
+                  for="height"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.height") }}
                 </label>
-                <input id="height" v-model="studentData.height" type="number" step="0.1"
+                <input
+                  id="height"
+                  v-model="studentData.height"
+                  type="number"
+                  step="0.1"
                   class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="เช่น 175.0" />
+                  :placeholder="$t('edit_profile.height')"
+                />
               </div>
-
               <div class="md:col-span-2">
-                <label for="address" class="block text-sm font-medium text-gray-700 mb-2">
-                  ที่อยู่
+                <label
+                  for="address"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.address") }}
                 </label>
-                <textarea id="address" v-model="studentData.address" rows="3"
+                <textarea
+                  id="address"
+                  v-model="studentData.address"
+                  rows="3"
                   class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="ที่อยู่ปัจจุบันของคุณ"></textarea>
+                  :placeholder="$t('edit_profile.address')"
+                ></textarea>
               </div>
-
               <div class="md:col-span-2">
-                <label for="hobby" class="block text-sm font-medium text-gray-700 mb-2">
-                  งานอดิเรกและความสนใจ
+                <label
+                  for="hobby"
+                  class="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.hobby") }}
                 </label>
-                <textarea id="hobby" v-model="studentData.hobby" rows="3"
+                <textarea
+                  id="hobby"
+                  v-model="studentData.hobby"
+                  rows="3"
                   class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="เช่น อ่านหนังสือ กีฬา ดนตรี ฯลฯ"></textarea>
+                  :placeholder="$t('edit_profile.hobby')"
+                ></textarea>
               </div>
             </div>
           </div>
@@ -258,36 +410,55 @@
         <div class="bg-white rounded-lg border border-gray-200">
           <div class="px-2 py-2 border-b border-gray-200">
             <h2 class="text-md font-normal text-gray-900">
-              โซเชียลมีเดีย & ลิงก์
+              {{ $t("edit_profile.social_media_section") }}
             </h2>
           </div>
           <div class="px-2 py-2">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
               <div>
-                <label for="facebook" class="block text-xs font-medium text-gray-700 mb-2">
-                  facebook
+                <label
+                  for="facebook"
+                  class="block text-xs font-medium text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.facebook") }}
                 </label>
-                <input id="facebook" v-model="studentData.facebook" type="text"
+                <input
+                  id="facebook"
+                  v-model="studentData.facebook"
+                  type="text"
                   class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="ชื่อเฟซบุ๊กของคุณ" />
+                  :placeholder="$t('edit_profile.facebook')"
+                />
               </div>
-
               <div>
-                <label for="line" class="block text-xs font-medium text-gray-700 mb-2">
-                  line
+                <label
+                  for="line"
+                  class="block text-xs font-medium text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.line") }}
                 </label>
-                <input id="line" v-model="studentData.line" type="text"
+                <input
+                  id="line"
+                  v-model="studentData.line"
+                  type="text"
                   class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="ไลน์ไอดีของคุณ" />
+                  :placeholder="$t('edit_profile.line')"
+                />
               </div>
-
               <div>
-                <label for="github" class="block text-xs font-medium text-gray-700 mb-2">
-                  github
+                <label
+                  for="github"
+                  class="block text-xs font-medium text-gray-700 mb-2"
+                >
+                  {{ $t("edit_profile.github") }}
                 </label>
-                <input id="github" v-model="studentData.github" type="url"
+                <input
+                  id="github"
+                  v-model="studentData.github"
+                  type="url"
                   class="w-full px-1 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="https://github.com/username" />
+                  :placeholder="$t('edit_profile.github')"
+                />
               </div>
             </div>
           </div>
@@ -296,47 +467,62 @@
         <!-- Action Buttons -->
         <div class="bg-white rounded-lg border border-gray-200">
           <div class="px-6 py-4 flex justify-center md:justify-end space-x-4">
-            <button type="button" @click="resetForm"
+            <button
+              type="button"
+              @click="resetForm"
               class="px-6 py-2 border border-gray-300 rounded-md text-xs md:text-sm lg:text-md font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-              :disabled="isSaving">
-              ค่าเริ่มต้น
+              :disabled="isSaving"
+            >
+              {{ $t("edit_profile.reset") }}
             </button>
-            <button type="submit"
-              class="px-6 py-2 border border-transparent rounded-md text-xs md:text-sm lg:text-md font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              :disabled="isSaving">
+            <button
+              type="submit"
+              class="px-6 py-2 border border-transparent rounded-md text-xs md:text-sm lg:text-md font-medium text-white bg-blue-400 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              :disabled="isSaving"
+            >
               <span v-if="isSaving" class="flex items-center">
-                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                กำลังบันทึกการเปลี่ยนเเปลง...
+                <div
+                  class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"
+                ></div>
+                {{ $t("edit_profile.saving") }}
               </span>
-              <span v-else>บันทึกการเปลี่ยนเเปลง</span>
+              <span v-else>{{ $t("edit_profile.save") }}</span>
             </button>
           </div>
         </div>
       </form>
 
       <!-- Success Message (Top Right) -->
-      <div v-if="showSuccess"
-        class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-300 z-50">
+      <div
+        v-if="showSuccess"
+        class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-300 z-50"
+      >
         <div class="flex items-center">
           <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd"
+            <path
+              fill-rule="evenodd"
               d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-              clip-rule="evenodd"></path>
+              clip-rule="evenodd"
+            ></path>
           </svg>
-          บันทึกข้อมูลสำเร็จ!
+          {{ $t("edit_profile.success") }}
         </div>
       </div>
 
       <!-- Error Message (Top Right) -->
-      <div v-if="showError"
-        class="fixed top-20 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-300 z-50">
+      <div
+        v-if="showError"
+        class="fixed top-20 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg transition-all duration-300 z-50"
+      >
         <div class="flex items-center">
           <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd"
+            <path
+              fill-rule="evenodd"
               d="M18 10A8 8 0 11 2 10a8 8 0 0116 0zm-7-4a1 1 0 112 0v4a1 1 0 01-2 0V6zm1 8a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"
-              clip-rule="evenodd"></path>
+              clip-rule="evenodd"
+            ></path>
           </svg>
-          {{ errorDetail }}
+          {{ errorDetail || $t("edit_profile.error") }}
         </div>
       </div>
     </div>
@@ -418,7 +604,8 @@ const handlelImageInputChange = async (event) => {
     if (file) {
       if (!allowedTypes.includes(file.type)) {
         event.target.value = null;
-        throw `${file.name} : File type ${file.type
+        throw `${file.name} : File type ${
+          file.type
         } not allowed. Allowed: ${allowedTypes.join(", ")}`;
       }
       if (file.size > MAX_FILE_SIZE) {
@@ -435,12 +622,10 @@ const handlelImageInputChange = async (event) => {
       if (event.target.name === "graduation_gown") {
         selectedImage.value.graduation_gown = event.target.files[0];
         previewImage_graduation_gown.value = URL.createObjectURL(file);
-
       }
       if (event.target.name === "suit") {
         selectedImage.value.suit = event.target.files[0];
         previewImage_suit.value = URL.createObjectURL(file);
-
       }
     }
   } catch (error) {
