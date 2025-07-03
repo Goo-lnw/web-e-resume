@@ -700,7 +700,7 @@ const saveStudent = async (event) => {
     formData.append("student_profile_data", updateData);
 
     // เพิ่ม header limit ถ้า backend รองรับ (optional)
-    const updatedResult = await $axios.post("/student/edit_profile", formData, {
+    const updatedResult = await $axios.put("/student/edit_profile", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
