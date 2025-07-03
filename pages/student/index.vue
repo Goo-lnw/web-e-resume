@@ -507,7 +507,9 @@ function getProficiencyColor(proficiency) {
                       <h3
                         class="text-sm lg:text-base font-bold text-orange-900"
                       >
-                        {{ project.project_name }}
+                        {{
+                          project.project_name || $t("resume_student.projects")
+                        }}
                       </h3>
                       <a
                         v-if="project.project_attachment_link"
