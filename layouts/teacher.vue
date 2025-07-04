@@ -184,6 +184,9 @@ select::-webkit-scrollbar-thumb:hover {
 </style>
 
 <script setup>
+definePageMeta({
+    middleware: ["auth"],
+});
 import Footer from '~/components/common/Footer.vue';
 
 const { $axios } = useNuxtApp();
