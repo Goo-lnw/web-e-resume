@@ -166,7 +166,7 @@ async function HandleLogin() {
                     </form>
                 </div>
                 <!-- รูปภาพ student_1.png -->
-                <div class="w-full md:w-1/3 relative mt-4 md:mt-0 animate-fade-up">
+                <div class="md:hidden lg:block w-full md:w-1/3 relative mt-4 md:mt-0 animate-fade-up">
                     <NuxtImg src="./images/student_1.png" alt="Teacher 3D" class="w-full max-w-[150px] sm:max-w-[200px] md:max-w-[250px] h-auto object-contain mx-auto md:absolute md:bottom-0 md:right-0" />
                 </div>
             </div>
