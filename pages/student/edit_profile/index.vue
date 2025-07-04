@@ -624,7 +624,7 @@ const handlelImageInputChange = async (event) => {
   try {
     const file = event.target.files[0];
     const allowedTypes = ["image/jpeg", "image/png"];
-    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+    const MAX_FILE_SIZE = 100 * 1024 * 1024; // 5MB
     if (file) {
       if (!allowedTypes.includes(file.type)) {
         event.target.value = null;
