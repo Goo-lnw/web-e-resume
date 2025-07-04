@@ -1,38 +1,32 @@
+import { jwtDecode } from "jwt-decode";
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  // ใช้ useState เพื่อกำหนด token แทน
-  // const tokenCookie = useCookie("token"); // <==ตัวเก่าโดนล้าง cookie ตลอดไม่สามารถนำมาเก็บได้
-//   const tokenState = useState("token", () => useCookie("token").value);
-//   //คำอธิบาย useState('token', () => useCookie('token').value)
-//   // สร้างสถานะถาวรสำหรับโทเค็น โทเค็นถูกดึงข้อมูลโดยใช้ useCookie('token')
-//   // และจัดเก็บไว้ในสถานะที่คงอยู่ทั้ง SSR และ CSR ซึ่งจะทำให้แน่ใจได้ว่าเมื่อเพจถูกไฮเดรต
-//   // (หลังจากกระบวนการ SSR) สถานะโทเค็นจะถูกเติมไว้แล้ว และจะไม่มีการกำหนดไว้
+    let decodedToken;
 
-//   // Add logging to track token changes
-//   console.log("Token from state:", tokenState.value);
+    const tokenState: any = useState("token", () => useCookie("token").value);
+    console.log(tokenState.value, "tokenState");
 
-//   const token = tokenState.value;
-
-//   if (!token && to.path === "/register") {
-//     // console.log("Redirecting due to missing or invalid token");
-//     return;
-//   }
-
-//   if (token && to.path === "/register") {
-//     return navigateTo("/home");
-//   }
-
-//   if (!token && to.path !== "/") {
-//     // console.log("Redirecting due to missing or invalid token");
-//     return navigateTo("/");
-//   }
-
-//   if (token && to.path === "/") {
-//     // console.log("Valid token detected, redirecting to /home");
-//     return navigateTo("/home");
-//   }
-
-//   if (token) {
-//     // console.log("Valid token detected, continuing");
-//     return;
-//   }
+    if (tokenState.value) {
+        try {
+            decodedToken = await jwtDecode(tokenState.value);
+            console.log(decodedToken, "decodedToken");
+            const { role, userId, resume_id }: any = decodedToken || {};
+            const path = to.path;
+            if (path.startsWith("/student") && (role !== "student" || !userId || !resume_id)) {
+                useCookie("token").value = null; // Clear the token if the role does not match
+                return navigateTo("/");
+            }
+            if (path.startsWith("/teacher") && (role !== "teacher" || !userId || !resume_id)) {
+                useCookie("token").value = null; // Clear the token if the role does not match
+                return navigateTo("/");
+            }
+        } catch (error) {
+            console.error("expected Token:", error);
+            // If the token is invalid or expired, redirect to the login page
+            return navigateTo("/");
+        }
+    } else {
+        if (to.path !== "/") {
+            return navigateTo("/");
+        }
+    }
 });

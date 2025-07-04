@@ -5,8 +5,8 @@
             <div class="bg-gradient-to-r from-purple-600 to-pink-600 px-2 py-2 md:px-6 md:py-4 text-white">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h2 class="text-md md:text-2xl font-bold">{{ $t('education_modal.title') }}</h2>
-                        <p class="text-purple-100 text-sm mt-1">{{ $t('education_modal.subtitle') }}</p>
+                        <h2 class="text-md md:text-2xl font-bold">{{ $t("education_modal.title") }}</h2>
+                        <p class="text-purple-100 text-sm mt-1">{{ $t("education_modal.subtitle") }}</p>
                     </div>
                     <button @click="close" class="p-2 hover:bg-white/20 rounded-full transition-colors duration-200 cursor-pointer" aria-label="Close modal">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -20,7 +20,7 @@
             <div class="p-2 md:p-4 overflow-y-auto space-y-1 max-h-[calc(90vh-120px)]">
                 <div v-if="isLoading" class="flex flex-col items-center justify-center py-12">
                     <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                    <span class="ml-3 text-gray-600">{{ $t('education_modal.loading') }}</span>
+                    <span class="ml-3 text-gray-600">{{ $t("education_modal.loading") }}</span>
                 </div>
 
                 <div v-else class="space-y-2">
@@ -28,11 +28,11 @@
                     <div
                         v-for="(education, index) in educationData"
                         :key="education.education_history_id"
-                        class="group bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-50 hover:to-gray-50 border border-gray-200 hover:border-gray-300 rounded-xl p-6 transition-all duration-200 hover:shadow-md"
+                        class="group bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-50 hover:to-gray-50 border border-gray-200 hover:border-gray-300 rounded-xl p-2 md:p-4 transition-all duration-200 hover:shadow-md"
                     >
                         <div class="flex justify-between items-start mb-4">
                             <h3 class="text-lg font-semibold text-gray-800">
-                                {{ $t('education_modal.education_no', { n: index + 1 }) }}
+                                {{ $t("education_modal.education_no", { n: index + 1 }) }}
                             </h3>
                             <button
                                 @click="removeEducation(index, education.education_history_id)"
@@ -40,16 +40,21 @@
                                 :title="$t('education_modal.remove_education')"
                             >
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                    ></path>
                                 </svg>
                             </button>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="space-y-2">
                                 <label class="block text-sm font-medium text-gray-700">
                                     <icon name="hugeicons:school-01" class="w-4 h-4"></icon>
-                                    <span>{{ $t('education_modal.institution') }}</span>
+                                    <span>{{ $t("education_modal.institution") }}</span>
                                 </label>
                                 <input
                                     v-model="education.education_history_institution"
@@ -62,7 +67,7 @@
                             <div class="space-y-2">
                                 <label class="block text-sm font-medium text-gray-700">
                                     <icon name="hugeicons:ranking" class="w-4 h-4"></icon>
-                                    <span>{{ $t('education_modal.level') }}</span>
+                                    <span>{{ $t("education_modal.level") }}</span>
                                 </label>
                                 <input
                                     v-model="education.education_history_major"
@@ -75,7 +80,7 @@
                             <div class="space-y-2">
                                 <label class="block text-sm font-medium text-gray-700">
                                     <icon name="hugeicons:calendar-01" class="w-4 h-4"></icon>
-                                    <span>{{ $t('education_modal.start_year') }}</span>
+                                    <span>{{ $t("education_modal.start_year") }}</span>
                                 </label>
                                 <input
                                     v-model="education.education_history_start_year"
@@ -90,7 +95,7 @@
                             <div class="space-y-2">
                                 <label class="block text-sm font-medium text-gray-700">
                                     <icon name="hugeicons:agreement-03" class="w-4 h-4"></icon>
-                                    <span>{{ $t('education_modal.gpa') }}</span>
+                                    <span>{{ $t("education_modal.gpa") }}</span>
                                 </label>
                                 <input
                                     v-model="education.education_history_gpa"
@@ -103,10 +108,10 @@
                                 />
                             </div>
 
-                            <div class="md:col-span-2 space-y-2">
+                            <div class="sm:col-span-2 space-y-2">
                                 <label class="block text-sm font-medium text-gray-700">
                                     <icon name="hugeicons:note-01" class="w-4 h-4"></icon>
-                                    <span>{{ $t('education_modal.notes') }}</span>
+                                    <span>{{ $t("education_modal.notes") }}</span>
                                 </label>
                                 <textarea
                                     v-model="education.education_history_notes"
@@ -122,7 +127,11 @@
                     </div>
 
                     <!-- Add New Education Button -->
-                    <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 cursor-pointer" @click="addNewEducation" :class="{ 'opacity-50 cursor-not-allowed': isSaving }">
+                    <div
+                        class="border-2 border-dashed border-gray-300 rounded-xl p-8 hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 cursor-pointer"
+                        @click="addNewEducation"
+                        :class="{ 'opacity-50 cursor-not-allowed': isSaving }"
+                    >
                         <div class="flex flex-col items-center justify-center space-y-3">
                             <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center hover:bg-blue-200 transition-colors duration-200">
                                 <svg class="w-8 h-8 text-blue-600" :class="{ 'animate-spin': isSaving }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -132,10 +141,10 @@
                             </div>
                             <div class="text-center">
                                 <h3 class="text-lg font-semibold text-gray-700">
-                                    {{ isSaving ? $t('education_modal.adding') : $t('education_modal.add_new_education') }}
+                                    {{ isSaving ? $t("education_modal.adding") : $t("education_modal.add_new_education") }}
                                 </h3>
                                 <p class="text-gray-500 text-sm mt-1">
-                                    {{ isSaving ? $t('education_modal.please_wait') : $t('education_modal.add_education_hint') }}
+                                    {{ isSaving ? $t("education_modal.please_wait") : $t("education_modal.add_education_hint") }}
                                 </p>
                             </div>
                         </div>
@@ -144,24 +153,25 @@
             </div>
 
             <!-- Footer -->
-            <div class="bg-gray-50 px-8 py-6 border-t border-gray-200">
-                <div class="flex justify-between items-center">
-                    <div class="text-sm text-gray-500">
-                        {{ $t('education_modal.total_educations', { count: educationData.length }) }}
-                    </div>
-                    <div class="flex space-x-3">
-                        <button @click="close" class="px-2 py-1 text-xs border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
-                            {{ $t('education_modal.cancel') }}
-                        </button>
-                        <button
-                            @click="saveEducation"
-                            :disabled="isSaving"
-                            class="px-2 py-1 text-xs bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 cursor-pointer"
-                            :class="{ 'animate-pulse': isSaving }"
-                        >
-                            {{ isSaving ? $t('education_modal.saving') : $t('education_modal.save') }}
-                        </button>
-                    </div>
+            <div class="bg-gray-50 px-2 py-2 md:px-6 md:py-4 border-t border-gray-200 space-y-1">
+                <div class="text-xs text-gray-500">
+                    {{ $t("education_modal.total_educations", { count: educationData.length }) }}
+                </div>
+                <div class="flex justify-end items-center space-x-3">
+                    <button
+                        @click="close"
+                        class="px-2 py-2 sm:px-3 text-xs border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                    >
+                        {{ $t("education_modal.cancel") }}
+                    </button>
+                    <button
+                        @click="saveEducation"
+                        :disabled="isSaving"
+                        class="px-2 py-2 sm:px-3 text-xs bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-200 font-medium shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 cursor-pointer"
+                        :class="{ 'animate-pulse': isSaving }"
+                    >
+                        {{ isSaving ? $t("education_modal.saving") : $t("education_modal.save") }}
+                    </button>
                 </div>
             </div>
         </div>
