@@ -29,7 +29,12 @@
       </div>
 
       <!-- Form -->
-      <form v-else @submit.prevent="saveStudent($event)" class="space-y-6">
+      <form
+        v-else
+        @submit.prevent="saveStudent($event)"
+        class="space-y-6"
+        enctype="multipart/form-data"
+      >
         <!-- Profile Image Section -->
         <div class="bg-white rounded-lg border border-gray-200">
           <div class="px-2 py-2 border-b border-gray-200">
@@ -72,7 +77,7 @@
                     />
                     <label
                       for="student_profile_image"
-                      class="text-xs font-medium text-gray-700 flex justify-start items-center"
+                      class="text-xs font-medium text-gray-700 flex justify-start items-center hover:cursor-pointer hover:bg-gray-100 p-1 px-2 rounded-2xl"
                     >
                       {{ $t("edit_profile.add_student_uniform") }}
                     </label>
@@ -114,7 +119,7 @@
                     />
                     <label
                       for="graduation_gown"
-                      class="text-xs font-medium text-gray-700 flex justify-start items-center"
+                      class="text-xs font-medium text-gray-700 flex justify-start items-center hover:cursor-pointer hover:bg-gray-100  px-2 rounded-2xl"
                     >
                       {{ $t("edit_profile.add_graduation_gown") }}
                     </label>
@@ -156,7 +161,7 @@
                     />
                     <label
                       for="suit"
-                      class="text-xs font-medium text-gray-700 flex justify-start items-center"
+                      class="text-xs font-medium text-gray-700 flex justify-start items-center hover:cursor-pointer hover:bg-gray-100 p-1 px-2 rounded-2xl"
                     >
                       {{ $t("edit_profile.add_suit") }}
                     </label>
@@ -551,22 +556,23 @@ definePageMeta({
   layout: "student",
 });
 
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useResumeStore } from "../../../stores/resumeStore";
 const resumeStore = useResumeStore();
+
 const previewImage_student_profile_image = ref(null);
 const previewImage_graduation_gown = ref(null);
 const previewImage_suit = ref(null);
-// State
+
 const studentData = ref({
   student_name: "",
   student_name_thai: "",
   student_main_id: "",
   student_email: "",
   student_phone: "",
-  student_profile_image: "" | null,
-  graduation_gown: "" | null,
-  suit: "" | null,
+  student_profile_image: "" || null,
+  graduation_gown: "" || null,
+  suit: "" || null,
   religion: "",
   nationality: "",
   date_of_birth: "",
@@ -580,6 +586,7 @@ const studentData = ref({
   github: "",
   position: "",
 });
+
 const selectedImage = ref({
   student_profile_image: null,
   graduation_gown: null,
@@ -592,15 +599,14 @@ const showSuccess = ref(false);
 const showSuccess_reset = ref(false);
 const showError = ref(false);
 const errorDetail = ref(null);
-// Composables
+
 const { $axios } = useNuxtApp();
 
-// Methods
+// ดึงข้อมูลนักศึกษา
 const getStudent = async () => {
   try {
     isLoading.value = true;
     const res = await $axios.get("/student/protected");
-
     if (res.data && res.data.student) {
       studentData.value = { ...res.data.student };
       originalData.value = { ...res.data.student };
@@ -608,12 +614,12 @@ const getStudent = async () => {
     }
   } catch (error) {
     console.error("Failed to fetch student data:", error);
-    // You might want to show an error message to the user
   } finally {
     isLoading.value = false;
   }
 };
 
+// handle การเลือกไฟล์รูป
 const handlelImageInputChange = async (event) => {
   try {
     const file = event.target.files[0];
@@ -634,15 +640,15 @@ const handlelImageInputChange = async (event) => {
         ).toFixed(2)} MB`;
       }
       if (event.target.name === "student_profile_image") {
-        selectedImage.value.student_profile_image = event.target.files[0];
+        selectedImage.value.student_profile_image = file;
         previewImage_student_profile_image.value = URL.createObjectURL(file);
       }
       if (event.target.name === "graduation_gown") {
-        selectedImage.value.graduation_gown = event.target.files[0];
+        selectedImage.value.graduation_gown = file;
         previewImage_graduation_gown.value = URL.createObjectURL(file);
       }
       if (event.target.name === "suit") {
-        selectedImage.value.suit = event.target.files[0];
+        selectedImage.value.suit = file;
         previewImage_suit.value = URL.createObjectURL(file);
       }
     }
@@ -652,12 +658,13 @@ const handlelImageInputChange = async (event) => {
   }
 };
 
+// ฟังก์ชันบันทึกข้อมูล
 const saveStudent = async (event) => {
   try {
     isSaving.value = true;
 
     // เช็คขนาดไฟล์รวมก่อนส่ง (ป้องกัน 413)
-    const MAX_TOTAL_SIZE = 8 * 1024 * 1024; // 8MB (ปรับตาม server)
+    const MAX_TOTAL_SIZE = 100 * 1024 * 1024; // 8MB (ปรับตาม server)
     let totalSize = 0;
     for (const file of Object.values(selectedImage.value)) {
       if (file) totalSize += file.size;
@@ -670,7 +677,6 @@ const saveStudent = async (event) => {
 
     // Prepare data for API
     const formData = new FormData();
-    // loop image data in selectedImages and append to formData kub
     for (const [key, file] of Object.entries(selectedImage.value)) {
       if (!file) continue;
       formData.append(key, file);
@@ -699,17 +705,8 @@ const saveStudent = async (event) => {
     });
     formData.append("student_profile_data", updateData);
 
-    // เพิ่ม header limit ถ้า backend รองรับ (optional)
-    const updatedResult = await $axios.put("/student/edit_profile", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-      // ถ้าใช้ axios บางเวอร์ชัน อาจต้องเพิ่ม maxBodyLength
-      maxBodyLength: 100 * 1024 * 1024, // 10MB
-    });
+    const updatedResult = await $axios.post("/student/edit_profile", formData);
     const uploadedImageResult = await updatedResult.data;
-    // check uploadedImage & Update result then
-    // loop to set image name in to studentData ref kub
     if (uploadedImageResult.success) {
       for (const imageField in uploadedImageResult.imagesData) {
         if (imageField in studentData.value) {
@@ -722,14 +719,11 @@ const saveStudent = async (event) => {
 
     originalData.value = { ...studentData.value };
     resumeStore.fetchResume();
-
-    // Show success message
     showSuccess.value = true;
     setTimeout(() => {
       showSuccess.value = false;
     }, 3000);
   } catch (error) {
-    // เพิ่ม error message กรณี 413
     if (error.response && error.response.status === 413) {
       showNotiError("ขนาดไฟล์ที่อัปโหลดใหญ่เกินไป (413)");
     } else {
@@ -741,16 +735,17 @@ const saveStudent = async (event) => {
   }
 };
 
+// แปลงวันเกิดสำหรับ input type="date"
 const formattedDateOfBirth = computed({
   get() {
     return studentData.value.date_of_birth?.split(" ")[0] || "";
   },
   set(value) {
-    // Keep full datetime format if needed
     studentData.value.date_of_birth = value ? `${value} 00:00:00` : "";
   },
 });
 
+// รีเซ็ตฟอร์ม
 const resetForm = () => {
   studentData.value = { ...originalData.value };
   selectedImage.value = {
@@ -766,6 +761,8 @@ const resetForm = () => {
     showSuccess_reset.value = false;
   }, 3000);
 };
+
+// แสดง error
 const showNotiError = async (detail) => {
   errorDetail.value = detail;
   showError.value = true;
@@ -773,6 +770,7 @@ const showNotiError = async (detail) => {
     showError.value = false;
   }, 4000);
 };
+
 // Lifecycle
 onMounted(() => {
   getStudent();
