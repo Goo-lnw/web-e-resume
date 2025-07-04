@@ -15,7 +15,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
                 useCookie("token").value = null; // Clear the token if the role does not match
                 return navigateTo("/");
             }
-            if (path.startsWith("/teacher") && (role !== "teacher" || !userId || !resume_id)) {
+            if (path.startsWith("/teacher") && (role !== "teacher" || !userId)) {
                 useCookie("token").value = null; // Clear the token if the role does not match
                 return navigateTo("/");
             }
