@@ -592,7 +592,7 @@ watch(page, () => fetchStudents());
                 v-model="formAdd.student_password"
                 type="password"
                 class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                :placeholder="$t('teacher.placeholder_password')"
+                :placeholder="$t('teacher.label_password')"
               />
               <p class="text-xs text-red-400 mt-1">
                 {{ $t("teacher.password_rule") }}
