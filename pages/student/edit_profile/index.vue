@@ -119,7 +119,7 @@
                     />
                     <label
                       for="graduation_gown"
-                      class="text-xs font-medium text-gray-700 flex justify-start items-center hover:cursor-pointer hover:bg-gray-100  px-2 rounded-2xl"
+                      class="text-xs font-medium text-gray-700 flex justify-start items-center hover:cursor-pointer hover:bg-gray-100 px-2 rounded-2xl"
                     >
                       {{ $t("edit_profile.add_graduation_gown") }}
                     </label>
@@ -555,7 +555,7 @@
 definePageMeta({
   layout: "student",
 });
-
+import imageCompression from "browser-image-compression";
 import { ref, onMounted, computed } from "vue";
 import { useResumeStore } from "../../../stores/resumeStore";
 const resumeStore = useResumeStore();
@@ -639,17 +639,23 @@ const handlelImageInputChange = async (event) => {
           (1024 * 1024)
         ).toFixed(2)} MB`;
       }
+
+      const compressedFile = await imageCompression(file, {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1200,
+        useWebWorker: true,
+      });
+      const previewUrl = URL.createObjectURL(compressedFile);
+
       if (event.target.name === "student_profile_image") {
-        selectedImage.value.student_profile_image = file;
-        previewImage_student_profile_image.value = URL.createObjectURL(file);
-      }
-      if (event.target.name === "graduation_gown") {
-        selectedImage.value.graduation_gown = file;
-        previewImage_graduation_gown.value = URL.createObjectURL(file);
-      }
-      if (event.target.name === "suit") {
-        selectedImage.value.suit = file;
-        previewImage_suit.value = URL.createObjectURL(file);
+        selectedImage.value.student_profile_image = compressedFile;
+        previewImage_student_profile_image.value = previewUrl;
+      } else if (event.target.name === "graduation_gown") {
+        selectedImage.value.graduation_gown = compressedFile;
+        previewImage_graduation_gown.value = previewUrl;
+      } else if (event.target.name === "suit") {
+        selectedImage.value.suit = compressedFile;
+        previewImage_suit.value = previewUrl;
       }
     }
   } catch (error) {
@@ -727,7 +733,9 @@ const saveStudent = async (event) => {
     if (error.response && error.response.status === 413) {
       showNotiError("ขนาดไฟล์ที่อัปโหลดใหญ่เกินไป (413)");
     } else {
-      showNotiError("บันทึกข้อมูลไม่สำเร็จ");
+      showNotiError(
+        "บันทึกข้อมูลไม่สำเร็จ ขนาดเเละความชัดของไฟล์เยอะเกินไป กรุณาลองใหม่อีกครั้ง"
+      );
     }
     console.error("Failed to save student profile:", error);
   } finally {
