@@ -28,14 +28,12 @@ const searchQuery = ref("");
 
 // ฟังก์ชันสำหรับการค้นหานักเรียน ด้วยชื่อ เเละ รหัสนักเรียน
 function filterStudents() {
-  //
   if (!searchQuery.value) {
     return student.value;
   }
-  // แปลง query เป็นตัวพิมพ์เล็กเพื่อการค้นหาที่ไม่สนใจตัวพิมพ์ใหญ่
   const query = searchQuery.value.toLowerCase();
   return student.value.filter((item) => {
-    return item.student_name.toLowerCase().includes(query) || item.student_main_id.toLowerCase().includes(query);
+    return (item.student_name && item.student_name.toLowerCase().includes(query)) || (item.student_main_id && item.student_main_id.toLowerCase().includes(query));
   });
 }
 
@@ -135,13 +133,17 @@ async function actionStudent(params, action) {
 
 async function saveEdit() {
   try {
-    console.log(formEdit.value);
+    // console.log(formEdit.value);
 
     const response = await $axios.put(`/student/${editId.value}/edit`, {
       student_name: formEdit.value.student_name,
       student_email: formEdit.value.student_email,
+      student_old_password: formEdit.value.student_old_password,
+      student_password: formEdit.value.student_password,
       student_phone: formEdit.value.student_phone,
     });
+    // console.log(response);
+
     if (response.status === 200) {
       showAlert(t("teacher.edit_student_success_message"), "info");
       showModal.value = false;
@@ -378,7 +380,7 @@ watch(page, () => fetchStudent());
                 {{ $t("teacher.label_password") }}
               </label>
               <input
-                v-model="formEdit.student_password"
+                v-model="formEdit.student_old_password"
                 type="password"
                 class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
                 :placeholder="$t('teacher.label_password')"
@@ -389,7 +391,7 @@ watch(page, () => fetchStudent());
                 {{ $t("teacher.label_new_password") }}
               </label>
               <input
-                v-model="formEdit.student_old_password"
+                v-model="formEdit.student_password"
                 type="password"
                 class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
                 :placeholder="$t('teacher.label_new_password')"
