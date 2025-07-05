@@ -222,14 +222,12 @@ async function checkInSubmit() {
 
   const res = await $axios.post("/teacher/activity/check_in", payload);
   if (res.status === 200) {
-    getingmessage("เพิ่มนักศึกษาที่เข้าร่วมกิจกรรมเรียบร้อยแล้ว", "checkin", "success");
+    getingmessage(t("activity.checkin_success_message"), "checkin", "success");
     await fetchNotCheckedinStudent(id_activity.value);
     await fetchCheckedinStudent(id_activity.value);
     await fetchNoCertExistStudent(id_activity.value);
   } else {
-    getingmessage("เกิดข้อผิดพลาดในการเพิ่มนักศึกษา", "checkin", "error");
-
-    // showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error");
+    getingmessage(t("activity.checkin_error_message"), "checkin", "error");
   }
 }
 
@@ -247,14 +245,13 @@ async function removeCheckinStudentsBtn() {
 
   if (res.status === 200) {
     // showAlert("นำชื่อออกแล้ว", "success");
-    getingmessage("ลบนักศึกษาที่เข้าร่วมกิจกรรมเรียบร้อยแล้ว", "assign", "success");
+    getingmessage(t("activity.checkout_success_message"), "assign", "success");
 
     certNotExistTableCheckbox.value = [];
     await fetchNotCheckedinStudent(id_activity.value);
     await fetchNoCertExistStudent(id_activity.value);
   } else {
-    getingmessage("เกิดข้อผิดพลาดในการลบนักศึกษาที่เข้าร่วมกิจกรรม", "assign", "error");
-    // showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error",);
+    getingmessage(t("activity.checkout_error_message"), "assign", "error");
   }
 }
 

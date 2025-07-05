@@ -4,11 +4,13 @@ definePageMeta({
 });
 
 import { ref, onMounted, computed } from "vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const { $axios } = useNuxtApp();
 const showModal = ref(false);
 const showModalAdd = ref(false);
-const editData = ref(null);
+// const editData = ref(null);
 const editId = ref(null);
 const { showAlert } = useAlert();
 const { handleApiError } = useErrorHandler();
@@ -88,11 +90,13 @@ async function handleConfirmDelete(value) {
     try {
       const response = await $axios.delete(`/student/${selectedStudentId.value}/delete`);
       if (response.status === 200) {
-        showAlert("ลบข้อมูลนักเรียน/นักศึกษาแล้ว", "error");
+        console.log(t("teacher.delete_student_success_message"));
+
+        showAlert(t("teacher.delete_student_success_message"), "error");
         fetchStudent();
       }
     } catch (err) {
-      handleApiError(err, "เกิดข้อผิดพลาดในการลบข้อมูลนักเรียน");
+      handleApiError(err, t("teacher.delete_student_error_message"));
     }
   }
   showModalConfirm.value = false; // ปิด modal ไม่ว่าจะลบหรือยกเลิก
@@ -121,9 +125,9 @@ async function actionStudent(params, action) {
     }
   } catch (err) {
     if (action === "delete") {
-      handleApiError(err, "เกิดข้อผิดพลาดในการลบข้อมูลนักเรียน");
+      handleApiError(err, t("teacher.delete_student_error_message"));
     } else if (action === "edit") {
-      handleApiError(err, "เกิดข้อผิดพลาดในการดึงข้อมูลนักเรียน");
+      handleApiError(err, t("teacher.fetch_student_error_message"));
     }
     console.error("Error in actionStudent:", err);
   }
@@ -139,29 +143,29 @@ async function saveEdit() {
       student_phone: formEdit.value.student_phone,
     });
     if (response.status === 200) {
-      showAlert("แก้ไขข้อมูลนักเรียนสำเร็จ", "info");
+      showAlert(t("teacher.edit_student_success_message"), "info");
       showModal.value = false;
       clearFormAdd();
       fetchStudent();
     }
   } catch (err) {
-    handleApiError(err, "เกิดข้อผิดพลาดในการแก้ไขข้อมูลนักเรียน");
+    handleApiError(err, t("teacher.edit_student_error_message"));
     console.error("Error saving edit:", err);
   }
 }
 
 async function saveAdd() {
   try {
-    console.log(formAdd.value);
+    // console.log(formAdd.value);
     const res = await $axios.post("/student", formAdd.value);
     if (res.status === 200) {
       showModalAdd.value = false;
-      showAlert("เพิ่มข้อมูลนักเรียนเรียบร้อย", "success");
+      showAlert(t("teacher.create_student_success_message"), "success");
     }
     clearFormAdd();
     fetchStudent();
   } catch (err) {
-    handleApiError(err, "เกิดข้อผิดพลาดในการเพิ่มข้อมูลนักเรียน");
+    handleApiError(err, t("teacher.create_student_error_message"));
     console.error("Error saving add:", err);
   }
 }
@@ -169,7 +173,7 @@ async function saveAdd() {
 onMounted(() => {
   fetchStudent();
 });
-watch(page, () => fetchStudents());
+watch(page, () => fetchStudent());
 </script>
 <template>
   <div class="min-h-screen bg-white border border-gray-200 rounded-lg">
