@@ -66,6 +66,9 @@
     "delete_student_error_message": "An error occurred while deleting student data.",
     "edit_student_success_message": "Student data was updated successfully.",
     "edit_student_error_message": "An error occurred while updating student data.",
+    "old_password_wrong": "please check an old password",
+    "new_password_wrong": "please check a new password",
+
     "create_student_success_message": "Student data was added successfully.",
     "create_student_error_message": "An error occurred while adding student data.",
     "fetch_student_error_message": "An error occurred while loading student data."

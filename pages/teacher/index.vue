@@ -47,7 +47,6 @@ const formEdit = ref({
   student_old_password: "",
   student_password: "",
   student_phone: "",
-  student_profile_image: "",
 });
 const formAdd = ref({
   student_email: "",
@@ -131,26 +130,74 @@ async function actionStudent(params, action) {
   }
 }
 
+const formEditErr = ref(false);
+const formEditErrLocation = ref("");
+async function clearFormEditErr() {
+  formEditErr.value = false;
+  formEditErrLocation.value = "";
+}
+async function closeFromEdit() {
+  clearFormEditErr();
+  formEdit.value.student_name = "";
+  formEdit.value.student_email = "";
+  formEdit.value.student_old_password = "";
+  formEdit.value.student_password = "";
+  formEdit.value.student_phone = "";
+  showModal.value = false;
+}
 async function saveEdit() {
   try {
-    // console.log(formEdit.value);
+    if (formEdit.value.student_old_password && !formEdit.value.student_password) {
+      formEditErr.value = true;
+      formEditErrLocation.value = "new_pass";
+      return;
+    } else if (!formEdit.value.student_old_password && formEdit.value.student_password) {
+      formEditErr.value = true;
+      formEditErrLocation.value = "old_pass";
+      return;
+    }
 
-    const response = await $axios.put(`/student/${editId.value}/edit`, {
-      student_name: formEdit.value.student_name,
-      student_email: formEdit.value.student_email,
-      student_old_password: formEdit.value.student_old_password,
-      student_password: formEdit.value.student_password,
-      student_phone: formEdit.value.student_phone,
-    });
-    // console.log(response);
+    // กรองค่าที่ไม่เป็นสตริงว่างออกมา
+    const filteredData = {};
+    for (const [key, value] of Object.entries(formEdit.value)) {
+      if (value !== "") {
+        filteredData[key] = value;
+      }
+    }
+
+    const response = await $axios.put(`/student/${editId.value}/edit`, filteredData);
+
+    // const response = await $axios.put(`/student/${editId.value}/edit`, {
+    //   student_name: formEdit.value.student_name,
+    //   student_email: formEdit.value.student_email,
+    //   student_old_password: formEdit.value.student_old_password,
+    //   student_password: formEdit.value.student_password,
+    //   student_phone: formEdit.value.student_phone,
+    // });
+    // console.log(response.data);
+    if (!response.data.success) {
+      const detail = response.data.detail.toLowerCase();
+      if (detail.includes("old password wrong")) {
+        formEditErr.value = true;
+        formEditErrLocation.value = "old_pass";
+        return;
+      }
+      console.error(response.data);
+
+      // if (detail.includes("validation fail")) {
+      //   throw detail;
+      // }
+    }
 
     if (response.status === 200) {
       showAlert(t("teacher.edit_student_success_message"), "info");
       showModal.value = false;
-      clearFormAdd();
+      closeFromEdit();
       fetchStudent();
     }
   } catch (err) {
+    showModal.value = false;
+    closeFromEdit();
     handleApiError(err, t("teacher.edit_student_error_message"));
     console.error("Error saving edit:", err);
   }
@@ -350,7 +397,7 @@ watch(page, () => fetchStudent());
             <h3 class="text-lg sm:text-xl font-semibold text-gray-800">
               {{ $t("teacher.edit_modal_title") }}
             </h3>
-            <button class="text-red-400 hover:text-red-600 cursor-pointer" @click.prevent="showModal = false">
+            <button class="text-red-400 hover:text-red-600 cursor-pointer" @click="closeFromEdit()">
               <Icon name="mingcute:close-line" style="width: 24px; height: 24px; padding-left: 10%" class="sm:w-5 sm:h-5 md:w-6 md:h-6 transform hover:scale-125 transition-transform duration-200" />
             </button>
           </div>
@@ -385,6 +432,9 @@ watch(page, () => fetchStudent());
                 class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
                 :placeholder="$t('teacher.label_password')"
               />
+              <div class="text-end">
+                <span :class="formEditErr !== false && formEditErrLocation === 'old_pass' ? '' : 'hidden'" class="text-xs text-red-600">{{ $t("teacher.old_password_wrong") }}</span>
+              </div>
             </div>
             <div>
               <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
@@ -396,6 +446,9 @@ watch(page, () => fetchStudent());
                 class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
                 :placeholder="$t('teacher.label_new_password')"
               />
+              <div class="text-end">
+                <span :class="formEditErr !== false && formEditErrLocation === 'new_pass' ? '' : 'hidden'" class="text-xs text-red-600">{{ $t("teacher.new_password_wrong") }}</span>
+              </div>
             </div>
             <div>
               <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
@@ -408,7 +461,7 @@ watch(page, () => fetchStudent());
               />
             </div>
             <div class="flex justify-end space-x-2 sm:space-x-3 pt-3 sm:pt-4">
-              <button class="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-500 rounded-lg text-white hover:bg-gray-600 transition duration-200 text-sm sm:text-base cursor-pointer" @click.prevent="showModal = false">
+              <button class="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-500 rounded-lg text-white hover:bg-gray-600 transition duration-200 text-sm sm:text-base cursor-pointer" @click="closeFromEdit()">
                 {{ $t("teacher.close") }}
               </button>
               <button type="submit" class="px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer">

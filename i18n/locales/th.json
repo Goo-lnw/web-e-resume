@@ -66,6 +66,9 @@
     "delete_student_error_message": "มีข้อผิดพลาดในการลบข้อมูลนักเรียน/นักศึกษา",
     "edit_student_success_message": "แก้ไขข้อมูลนักเรียน/นักศึกษาเรียบร้อยแล้ว",
     "edit_student_error_message": "มีข้อผิดพลาดในการแก้ไขข้อมูลนักเรียน/นักศึกษา",
+    "old_password_wrong": "รหัสผ่านเก่าไม่ถูกต้อง",
+    "new_password_wrong": "ตรวจสอบรหัสผ่านใหม่",
+
     "create_student_success_message": "เพิ่มข้อมูลนักเรียน/นักศึกษาเรียบร้อยแล้ว",
     "create_student_error_message": "มีข้อผิดพลาดในการเพิ่มข้อมูลนักเรียน/นักศึกษา",
     "fetch_student_error_message": "มีข้อผิดพลาดในการดึงข้อมูลนักเรียน/นักศึกษา"
