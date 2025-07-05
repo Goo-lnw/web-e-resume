@@ -16,7 +16,7 @@
           <!-- Center Navigation -->
           <div class="hidden sm:flex items-center space-x-1 md:space-x-2 lg:space-x-3 animate-fade-fade-down">
 
-            <NuxtLink to="/teacher"
+            <NuxtLink :to="localePath('/teacher')"
               class="group relative flex flex-col items-center justify-center p-2 lg:p-3 rounded-lg transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200">
               <Icon name="mdi:home" style="height: 24px; width: 24px;"
                 class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200" />
@@ -31,7 +31,7 @@
               </div>
             </NuxtLink>
 
-            <NuxtLink to="/teacher/resume_list"
+            <NuxtLink :to="localePath('/teacher/resume_list')"
               class="group relative flex flex-col items-center justify-center p-2 lg:p-3 rounded-lg transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200">
               <Icon name="ic:round-list" style="height: 26px; width: 26px;"
                 class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200" />
@@ -50,14 +50,14 @@
 
           <!-- Mobile Navigation -->
           <div class="flex sm:hidden items-center space-x-2">
-            <NuxtLink to="/teacher"
+            <NuxtLink :to="localePath('/teacher')"
               class="group flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200">
               <Icon name="mdi:home" style="height: 24px; width: 24px;"
                 class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200" />
 
             </NuxtLink>
 
-            <NuxtLink to="/teacher/resume_list"
+            <NuxtLink :to="localePath('/teacher/resume_list')"
               class="group flex items-center justify-center p-2 rounded-full transition-all duration-200 ease-in-out hover:bg-gray-100 active:bg-gray-200">
               <Icon name="ic:round-list" style="height: 26px; width: 26px;"
                 class="sm:w-6 sm:h-6 lg:w-7 lg:h-7 text-gray-600 group-hover:text-blue-600 transition-colors duration-200" />
@@ -188,7 +188,7 @@ definePageMeta({
     middleware: ["auth"],
 });
 import Footer from '~/components/common/Footer.vue';
-
+const localePath = useLocalePath();
 const { $axios } = useNuxtApp();
 const confirm = ref(false)
 const router = useRouter();

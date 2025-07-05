@@ -1,23 +1,37 @@
 <template>
-    <nav class="animate-fade-down border-b border-gray-200 sticky top-0 z-10 min-h-16">
-        <div class="container mx-auto px-4 flex justify-between items-center flex-wrap md:flex-nowrap">
-            <!-- โลโก้ -->
-            <div class="flex items-center gap-4 flex-shrink-0">
-                <NuxtLink to="/" class="flex items-center">
-                    <NuxtImg src="./images/logo-it-bru-Photoroom.png" alt="logo-bru" class="h-12 animate-fade-down" />
-                </NuxtLink>
-                <NuxtImg src="./images/Eresumem-logo-removebg.png" alt="logo-eresume" class="h-18 w-28 animate-fade-down" />
-            </div>
-            <LanguageChange />
-        </div>
-    </nav>
-    <div style="font-family: 'Mitr', sans-serif" class="md:mt-[-50px]">
-        <slot />
+  <nav
+    class="animate-fade-down border-b border-gray-200 sticky top-0 z-10 min-h-16"
+  >
+    <div
+      class="container mx-auto px-4 flex justify-between items-center flex-wrap md:flex-nowrap"
+    >
+      <!-- โลโก้ -->
+      <div class="flex items-center gap-4 flex-shrink-0">
+        <NuxtLink :to="localePath('/')" class="flex items-center">
+          <NuxtImg
+            src="./images/logo-it-bru-Photoroom.png"
+            alt="logo-bru"
+            class="h-12 animate-fade-down"
+          />
+        </NuxtLink>
+        <NuxtImg
+          src="./images/Eresumem-logo-removebg.png"
+          alt="logo-eresume"
+          class="h-18 w-28 animate-fade-down"
+        />
+      </div>
+      <LanguageChange />
     </div>
+  </nav>
+  <div style="font-family: 'Mitr', sans-serif" class="md:mt-[-50px]">
+    <slot />
+  </div>
 </template>
-<script setup></script>
+<script setup>
+const localePath = useLocalePath();
+</script>
 
-<!-- <style scoped>
+<style scoped>
 /* อนิเมชันสำหรับ fade-up */
 @keyframes fade-up {
   from {
@@ -80,4 +94,4 @@
 .animate-slide-in-right {
   animation: slide-in-right 0.5s ease-out;
 }
-</style> -->
+</style>
