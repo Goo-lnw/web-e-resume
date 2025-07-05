@@ -15,21 +15,14 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
   ],
   i18n: {
-    strategy: "prefix",
-    defaultLocale: "th",
-    locales: [
-      { code: "en", name: "English", file: "en.json" },
-      { code: "th", name: "ไทย", file: "th.json" },
-    ],
-    lazy: true,
     langDir: "i18n/locales",
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: "i18n_redirected",
-      fallbackLocale: "th",
-      alwaysRedirect: false,
-      redirectOn: "no_prefix",
-    },
+    locales: [
+      { code: "en", file: "en.json" },
+      { code: "th", file: "th.json" },
+    ],
+    defaultLocale: "en",
+    strategy: "prefix",
+    lazy: true,
   },
   css: ["~/assets/css/main.css"],
   vite: {
