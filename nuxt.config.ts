@@ -15,7 +15,7 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
   ],
   i18n: {
-    langDir: "i18n/locales",
+    langDir: "locales",
     locales: [
       { code: "en", file: "en.json" },
       { code: "th", file: "th.json" },
