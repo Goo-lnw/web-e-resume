@@ -189,7 +189,8 @@
     "approved": "Approved",
     "id": "ID",
     "footer": "Professional Resume",
-    "err": "An error occurred while loading data."
+    "err": "An error occurred while loading data.",
+    "name":"No name"
   },
   "student": {
     "home": "Home",
