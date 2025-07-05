@@ -221,7 +221,7 @@ async function Hendlelogout() {
     await $axios.post("/logout"); // Uncomment if you want to notify backend
 
     // Redirect to home page
-    router.push("/");
+    router.push(localePath("/"));
   } catch (err) {
     console.log(err);
   }
