@@ -139,7 +139,11 @@
     "checkin_success_message": "เพิ่มนักศึกษาที่เข้าร่วมกิจกรรมเรียบร้อยแล้ว",
     "checkin_error_message": "เกิดข้อผิดพลาดในการเพิ่มนักศึกษา",
     "checkout_success_message": "ลบนักศึกษาที่เข้าร่วมกิจกรรมเรียบร้อยแล้ว",
-    "checkout_error_message": "ลบนักศึกษาที่เข้าร่วมกิจกรรมเรียบร้อยแล้ว"
+    "checkout_error_message": "ลบนักศึกษาที่เข้าร่วมกิจกรรมเรียบร้อยแล้ว",
+    "assign_success_message": "มอบเกียรติบัตร/ใบรับรองเรียบร้อยแล้ว",
+    "assign_error_message": "มอบเกียรติบัตร/ใบรับรองเรียบร้อยแล้ว",
+    "remove_cert_success_message": "ยกเลิกเกียรติบัตร/ใบรับรองเรียบร้อยแล้ว",
+    "remove_cert_error_message": "ยกเลิกเกียรติบัตร/ใบรับรองเรียบร้อยแล้ว"
   },
   "resume_list": {
     "header": "รายการแสดง Resume นักศึกษา/นักเรียน",

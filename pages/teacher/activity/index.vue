@@ -270,13 +270,13 @@ async function assignCertBtn() {
 
   if (res.status === 200) {
     // showAlert("มอบใบ Certificate เรียบร้อยแล้ว", "success");
-    getingmessage("มอบใบ Certificate เรียบร้อยแล้ว", "assign", "success");
+    getingmessage(t("activity.assign_success_message"), "assign", "success");
 
     certNotExistTableCheckbox.value = [];
     await fetchNoCertExistStudent(id_activity.value);
     await fetchCertExistStudent(id_activity.value);
   } else {
-    getingmessage("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "assign", "error");
+    getingmessage(t("activity.assign_error_message"), "assign", "error");
     // showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error");
   }
 }
@@ -296,7 +296,7 @@ async function removeCertBtn() {
 
     if (res.status === 200) {
       // showAlert("ลบ certificate แล้ว", "success");
-      getingmessage("ลบ certificate แล้ว", "checkcert", "success");
+      getingmessage(t("activity.remove_cert_success_message"), "checkcert", "success");
 
       removeStudentCertCheckbox.value = [];
       await fetchNotCheckedinStudent(id_activity.value);
@@ -304,11 +304,11 @@ async function removeCertBtn() {
       await fetchNoCertExistStudent(id_activity.value);
       await fetchCertExistStudent(id_activity.value);
     } else {
-      showAlert("เกิดข้อผิดพลาดในการลบ", "error");
+      getingmessage(t("activity.remove_cert_error_message"), "checkcert", "error");
     }
   } catch (error) {
     console.error(error);
-    getingmessage("เกิดข้อผิดพลาดในการลบ", "checkcert", "error");
+    getingmessage(t("activity.remove_cert_error_message"), "checkcert", "error");
 
     // showAlert("เกิดข้อผิดพลาดในการลบ", "error");
   }
@@ -1018,7 +1018,11 @@ watch(certNotExistTableCheckbox, (value) => {
                       <h5 class="text-lg sm:text-lg font-semibold text-blue-400">
                         {{ $t("activity.manage_not_checkedin_students") }}
                       </h5>
-                      <p :class="type_modal_alert === 'success' ? 'text-green-600' : 'text-red-600'" class="border-1 text-xs p-1 animate-bounce" v-if="message_modal_alert.length > 0 && position_modal_alert == 'checkin'">
+                      <p
+                        :class="type_modal_alert === 'success' ? 'text-green-600' : 'text-red-600'"
+                        class="border-1 text-xs text-normal p-1 animate-slide-in rounded"
+                        v-if="message_modal_alert.length > 0 && position_modal_alert == 'checkin'"
+                      >
                         {{ message_modal_alert }}
                       </p>
                     </div>
@@ -1087,7 +1091,11 @@ watch(certNotExistTableCheckbox, (value) => {
                       <h5 class="text-lg sm:text-lg font-semibold text-blue-400">
                         {{ $t("activity.manage_checkedin_students") }}
                       </h5>
-                      <p :class="type_modal_alert === 'success' ? 'text-green-600' : 'text-red-600'" class="border-1 text-xs p-1 animate-bounce" v-if="message_modal_alert.length > 0 && position_modal_alert == 'assign'">
+                      <p
+                        :class="type_modal_alert === 'success' ? 'text-green-600' : 'text-red-600'"
+                        class="border-1 text-xs text-normal p-1 animate-slide-in rounded"
+                        v-if="message_modal_alert.length > 0 && position_modal_alert == 'assign'"
+                      >
                         {{ message_modal_alert }}
                       </p>
                     </div>
@@ -1167,7 +1175,11 @@ watch(certNotExistTableCheckbox, (value) => {
                         <h5 class="text-lg sm:text-lg font-semibold text-blue-800">
                           <!-- สามารถใส่หัวข้อได้ เช่น {{ $t('activity.checked_in_students') }} -->
                         </h5>
-                        <p :class="type_modal_alert === 'success' ? 'text-green-600' : 'text-red-600'" class="border-1 text-xs p-1 animate-bounce" v-if="message_modal_alert.length > 0 && position_modal_alert == 'checkcert'">
+                        <p
+                          :class="type_modal_alert === 'success' ? 'text-green-600' : 'text-red-600'"
+                          class="border-1 text-xs text-normal p-1 animate-slide-in rounded"
+                          v-if="message_modal_alert.length > 0 && position_modal_alert == 'checkcert'"
+                        >
                           {{ message_modal_alert }}
                         </p>
                       </div>
