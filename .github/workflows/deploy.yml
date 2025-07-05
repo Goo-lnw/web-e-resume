@@ -1,4 +1,4 @@
-name: Deploy app to VPS
+name: resume web deploy to vps server
 
 on:
   push:
