@@ -25,7 +25,10 @@ export default defineNuxtPlugin(() => {
       }
       return config;
     },
-    (error) => Promise.reject(error)
+    (error) => {
+      console.error("Request error:", error);
+      return Promise.reject(error);
+    }
   );
 
   $axios.interceptors.response.use(
@@ -34,11 +37,25 @@ export default defineNuxtPlugin(() => {
         tokenCookie.value = response.data.token;
       }
       return response;
-
     },
     (error) => {
+      console.error("Response error:", error);
+      
+      if (error.response?.status === 401) {
+        tokenCookie.value = null;
+        if (process.client) {
+          router.push("/");
+        }
+      } else if (error.response?.status === 403) {
+        tokenCookie.value = null;
+        if (process.client) {
+          router.push("/");
+        }
+      } else if (error.response?.status >= 500) {
+        console.error("Server error:", error.response?.data);
+      }
+      
       return Promise.reject(error);
-
     }
   );
 

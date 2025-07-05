@@ -9,6 +9,8 @@
           <a
             href="https://it.bru.ac.th/"
             class="flex justify-center lg:justify-start"
+            target="_blank"
+            rel="noopener"
           >
             <NuxtImg
               src="./images/logo-it-bru-Photoroom.png"
@@ -21,6 +23,8 @@
           <a
             href="https://www.bru.ac.th/venue/bru/"
             class="flex justify-center lg:justify-start"
+            target="_blank"
+            rel="noopener"
           >
             <NuxtImg src="./images/bru-web-logo-en.png" alt="" class="h-26" />
           </a>
@@ -50,20 +54,24 @@
           </h4>
           <ul class="text-sm transition-all duration-500">
             <li class="mb-6">
-              <NuxtLink
+              <a
                 href="https://www.facebook.com/it.bru.ac.th"
                 class="text-gray-600 hover:text-gray-900"
+                target="_blank"
+                rel="noopener"
               >
-                {{ $t("footer.facebook_page") }}</NuxtLink
-              >
+                {{ $t("footer.facebook_page") }}
+              </a>
             </li>
             <li class="mb-6">
-              <NuxtLink
+              <a
                 href="https://it.bru.ac.th/"
                 class="text-gray-600 hover:text-gray-900"
+                target="_blank"
+                rel="noopener"
               >
-                {{ $t("footer.website") }}</NuxtLink
-              >
+                {{ $t("footer.website") }}
+              </a>
             </li>
           </ul>
         </div>
@@ -88,6 +96,21 @@
 import { jwtDecode } from "jwt-decode";
 const localePath = useLocalePath();
 const tokenState = useState("token", () => useCookie("token").value);
-let decodedToken = jwtDecode(tokenState.value);
-const { role, userId, resume_id } = decodedToken || {};
+
+// ตรวจสอบ token ก่อน decode
+let decodedToken = null;
+let role = null;
+let userId = null;
+let resume_id = null;
+
+if (tokenState.value) {
+  try {
+    decodedToken = jwtDecode(tokenState.value);
+    role = decodedToken?.role;
+    userId = decodedToken?.userId;
+    resume_id = decodedToken?.resume_id;
+  } catch (error) {
+    console.error("Token decode error in Footer:", error);
+  }
+}
 </script>

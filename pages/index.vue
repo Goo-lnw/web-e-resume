@@ -18,23 +18,23 @@ async function HandleLogin() {
     try {
         const response = await $axios.post("/login", formData.value);
         const { token, data } = response.data;
-        // const expire = new Date(Date.now() + 60 * 60 * 2);
+        
         if (response.status === 200 && token) {
-            // const tokenCookie = useCookie("token", {
-            //     // maxAge: 60,
-            //     expires: expire,
-            // });
-            // tokenCookie.value = token;
-
-            const expires = new Date(Date.now() + 2 * 60 * 60 * 1000).toUTCString();
-            document.cookie = `token=${token}; expires=${expires}; path=/`;
+            const tokenCookie = useCookie("token", {
+                maxAge: 60 * 60 * 2, // 2 ชั่วโมง
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "strict",
+                path: "/",
+            });
+            tokenCookie.value = token;
+            
             const role = data?.role;
             if (role === "student") {
                 showAlert("เข้าสู่ระบบสำเร็จ (นักเรียน)", "success");
-                navigateTo("/student", { replace: true, external: true });
+                await navigateTo("/student", { replace: true });
             } else if (role === "teacher") {
                 showAlert("เข้าสู่ระบบสำเร็จ (อาจารย์)", "success");
-                navigateTo("/teacher", { replace: true, external: true });
+                await navigateTo("/teacher", { replace: true });
             } else {
                 showAlert("ไม่พบสิทธิ์ในการเข้าถึงระบบ", "error");
             }
@@ -43,8 +43,9 @@ async function HandleLogin() {
         console.log(error.status);
         if (error.status === 401) {
             err.value = "รหัสผ่านหรือชื่อผู้ใช้ไม่ถูกต้อง";
-            loading.value = false;
         }
+    } finally {
+        loading.value = false;
     }
 }
 </script>

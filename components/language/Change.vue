@@ -3,7 +3,7 @@
     <input
       type="checkbox"
       class="sr-only peer"
-      :checked="spanRef"
+      :checked="isThaiLocale"
       @change="toggleLocale"
     />
 
@@ -13,67 +13,90 @@
     <div class="flex justify-between items-center">
       <span
         class="absolute text-xs left-2 text-white transition duration-300 opacity-100"
-        >{{ spanRef ? "TH" : "" }}</span
+        >{{ isThaiLocale ? "TH" : "" }}</span
       >
       <span
         class="absolute text-xs left-7 text-white transition duration-300 opacity-100"
-        >{{ !spanRef ? "EN" : "" }}</span
+        >{{ !isThaiLocale ? "EN" : "" }}</span
       >
     </div>
   </label>
 </template>
 
 <script setup>
-import { ref, onBeforeMount, watch } from "vue";
-import { useRouter } from "vue-router";
-import { useI18n } from "vue-i18n";
+import { ref, computed, onMounted, watch } from "vue";
 
-const router = useRouter();
-const { currentRoute } = router;
+// ใช้ Nuxt composables
+const { locale, locales } = useI18n();
+const route = useRoute();
 const localePath = useLocalePath();
-const spanRef = ref(false);
-const { locales, locale, setLocale } = useI18n();
-const rawLocales = locales.value;
-const localeCodes = Object.values(rawLocales).map((l) => l.code);
 
-const [firstLocale, secondLocale] = localeCodes;
+// สร้าง reactive state
+const isThaiLocale = ref(false);
 
+// Computed property สำหรับตรวจสอบ locale ปัจจุบัน
+const currentLocale = computed(() => locale.value);
+const availableLocales = computed(() => locales.value);
+
+// ฟังก์ชันสำหรับอัพเดท locale ตาม path
 function updateLocaleByPath(path) {
-  if (path.startsWith("/th")) {
-    if (!spanRef.value || locale.value !== secondLocale) {
-      spanRef.value = true;
-      setLocale(secondLocale);
-    }
-  } else {
-    if (spanRef.value || locale.value !== firstLocale) {
-      spanRef.value = false;
-      setLocale(firstLocale);
-    }
+  const isThai = path.startsWith("/th");
+  isThaiLocale.value = isThai;
+  
+  // อัพเดท locale ถ้าต่างจากปัจจุบัน
+  if (isThai && currentLocale.value !== "th") {
+    locale.value = "th";
+  } else if (!isThai && currentLocale.value !== "en") {
+    locale.value = "en";
   }
 }
 
-onBeforeMount(() => {
-  updateLocaleByPath(currentRoute.value.path);
+// ฟังก์ชันสำหรับสลับ locale
+const toggleLocale = async () => {
+  try {
+    isThaiLocale.value = !isThaiLocale.value;
+    const newLocale = isThaiLocale.value ? "th" : "en";
+    
+    // อัพเดท locale
+    locale.value = newLocale;
+    
+    // สร้าง path ใหม่
+    const currentPath = route.fullPath;
+    const cleanedPath = currentPath.replace(/^\/(th|en)/, "") || "/";
+    const newPath = localePath(cleanedPath);
+    
+    // ใช้ navigateTo แทน router.push
+    await navigateTo(newPath, { replace: true });
+  } catch (error) {
+    console.error("Error toggling locale:", error);
+  }
+};
+
+// ตั้งค่าเริ่มต้น
+onMounted(() => {
+  updateLocaleByPath(route.path);
 });
 
+// ดูการเปลี่ยนแปลงของ route
 watch(
-  () => currentRoute.value.path,
+  () => route.path,
   (newPath) => {
     updateLocaleByPath(newPath);
   }
 );
 
-const toggleLocale = () => {
-  spanRef.value = !spanRef.value;
-  const newLocale = spanRef.value ? secondLocale : firstLocale;
-  setLocale(newLocale);
-
-  // เปลี่ยน path ตามภาษา
-  const currentPath = currentRoute.value.fullPath;
-  const cleanedPath = currentPath.replace(/^\/(th|en)/, "") || "/";
-  const newPath = localePath(cleanedPath);
-
-  router.push(newPath);
-};
+// ดูการเปลี่ยนแปลงของ locale
+watch(
+  () => currentLocale.value,
+  (newLocale) => {
+    isThaiLocale.value = newLocale === "th";
+  }
+);
 </script>
-<style lang=""></style>
+
+<style scoped>
+/* เพิ่ม transition สำหรับ smooth animation */
+.transition-duration-300 {
+  transition-duration: 300ms;
+}
+</style>

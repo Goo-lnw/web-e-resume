@@ -1,32 +1,59 @@
 import { jwtDecode } from "jwt-decode";
+
 export default defineNuxtRouteMiddleware(async (to, from) => {
-  let decodedToken;
+  // ตรวจสอบว่าเป็น client-side หรือไม่
+  if (process.server) {
+    return;
+  }
 
-  const tokenState: any = useState("token", () => useCookie("token").value);
-  // console.log(tokenState.value, "tokenState");
-
-  if (tokenState.value) {
-    try {
-      decodedToken = await jwtDecode(tokenState.value);
-      //   console.log(decodedToken, "decodedToken");
-      const { role, userId, resume_id }: any = decodedToken || {};
-      const path = to.path;
-      if (path.startsWith("/student") && (role !== "student" || !userId || !resume_id)) {
-        useCookie("token").value = null; // Clear the token if the role does not match
-        return navigateTo("/");
-      }
-      if (path.startsWith("/teacher") && (role !== "teacher" || !userId)) {
-        useCookie("token").value = null; // Clear the token if the role does not match
-        return navigateTo("/");
-      }
-    } catch (error) {
-      console.error("expected Token:", error);
-      // If the token is invalid or expired, redirect to the login page
-      return navigateTo("/");
-    }
-  } else {
+  const tokenCookie = useCookie("token");
+  
+  // ถ้าไม่มี token และไม่ได้อยู่ที่หน้า login
+  if (!tokenCookie.value) {
     if (to.path !== "/") {
       return navigateTo("/");
+    }
+    return;
+  }
+
+  // ถ้ามี token ให้ตรวจสอบ
+  if (tokenCookie.value) {
+    try {
+      const decodedToken = await jwtDecode(tokenCookie.value);
+      const { role, userId, resume_id }: any = decodedToken || {};
+      const path = to.path;
+      
+      // ตรวจสอบสิทธิ์สำหรับหน้า student
+      if (path.startsWith("/student")) {
+        if (role !== "student" || !userId || !resume_id) {
+          tokenCookie.value = null;
+          return navigateTo("/");
+        }
+      }
+      
+      // ตรวจสอบสิทธิ์สำหรับหน้า teacher
+      if (path.startsWith("/teacher")) {
+        if (role !== "teacher" || !userId) {
+          tokenCookie.value = null;
+          return navigateTo("/");
+        }
+      }
+      
+      // ถ้าอยู่ที่หน้า login แต่มี token อยู่แล้ว ให้ redirect ไปตาม role
+      if (path === "/" && role) {
+        if (role === "student") {
+          return navigateTo("/student");
+        } else if (role === "teacher") {
+          return navigateTo("/teacher");
+        }
+      }
+      
+    } catch (error) {
+      console.error("Token validation error:", error);
+      tokenCookie.value = null;
+      if (to.path !== "/") {
+        return navigateTo("/");
+      }
     }
   }
 });

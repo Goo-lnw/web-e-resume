@@ -22,10 +22,18 @@ const githubUsername = computed(() => {
     return url.replace(/^https:\/\/github\.com\//, "");
 });
 
-onMounted(() => {
-    resumeStore.fetchResume();
-    console.log("this is pinia", resumeStore.student);
-    console.log("student name:", resumeStore.student.student_name);
+// เพิ่ม reactive variables สำหรับ loading และ error
+const loading = computed(() => resumeStore.loading);
+const error = computed(() => resumeStore.error);
+
+onMounted(async () => {
+    try {
+        await resumeStore.fetchResume();
+        console.log("this is pinia", resumeStore.student);
+        console.log("student name:", resumeStore.student.student_name);
+    } catch (err) {
+        console.error("Error loading resume:", err);
+    }
 });
 
 function getProficiencyColor(proficiency) {
