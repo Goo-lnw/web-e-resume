@@ -190,21 +190,12 @@ definePageMeta({
 import Footer from '~/components/common/Footer.vue';
 const localePath = useLocalePath();
 const { $axios } = useNuxtApp();
-const confirm = ref(false)
+
 const router = useRouter();
 
 
 
 
-async function logout(action) {
-  confirm.value = true
-
-  if (action == true) {
-    await Hendlelogout();
-  } else {
-    return null;
-  }
-}
 
 async function Hendlelogout() {
   try {
