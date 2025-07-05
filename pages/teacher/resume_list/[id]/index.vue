@@ -165,11 +165,11 @@ onMounted(() => {
 
           <div class="flex-1 text-center md:text-left">
             <h1 class="text-3xl font-bold text-gray-800 mb-2">
-              {{ resume.student?.student_name || $t("resume_detail.na") }}
+              {{ resume.student?.student_name || $t("resume_detail.name") }}
             </h1>
             <p class="text-gray-600 mb-2">
               {{ $t("resume_detail.id") }}
-              {{ resume.student?.student_main_id || $t("resume_detail.na") }}
+              {{ resume.student?.student_main_id || $t("resume_detail.name") }}
             </p>
 
             <!-- Resume Status -->
@@ -213,13 +213,13 @@ onMounted(() => {
               <div class="flex items-center gap-2">
                 <span class="text-blue-500">📧</span>
                 <span class="text-gray-700">
-                  {{ resume.student?.student_email || $t("resume_detail.na") }}
+                  {{ resume.student?.student_email || $t("resume_detail.name") }}
                 </span>
               </div>
               <div class="flex items-center gap-2">
                 <span class="text-blue-500">📞</span>
                 <span class="text-gray-700">
-                  {{ resume.student?.student_phone || $t("resume_detail.na") }}
+                  {{ resume.student?.student_phone || $t("resume_detail.name") }}
                 </span>
               </div>
             </div>
