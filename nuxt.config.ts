@@ -21,7 +21,7 @@ export default defineNuxtConfig({
       { code: "th", file: "th.json" },
     ],
     defaultLocale: "en",
-    strategy: "prefix",
+    strategy: "no_prefix",
     lazy: true,
   },
   css: ["~/assets/css/main.css"],
