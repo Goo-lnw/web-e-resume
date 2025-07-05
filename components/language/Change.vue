@@ -69,28 +69,11 @@ const toggleLocale = () => {
   setLocale(newLocale);
 
   // เปลี่ยน path ตามภาษา
-  const currentPath = currentRoute.value.path;
-  let newPath = "";
+  const currentPath = currentRoute.value.fullPath;
+  const cleanedPath = currentPath.replace(/^\/(th|en)/, "") || "/";
+  const newPath = localePath(cleanedPath);
 
-  if (spanRef.value) {
-    // ไปภาษาไทย: เพิ่ม /th ถ้ายังไม่มี
-    if (!currentPath.startsWith("/th")) {
-      newPath = "/th" + currentPath;
-    } else {
-      newPath = currentPath;
-    }
-  } else {
-    // ไปภาษาอังกฤษ: ลบ /th ออก
-    if (currentPath.startsWith("/th")) {
-      newPath = currentPath.replace(/^\/th/, "") || "/";
-    } else {
-      newPath = currentPath;
-    }
-  }
-
-  if (newPath !== currentPath) {
-    router.push(localePath(newPath));
-  }
+  router.push(newPath);
 };
 </script>
 <style lang=""></style>
