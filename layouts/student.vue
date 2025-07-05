@@ -308,7 +308,7 @@ async function logout() {
     await $axios.post("/logout"); // Uncomment if you want to notify backend
 
     // Redirect to home page
-    router.push(localePath("/student/edit_profile"));
+    router.push(localePath("/"));
   } catch (err) {
     console.log(err);
   }
