@@ -4,7 +4,7 @@
   
 
     <nav
-      class="text-white shadow-xl fixed top-0 left-0 right-0 z-50 animate-fade-fade-down bg-white/95 backdrop-blur-sm">
+      class="text-white shadow-sm fixed top-0 left-0 right-0 z-50 animate-fade-fade-down bg-white/95 backdrop-blur-sm">
       <div class="container max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 flex justify-between items-center">
         <div class="flex justify-between items-center h-14 sm:h-16 w-full">
           <!-- Logo Section -->

@@ -33,10 +33,7 @@ function filterStudents() {
   // แปลง query เป็นตัวพิมพ์เล็กเพื่อการค้นหาที่ไม่สนใจตัวพิมพ์ใหญ่
   const query = searchQuery.value.toLowerCase();
   return student.value.filter((item) => {
-    return (
-      item.student_name.toLowerCase().includes(query) ||
-      item.student_main_id.toLowerCase().includes(query)
-    );
+    return item.student_name.toLowerCase().includes(query) || item.student_main_id.toLowerCase().includes(query);
   });
 }
 
@@ -89,9 +86,7 @@ async function fetchStudent() {
 async function handleConfirmDelete(value) {
   if (value && selectedStudentId.value) {
     try {
-      const response = await $axios.delete(
-        `/student/${selectedStudentId.value}/delete`
-      );
+      const response = await $axios.delete(`/student/${selectedStudentId.value}/delete`);
       if (response.status === 200) {
         showAlert("ลบข้อมูลนักเรียน/นักศึกษาแล้ว", "error");
         fetchStudent();
@@ -116,8 +111,7 @@ async function actionStudent(params, action) {
       formEdit.value.student_name = response_id.data.student_name;
       formEdit.value.student_email = response_id.data.student_email;
       formEdit.value.student_phone = response_id.data.student_phone;
-      formEdit.value.student_profile_image =
-        response_id.data.student_profile_image;
+      formEdit.value.student_profile_image = response_id.data.student_profile_image;
       editId.value = response_id.data.student_id;
     } else if (action === "add" && params == 0) {
       showModal.value = false;
@@ -178,32 +172,25 @@ onMounted(() => {
 watch(page, () => fetchStudents());
 </script>
 <template>
-  <div class="min-h-full bg-gradient-to-b from-blue-100 to-white rounded">
-    <div
-      class="flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8"
-    >
+  <div class="min-h-screen bg-white border border-gray-200 rounded-lg">
+    <div class="flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
       <div class="flex justify-between animate-fade-up">
-        <Nuxtimg src="./images/teacher2.png" alt="" class="w-56 h-42" />
-        <h1
-          class="text-xl sm:text-2xl font-semibold text-gray-800 mt-32 sm:mb-0"
-        >
+        <div class="w-46 h-34">
+          <NuxtImg src="./images/teacher2.png" alt="" class="w-56 h-42" />
+        </div>
+        <span class="text-sm sm:text-md md:text-2xl font-semibold text-gray-800 mt-32 sm:mb-0 text-nowrap">
           {{ $t("teacher.student_list_title") }}
-        </h1>
+        </span>
       </div>
 
       <!-- Loading State -->
       <div v-if="isLoading" class="flex justify-center items-center py-12">
-        <div
-          class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"
-        ></div>
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
         <span class="ml-3 text-gray-600"> {{ $t("teacher.loading") }}</span>
       </div>
 
       <!-- Error State -->
-      <div
-        v-else-if="error"
-        class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded mb-4"
-      >
+      <div v-else-if="error" class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded mb-4">
         <div class="flex items-center">
           <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
             <path
@@ -214,128 +201,73 @@ watch(page, () => fetchStudents());
           </svg>
           {{ $t("teacher.error") }}
         </div>
-        <button
-          @click="fetchStudent"
-          class="mt-2 text-sm text-red-600 hover:text-red-800 underline"
-        >
+        <button @click="fetchStudent" class="mt-2 text-sm text-red-600 hover:text-red-800 underline">
           {{ $t("teacher.retry") }}
         </button>
       </div>
 
       <!-- Main Content -->
-      <div v-else class="rounded-lg shadow-md p-4 sm:p-6 bg-white">
-        <div
-          class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-3 sm:gap-4"
-        >
+      <div v-else class="rounded-lg p-4 sm:p-6 bg-white boder border-gray-200">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-3 sm:gap-4">
           <!-- Search and Filter -->
           <div class="flex items-center w-full sm:w-auto">
             <div class="relative w-full">
-              <input
-                v-model="searchQuery"
-                type="text"
-                :placeholder="$t('teacher.search_placeholder')"
-                class="pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg shadow-lg w-full text-sm sm:text-base"
-              />
-              <div
-                class="absolute left-2 sm:left-3 top-2 sm:top-2.5 text-gray-400"
-              >
+              <input v-model="searchQuery" type="text" :placeholder="$t('teacher.search_placeholder')" class="pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg w-full text-sm sm:text-base" />
+              <div class="absolute left-2 sm:left-3 top-2 sm:top-2.5 text-gray-400">
                 <Icon name="stash:search" style="width: 24px; height: 24px" />
               </div>
             </div>
           </div>
 
           <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:ml-auto">
-            <button
-              @click="actionStudent(0, 'add_activity')"
-              class="space-x-1 bg-green-400 hover:bg-green-600 text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center transition duration-200 cursor-pointer text-xs sm:text-xs"
-            >
-              <Icon
-                name="ep:circle-plus-filled"
-                style="color: white; width: 16px; height: 16px"
-              />
+            <button @click="actionStudent(0, 'add_activity')" class="space-x-1 bg-green-400 hover:bg-green-600 text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center transition duration-200 cursor-pointer text-xs sm:text-xs">
+              <Icon name="ep:circle-plus-filled" style="color: white; width: 16px; height: 16px" />
               <span>{{ $t("teacher.add_activity") }}</span>
             </button>
 
-            <button
-              @click="actionStudent(0, 'add')"
-              class="space-x-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center transition duration-200 cursor-pointer text-xs sm:text-xs"
-            >
-              <Icon
-                name="ep:circle-plus-filled"
-                style="color: white; width: 16px; height: 16px"
-              />
+            <button @click="actionStudent(0, 'add')" class="space-x-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center transition duration-200 cursor-pointer text-xs sm:text-xs">
+              <Icon name="ep:circle-plus-filled" style="color: white; width: 16px; height: 16px" />
               <span>{{ $t("teacher.add_student") }}</span>
             </button>
-            <NuxtLink
-              to="/teacher/resume_list"
-              class="space-x-1 flex items-center bg-cyan-600 text-white px-4 sm:px-6 py-2 rounded-lg shadow-md hover:bg-cyan-700 transition duration-200 gap-1 sm:gap-2 text-xs sm:text-xs"
-            >
+            <NuxtLink to="/teacher/resume_list" class="space-x-1 flex items-center bg-cyan-600 text-white px-4 sm:px-6 py-2 rounded-lg shadow-md hover:bg-cyan-700 transition duration-200 gap-1 sm:gap-2 text-xs sm:text-xs">
               <span>{{ $t("teacher.resume_list") }}</span>
-              <Icon
-                name="ep:right"
-                style="color: white; width: 16px; height: 16px"
-              />
+              <Icon name="ep:right" style="color: white; width: 16px; height: 16px" />
             </NuxtLink>
           </div>
         </div>
 
         <!-- Table -->
-        <div class="overflow-x-auto">
-          <table
-            class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base"
-          >
+        <div class="overflow-x-auto p-1 border border-gray-200 rounded-lg">
+          <table class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base">
             <thead class="bg-gray-100 text-gray-700">
               <tr>
-                <th
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
-                >
+                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">
                   {{ $t("teacher.student_id") }}
                 </th>
-                <th
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
-                >
+                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">
                   {{ $t("teacher.student_name") }}
                 </th>
-                <th
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm"
-                >
+                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm">
                   {{ $t("teacher.student_email") }}
                 </th>
-                <th
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-center text-xs sm:text-sm"
-                >
+                <th class="py-2 sm:py-3 px-2 sm:px-4 text-center text-xs sm:text-sm">
                   {{ $t("teacher.manage") }}
                 </th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
-              <tr
-                v-for="item in filterStudents()"
-                :key="item.student_id"
-                class="hover:bg-gray-50 dtransition-all uration-200"
-              >
-                <td
-                  class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105"
-                >
+              <tr v-for="item in filterStudents()" :key="item.student_id" class="hover:bg-gray-50 dtransition-all uration-200">
+                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
                   {{ item.student_main_id }}
                 </td>
-                <td
-                  class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105"
-                >
+                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
                   {{ item.student_name }}
                 </td>
-                <td
-                  class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105 text-blue-500"
-                >
+                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105 text-blue-500">
                   {{ item.student_email }}
                 </td>
-                <td
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-center space-x-1 sm:space-x-2"
-                >
-                  <button
-                    @click="actionStudent(item.student_id, 'edit')"
-                    class="text-indigo-600 hover:text-indigo-800 transition duration-200 cursor-pointer"
-                  >
+                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center space-x-1 sm:space-x-2">
+                  <button @click="actionStudent(item.student_id, 'edit')" class="text-indigo-600 hover:text-indigo-800 transition duration-200 cursor-pointer">
                     <Icon
                       name="tabler:edit"
                       style="
@@ -347,10 +279,7 @@ watch(page, () => fetchStudents());
                       class="sm:w-5 sm:h-5 md:w-6 md:h-6 transform hover:scale-125 transition-transform duration-200"
                     />
                   </button>
-                  <button
-                    @click="actionStudent(item.student_id, 'delete')"
-                    class="text-red-600 hover:text-red-800 transition duration-200 cursor-pointer"
-                  >
+                  <button @click="actionStudent(item.student_id, 'delete')" class="text-red-600 hover:text-red-800 transition duration-200 cursor-pointer">
                     <Icon
                       name="material-symbols:delete-outline"
                       style="
@@ -367,19 +296,11 @@ watch(page, () => fetchStudents());
             </tbody>
           </table>
           <div class="flex items-center justify-center mt-4 gap-4">
-            <button
-              @click="page--"
-              :disabled="page <= 1"
-              class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-            >
+            <button @click="page--" :disabled="page <= 1" class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50">
               {{ $t("teacher.prev") }}
             </button>
             <span>{{ $t("teacher.page") }} {{ page }} / {{ totalPages }}</span>
-            <button
-              @click="page++"
-              :disabled="page >= totalPages"
-              class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-            >
+            <button @click="page++" :disabled="page >= totalPages" class="px-4 py-2 bg-gray-200 rounded disabled:opacity-50">
               {{ $t("teacher.next") }}
             </button>
           </div>
@@ -387,19 +308,10 @@ watch(page, () => fetchStudents());
       </div>
     </div>
 
-    <dialog
-      v-if="showModalConfirm"
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full"
-      open
-    >
-      <div
-        class="bg-white rounded-lg shadow-lg w-full max-w-xs mx-4 sm:mx-auto p-6"
-      >
+    <dialog v-if="showModalConfirm" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full" open>
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-xs mx-4 sm:mx-auto p-6">
         <div class="flex flex-col items-center">
-          <Icon
-            name="material-symbols:warning"
-            style="width: 40px; height: 40px; color: #f59e42"
-          />
+          <Icon name="material-symbols:warning" style="width: 40px; height: 40px; color: #f59e42" />
           <h3 class="text-lg font-semibold text-gray-800 mt-2 mb-4 text-center">
             {{ $t("teacher.confirm_delete_title") }}
           </h3>
@@ -407,10 +319,7 @@ watch(page, () => fetchStudents());
             {{ $t("teacher.confirm_delete_text") }}
           </p>
           <div class="flex justify-center gap-3 w-full">
-            <button
-              class="px-4 py-2 bg-gray-300 rounded-lg text-gray-700 hover:bg-gray-400 transition duration-200 text-sm w-1/2"
-              @click="showModalConfirm = false"
-            >
+            <button class="px-4 py-2 bg-gray-300 rounded-lg text-gray-700 hover:bg-gray-400 transition duration-200 text-sm w-1/2" @click="showModalConfirm = false">
               {{ $t("teacher.cancel") }}
             </button>
             <button
@@ -428,40 +337,20 @@ watch(page, () => fetchStudents());
     </dialog>
 
     <!-- Edit Modal -->
-    <dialog
-      v-if="showModal"
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full"
-      :class="{ active: showModal }"
-      open
-    >
-      <div
-        class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-auto"
-      >
+    <dialog v-if="showModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full" :class="{ active: showModal }" open>
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-auto">
         <div class="p-4 sm:p-6">
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg sm:text-xl font-semibold text-gray-800">
               {{ $t("teacher.edit_modal_title") }}
             </h3>
-            <button
-              class="text-red-400 hover:text-red-600 cursor-pointer"
-              @click.prevent="showModal = false"
-            >
-              <Icon
-                name="mingcute:close-line"
-                style="width: 24px; height: 24px; padding-left: 10%"
-                class="sm:w-5 sm:h-5 md:w-6 md:h-6 transform hover:scale-125 transition-transform duration-200"
-              />
+            <button class="text-red-400 hover:text-red-600 cursor-pointer" @click.prevent="showModal = false">
+              <Icon name="mingcute:close-line" style="width: 24px; height: 24px; padding-left: 10%" class="sm:w-5 sm:h-5 md:w-6 md:h-6 transform hover:scale-125 transition-transform duration-200" />
             </button>
           </div>
-          <form
-            method="dialog"
-            class="space-y-3 sm:space-y-4"
-            @submit.prevent="saveEdit"
-          >
+          <form method="dialog" class="space-y-3 sm:space-y-4" @submit.prevent="saveEdit">
             <div>
-              <label
-                class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-              >
+              <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                 {{ $t("teacher.label_fullname") }}
               </label>
               <input
@@ -471,9 +360,7 @@ watch(page, () => fetchStudents());
               />
             </div>
             <div>
-              <label
-                class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-              >
+              <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                 {{ $t("teacher.label_email") }}
               </label>
               <input
@@ -483,9 +370,7 @@ watch(page, () => fetchStudents());
               />
             </div>
             <div>
-              <label
-                class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-              >
+              <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                 {{ $t("teacher.label_password") }}
               </label>
               <input
@@ -496,9 +381,7 @@ watch(page, () => fetchStudents());
               />
             </div>
             <div>
-              <label
-                class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-              >
+              <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                 {{ $t("teacher.label_new_password") }}
               </label>
               <input
@@ -509,9 +392,7 @@ watch(page, () => fetchStudents());
               />
             </div>
             <div>
-              <label
-                class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-              >
+              <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                 {{ $t("teacher.label_phone") }}
               </label>
               <input
@@ -521,16 +402,10 @@ watch(page, () => fetchStudents());
               />
             </div>
             <div class="flex justify-end space-x-2 sm:space-x-3 pt-3 sm:pt-4">
-              <button
-                class="px-3 sm:px-4 py-1.5 sm:py-2 bg-amber-600 rounded-lg text-white hover:bg-amber-700 transition duration-200 text-sm sm:text-base cursor-pointer"
-                @click.prevent="showModal = false"
-              >
+              <button class="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-500 rounded-lg text-white hover:bg-gray-600 transition duration-200 text-sm sm:text-base cursor-pointer" @click.prevent="showModal = false">
                 {{ $t("teacher.close") }}
               </button>
-              <button
-                type="submit"
-                class="px-3 sm:px-4 py-1.5 sm:py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer"
-              >
+              <button type="submit" class="px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer">
                 {{ $t("teacher.save") }}
               </button>
             </div>
@@ -540,52 +415,31 @@ watch(page, () => fetchStudents());
     </dialog>
 
     <!-- Add Modal -->
-    <dialog
-      v-if="showModalAdd"
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full"
-      :class="{ active: showModalAdd }"
-      open
-    >
-      <div
-        class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-auto"
-      >
+    <dialog v-if="showModalAdd" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full" :class="{ active: showModalAdd }" open>
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-auto">
         <div class="p-4 sm:p-6">
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg sm:text-xl font-semibold text-gray-800">
               {{ $t("teacher.add_modal_title") }}
             </h3>
-            <button
-              class="text-red-400 hover:text-red-600 cursor-pointer"
-              @click.prevent="showModalAdd = false"
-            >
-              <Icon
-                name="mingcute:close-line"
-                style="width: 24px; height: 24px; padding-left: 10%"
-                class="sm:w-5 sm:h-5 md:w-6 md:h-6 transform hover:scale-125 transition-transform duration-200"
-              />
+            <button class="text-red-400 hover:text-red-600 cursor-pointer" @click.prevent="showModalAdd = false">
+              <Icon name="mingcute:close-line" style="width: 24px; height: 24px; padding-left: 10%" class="sm:w-5 sm:h-5 md:w-6 md:h-6 transform hover:scale-125 transition-transform duration-200" />
             </button>
           </div>
-          <form
-            method="dialog"
-            class="space-y-3 sm:space-y-4"
-            @submit.prevent="saveAdd"
-          >
+          <form method="dialog" class="space-y-3 sm:space-y-4" @submit.prevent="saveAdd">
             <div>
-              <label
-                class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-              >
+              <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                 {{ $t("teacher.label_email") }}
               </label>
               <input
                 v-model="formAdd.student_email"
+                type="email"
                 class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
                 :placeholder="$t('teacher.label_email')"
               />
             </div>
             <div>
-              <label
-                class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-              >
+              <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                 {{ $t("teacher.label_password") }}
               </label>
               <input
@@ -599,9 +453,7 @@ watch(page, () => fetchStudents());
               </p>
             </div>
             <div>
-              <label
-                class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-              >
+              <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                 {{ $t("teacher.student_main_id") }}
               </label>
               <input
@@ -611,16 +463,10 @@ watch(page, () => fetchStudents());
               />
             </div>
             <div class="flex justify-end space-x-2 sm:space-x-3 pt-3 sm:pt-4">
-              <button
-                class="px-3 sm:px-4 py-1.5 sm:py-2 bg-amber-500 rounded-lg text-white hover:bg-amber-600 transition duration-200 text-sm sm:text-base cursor-pointer"
-                @click.prevent="showModalAdd = false"
-              >
+              <button class="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-500 hover:bg-gray-600 rounded-lg text-white transition duration-200 text-sm sm:text-base cursor-pointer" @click.prevent="showModalAdd = false">
                 {{ $t("teacher.close") }}
               </button>
-              <button
-                type="submit"
-                class="px-3 sm:px-4 py-1.5 sm:py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer"
-              >
+              <button type="submit" class="px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer">
                 {{ $t("teacher.save") }}
               </button>
             </div>

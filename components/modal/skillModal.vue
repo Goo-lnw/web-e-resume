@@ -188,7 +188,7 @@
 
             <!-- Footer -->
             <div class="bg-gray-50 px-2 py-2 md:px-6 md:py-4 border-t border-gray-200">
-                <div class="text-xs text-gray-500">{{ $t("skill_modal.total_skills") }}{{ skillData.length }}</div>
+                <div class="text-xs text-gray-500">{{ $t("skill_modal.total_skills", { count: skillData.length }) }}</div>
 
                 <div class="flex items-center justify-end space-x-3">
                     <button

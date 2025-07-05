@@ -4,6 +4,9 @@ definePageMeta({
 });
 
 import { ref, onMounted, watch } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 const { $axios } = useNuxtApp();
 const { showAlert } = useAlert();
 // fetch state
@@ -64,15 +67,18 @@ const canvasWrapper = ref("canvasWrapper");
 async function handleConfirmDelete(value) {
   if (value && selectedStudentId.value) {
     try {
-      const response = await $axios.delete(
-        `/student/${selectedStudentId.value}/delete`
-      );
+      // console.log(`Deleting activity with ID: ${selectedStudentId.value}`);
+
+      const response = await $axios.delete(`/teacher/activity/${selectedStudentId.value}`);
+      console.log(response);
+
       if (response.status === 200) {
-        showAlert("ลบข้อมูลนักเรียน/นักศึกษาแล้ว", "error");
-        fetchStudent();
+        showAlert(t("activity.delete_success"), "success");
+        fetchActivity();
       }
     } catch (err) {
-      showAlert("เกิดข้อผิดพลาดในการลบกิจกรรม ลองใหม่อีกครั้ง", "error");
+      // console.error(err);
+      showAlert(t("activity.delete_error"), "error");
     }
   }
   showModalConfirm.value = false; // ปิด modal ไม่ว่าจะลบหรือยกเลิก
@@ -216,11 +222,7 @@ async function checkInSubmit() {
 
   const res = await $axios.post("/teacher/activity/check_in", payload);
   if (res.status === 200) {
-    getingmessage(
-      "เพิ่มนักศึกษาที่เข้าร่วมกิจกรรมเรียบร้อยแล้ว",
-      "checkin",
-      "success"
-    );
+    getingmessage("เพิ่มนักศึกษาที่เข้าร่วมกิจกรรมเรียบร้อยแล้ว", "checkin", "success");
     await fetchNotCheckedinStudent(id_activity.value);
     await fetchCheckedinStudent(id_activity.value);
     await fetchNoCertExistStudent(id_activity.value);
@@ -239,30 +241,19 @@ async function removeCheckinStudentsBtn() {
   const payload = {
     resume_id: resume_id,
   };
-  const res = await $axios.delete(
-    `/teacher/activity/student/${id_activity.value}`,
-    {
-      data: payload,
-    }
-  );
+  const res = await $axios.delete(`/teacher/activity/student/${id_activity.value}`, {
+    data: payload,
+  });
 
   if (res.status === 200) {
     // showAlert("นำชื่อออกแล้ว", "success");
-    getingmessage(
-      "ลบนักศึกษาที่เข้าร่วมกิจกรรมเรียบร้อยแล้ว",
-      "assign",
-      "success"
-    );
+    getingmessage("ลบนักศึกษาที่เข้าร่วมกิจกรรมเรียบร้อยแล้ว", "assign", "success");
 
     certNotExistTableCheckbox.value = [];
     await fetchNotCheckedinStudent(id_activity.value);
     await fetchNoCertExistStudent(id_activity.value);
   } else {
-    getingmessage(
-      "เกิดข้อผิดพลาดในการลบนักศึกษาที่เข้าร่วมกิจกรรม",
-      "assign",
-      "error"
-    );
+    getingmessage("เกิดข้อผิดพลาดในการลบนักศึกษาที่เข้าร่วมกิจกรรม", "assign", "error");
     // showAlert("เกิดข้อผิดพลาดในการมอบเกียรติบัตร", "error",);
   }
 }
@@ -302,12 +293,9 @@ async function removeCertBtn() {
     const payload = {
       resume_id: resume_id,
     };
-    const res = await $axios.delete(
-      `/teacher/activity/student_cert/${id_activity.value}`,
-      {
-        data: payload,
-      }
-    );
+    const res = await $axios.delete(`/teacher/activity/student_cert/${id_activity.value}`, {
+      data: payload,
+    });
 
     if (res.status === 200) {
       // showAlert("ลบ certificate แล้ว", "success");
@@ -337,23 +325,16 @@ async function handlelCertImageChange(event) {
     if (file) {
       if (!allowedTypes.includes(file.type)) {
         event.target.value = null;
-        throw `${file.name} : File type ${
-          file.type
-        } not allowed. Allowed: ${allowedTypes.join(", ")}`;
+        throw `${file.name} : File type ${file.type} not allowed. Allowed: ${allowedTypes.join(", ")}`;
       }
       if (file.size > MAX_FILE_SIZE) {
         event.target.value = null;
-        throw `${file.name} : is larger than 5 MB : This file is ${(
-          file.size /
-          (1024 * 1024)
-        ).toFixed(2)} MB`;
+        throw `${file.name} : is larger than 5 MB : This file is ${(file.size / (1024 * 1024)).toFixed(2)} MB`;
       }
       if (event.target.name === "edit_cert_image") {
-        formEditActivity.value.activity_certificate_file =
-          event.target.files[0];
+        formEditActivity.value.activity_certificate_file = event.target.files[0];
       } else if (event.target.name === "create_cert_image") {
-        formCreateActivity.value.activity_certificate_file =
-          event.target.files[0];
+        formCreateActivity.value.activity_certificate_file = event.target.files[0];
       }
       // console.log(formCreateActivity.value.activity_certificate_file);
     }
@@ -374,7 +355,7 @@ async function createActivitySubmit() {
       headers: { "Content-Type": "multipart/form-data" },
     });
     if (res.status === 200) {
-      showAlert("เพิ่มกิจกรรมเรียบร่้อย", "success");
+      showAlert(t("activity.create_success"), "success");
       fetchActivity();
       Object.assign(formCreateActivity.value, initialFormCreate);
       createActivityModalShow.value = false;
@@ -432,10 +413,7 @@ function generateAndUploadImage(imageSrc) {
     // const desiredMaxHeight = Math.min(parentHeight, 600);
     const desiredMaxHeight = parentHeight;
 
-    const scale = Math.min(
-      desiredMaxWidth / img.width,
-      desiredMaxHeight / img.height
-    );
+    const scale = Math.min(desiredMaxWidth / img.width, desiredMaxHeight / img.height);
 
     canvas.width = img.width * scale;
     canvas.height = img.height * scale;
@@ -469,12 +447,7 @@ function generateAndUploadImage(imageSrc) {
       const scaledTextX = textX * scale;
       const scaledTextY = textY * scale;
 
-      return (
-        mouseX >= scaledTextX &&
-        mouseX <= scaledTextX + textWidth &&
-        mouseY >= scaledTextY - textHeight &&
-        mouseY <= scaledTextY
-      );
+      return mouseX >= scaledTextX && mouseX <= scaledTextX + textWidth && mouseY >= scaledTextY - textHeight && mouseY <= scaledTextY;
     };
 
     // Event handlers
@@ -591,9 +564,7 @@ const notCheckedinStudentTableSelectAll = ref(false);
 
 watch(notCheckedinStudentTableSelectAll, (value) => {
   if (value) {
-    notCheckedinStudentCheckbox.value = notCheckinStudentData.value.map(
-      (s) => s.resume_id
-    );
+    notCheckedinStudentCheckbox.value = notCheckinStudentData.value.map((s) => s.resume_id);
   } else {
     notCheckedinStudentCheckbox.value = [];
   }
@@ -609,9 +580,7 @@ watch(notCheckedinStudentCheckbox, (value) => {
 
 watch(certExistStudentTableSelectAll, (value) => {
   if (value) {
-    removeStudentCertCheckbox.value = certExistStudent.value.map(
-      (s) => s.resume_id
-    );
+    removeStudentCertCheckbox.value = certExistStudent.value.map((s) => s.resume_id);
   } else {
     removeStudentCertCheckbox.value = [];
   }
@@ -627,9 +596,7 @@ watch(removeStudentCertCheckbox, (value) => {
 
 watch(certNotExistTableSelectAll, (value) => {
   if (value) {
-    certNotExistTableCheckbox.value = certNotExistStudent.value.map(
-      (s) => s.resume_id
-    );
+    certNotExistTableCheckbox.value = certNotExistStudent.value.map((s) => s.resume_id);
   } else {
     certNotExistTableCheckbox.value = [];
   }
@@ -644,69 +611,36 @@ watch(certNotExistTableCheckbox, (value) => {
 });
 </script>
 <template>
-  <div class="min-h-full bg-gradient-to-b from-blue-100 to-white rounded">
-    <div
-      class="flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8"
-    >
+  <div class="min-h-screen bg-white border border-gray-200 rounded-lg">
+    <div class="flex flex-col max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
       <!-- Page Header -->
-      <div class="flex justify-between animate-fade-up">
-        <Nuxtimg src=".././images/teacher2.png" alt="" class="w-56 h-42" />
-        <h1
-          class="text-xl sm:text-2xl font-semibold text-gray-800 mt-32 sm:mb-0"
-        >
+      <div class="flex justify-between animate-fade-up mb-2">
+        <div class="w-46 h-34">
+          <NuxtImg src="./images/teacher2.png" alt="" class="w-56 h-42" />
+        </div>
+        <span class="text-sm sm:text-md md:text-2xl font-semibold text-gray-800 mt-32 sm:mb-0 text-nowrap">
           {{ $t("activity.page_title") }}
-        </h1>
+        </span>
       </div>
-      <div class="rounded-lg shadow-md p-4 sm:p-6 bg-white">
+      <div class="rounded-lg p-4 sm:p-6 bg-white">
         <!-- Content Header -->
-        <div
-          class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-3 sm:gap-4"
-        >
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 sm:mb-6 gap-3 sm:gap-4">
           <!-- Search and Filter -->
           <div class="flex items-center w-full sm:w-auto">
             <div class="relative w-full">
-              <input
-                type="text"
-                :placeholder="$t('activity.placeholder_search')"
-                class="pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg w-full text-sm sm:text-base"
-              />
-              <div
-                class="absolute left-2 sm:left-3 top-2 sm:top-2.5 text-gray-400"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-4 w-4 sm:h-5 sm:w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
+              <input type="text" :placeholder="$t('activity.placeholder_search')" class="pl-8 sm:pl-10 pr-3 sm:pr-4 py-1.5 sm:py-2 border border-gray-300 rounded-lg w-full text-sm sm:text-base" />
+              <div class="absolute left-2 sm:left-3 top-2 sm:top-2.5 text-gray-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
             </div>
           </div>
 
           <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 sm:ml-auto">
-            <button
-              @click="actionActivity(0, 'add')"
-              class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center transition duration-200 cursor-pointer text-sm sm:text-base"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-4 w-4 sm:h-5 sm:w-5 mr-1"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                  clip-rule="evenodd"
-                />
+            <button @click="actionActivity(0, 'add')" class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-3 sm:px-4 rounded-lg flex items-center transition duration-200 cursor-pointer text-sm sm:text-base">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
               </svg>
               {{ $t("activity.add_activity") }}
             </button>
@@ -714,117 +648,37 @@ watch(certNotExistTableCheckbox, (value) => {
         </div>
 
         <!-- Activity Table -->
-        <div class="overflow-x-auto">
-          <table
-            class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base"
-          >
+        <div class="overflow-x-auto border border-gray-200 rounded-lg p-1">
+          <table class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base table-auto">
             <thead class="bg-gray-100 text-gray-700">
-              <tr>
-                <th
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap"
-                >
-                  ชื่อกิจกรรม
-                </th>
-                <th
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap"
-                >
-                  วันเริ่มต้นกิจกรรม
-                </th>
-                <th
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap"
-                >
-                  วันสิ้นสุดกิจกรรม
-                </th>
-                <th
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap"
-                ></th>
+              <tr class="text-left">
+                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap">{{ $t("activity.activity_name") }}</th>
+                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap">{{ $t("activity.activity_start_date") }}</th>
+                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap">{{ $t("activity.activity_end_date") }}</th>
+                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap">{{ $t("teacher.manage") }}</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
-              <tr
-                v-for="(item, index) in allActivityData"
-                :key="index + 1"
-                class="hover:bg-gray-50 dtransition-all uration-200"
-              >
-                <td
-                  class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105"
-                >
+              <tr v-for="(item, index) in allActivityData" :key="index + 1" class="hover:bg-gray-50 dtransition-all uration-200">
+                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
                   {{ item.activity_name }}
                 </td>
-                <td
-                  class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105"
-                >
+                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
                   {{ item.activity_start_date }}
                 </td>
-                <td
-                  class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105 text-blue-500"
-                >
+                <td class="py-2 sm:py-3 px-2 sm:px-4 truncate transition-transform duration-200 hover:scale-105">
                   {{ item.activity_end_date }}
                 </td>
-                <td
-                  class="py-2 sm:py-3 px-2 sm:px-4 text-center space-x-1 sm:space-x-2"
-                >
-                  <div
-                    class="flex justify-center items-center space-x-1 sm:space-x-2"
-                  >
-                    <button
-                      @click="actionActivity(item.activity_id, 'view')"
-                      class="text-green-600 hover:text-green-700 transition duration-200 cursor-pointer"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-4 w-4 sm:h-5 sm:w-5 transform hover:scale-125 transition-transform duration-200"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          fill="none"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M4.616 20q-.691 0-1.153-.462T3 18.384V5.616q0-.691.463-1.153T4.615 4h14.77q.69 0 1.152.463T21 5.616v12.769q0 .69-.463 1.153T19.385 20zm0-1h14.769q.23 0 .423-.192t.192-.424V5.616q0-.231-.192-.424T19.385 5H4.615q-.23 0-.423.192T4 5.616v12.769q0 .23.192.423t.423.192m.885-2.5h4v-1h-4zm9.05-2.211l4.238-4.239l-.713-.714l-3.525 3.55l-1.425-1.424l-.688.713zM5.5 12.5h4v-1h-4zm0-4h4v-1h-4zM4 19V5z"
-                          stroke-width="1"
-                          stroke="currentColor"
-                        />
-                      </svg>
+                <td class="py-2 sm:py-3 px-2 sm:px-4 space-x-1 sm:space-x-2">
+                  <div class="flex justify-start items-center space-x-1 sm:space-x-2">
+                    <button @click="actionActivity(item.activity_id, 'view')" class="text-green-500 hover:text-green-600 transition duration-200 cursor-pointer">
+                      <Icon name="mdi:table-eye" class="h-8 w-8 sm:h-5 sm:w-5 transform hover:scale-125 transition-transform duration-200" />
                     </button>
-                    <button
-                      @click="actionActivity(item.activity_id, 'edit')"
-                      class="text-indigo-600 hover:text-indigo-800 transition duration-200 cursor-pointer"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-4 w-4 sm:h-5 sm:w-5 transform hover:scale-125 transition-transform duration-200"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                        />
-                      </svg>
+                    <button @click="actionActivity(item.activity_id, 'edit')" class="text-blue-600 hover:text-blue-800 transition duration-200 cursor-pointer">
+                      <Icon name="mdi:application-edit-outline" class="h-8 w-8 sm:h-5 sm:w-5 transform hover:scale-125 transition-transform duration-200" />
                     </button>
-                    <button
-                      @click="actionActivity(item.activity_id, 'delete')"
-                      class="text-red-600 hover:text-red-800 transition duration-200 cursor-pointer"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-4 w-4 sm:h-5 sm:w-5 transform hover:scale-125 transition-transform duration-200"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
+                    <button @click="actionActivity(item.activity_id, 'delete')" class="text-red-600 hover:text-red-800 transition duration-200 cursor-pointer">
+                      <Icon name="mdi:trash-can" class="w-8 h-8 sm:w-5 sm:h-5 transform hover:scale-125 transition-transform duration-200" />
                     </button>
                   </div>
                 </td>
@@ -836,152 +690,103 @@ watch(certNotExistTableCheckbox, (value) => {
     </div>
 
     <!-- create Activity Modal -->
-    <dialog
-      v-if="createActivityModalShow"
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full"
-      :class="{ active: createActivityModalShow }"
-      open
-    >
-      <div
-        class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-auto"
-      >
+    <dialog v-if="createActivityModalShow" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full" :class="{ active: createActivityModalShow }" open>
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-auto">
         <div class="p-4 sm:p-6">
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg sm:text-xl font-semibold text-gray-800">
               {{ $t("activity.add_activity") }}
             </h3>
-            <button
-              class="text-gray-400 hover:text-gray-600 cursor-pointer"
-              @click.prevent="createActivityModalShow = false"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 sm:h-6 sm:w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
+            <button class="text-gray-400 hover:text-gray-600 cursor-pointer" @click.prevent="createActivityModalShow = false">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
-          <form
-            method="dialog"
-            class="space-y-3 sm:space-y-4"
-            @submit.prevent="createActivitySubmit(formEditActivity.activity_id)"
-          >
-            <div class="grid grid-cols-2 lg:grid-cols-1 gap-2">
+          <form method="dialog" class="space-y-3 sm:space-y-4" @submit.prevent="createActivitySubmit(formEditActivity.activity_id)">
+            <div class="grid grid-cols-1 gap-2">
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   {{ $t("activity.activity_name") }}
                 </label>
                 <input
                   required
                   v-model="formCreateActivity.activity_name"
-                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
+                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                   :placeholder="$t('activity.activity_name')"
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   {{ $t("activity.activity_description") }}
                 </label>
                 <textarea
                   type="text"
                   v-model="formCreateActivity.activity_description"
-                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
+                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                   :placeholder="$t('activity.activity_description')"
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   {{ $t("activity.activity_location") }}
                 </label>
                 <input
                   required
                   v-model="formCreateActivity.activity_location"
-                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
+                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                   :placeholder="$t('activity.activity_location')"
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   {{ $t("activity.activity_organization") }}
                 </label>
                 <input
                   required
                   v-model="formCreateActivity.activity_organization"
-                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
+                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                   :placeholder="$t('activity.activity_organization')"
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   {{ $t("activity.activity_certificate") }}
                 </label>
                 <input
                   required
                   type="file"
                   @change="handlelCertImageChange"
-                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
+                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                   :placeholder="$t('activity.activity_certificate')"
                   name="create_cert_image"
                 />
               </div>
 
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
-                  {{ $t("activity.activity_start_date") }}</label
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"> {{ $t("activity.activity_start_date") }}</label>
                 <input
                   required
                   type="date"
                   v-model="formCreateActivity.activity_start_date"
-                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
+                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
-                  {{ $t("activity.activity_end_date") }}</label
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"> {{ $t("activity.activity_end_date") }}</label>
                 <input
                   required
                   type="date"
                   v-model="formCreateActivity.activity_end_date"
-                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
+                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                 />
               </div>
             </div>
             <div class="flex justify-end space-x-2 sm:space-x-3 pt-3 sm:pt-4">
-              <button
-                class="px-3 sm:px-4 py-1.5 sm:py-2 bg-amber-600 rounded-lg text-white hover:bg-amber-700 transition duration-200 text-sm sm:text-base cursor-pointer"
-                @click.prevent="createActivityModalShow = false"
-              >
+              <button class="px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-white bg-gray-500 hover:bg-gray-600 transition duration-200 text-sm sm:text-base cursor-pointer" @click.prevent="createActivityModalShow = false">
                 {{ $t("activity.close") }}
               </button>
-              <button
-                type="submit"
-                class="px-3 sm:px-4 py-1.5 sm:py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer"
-              >
+              <button type="submit" class="px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer">
                 {{ $t("activity.save") }}
               </button>
             </div>
@@ -991,148 +796,96 @@ watch(certNotExistTableCheckbox, (value) => {
     </dialog>
 
     <!-- Edit Activity Modal -->
-    <dialog
-      v-if="editActivityModalShow"
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full"
-      :class="{ active: editActivityModalShow }"
-      open
-    >
-      <div
-        class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-auto"
-      >
+    <dialog v-if="editActivityModalShow" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full" :class="{ active: editActivityModalShow }" open>
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-auto">
         <div class="p-4 sm:p-6">
           <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg sm:text-xl font-semibold text-gray-800">
               {{ $t("activity.edit_activity") }}
             </h3>
-            <button
-              class="text-gray-400 hover:text-gray-600 cursor-pointer"
-              @click.prevent="editActivityModalShow = false"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 sm:h-6 sm:w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
+            <button class="text-gray-400 hover:text-gray-600 cursor-pointer" @click.prevent="editActivityModalShow = false">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
-          <form
-            method="dialog"
-            class="space-y-3 sm:space-y-4"
-            @submit.prevent="editActivitySubmit(formEditActivity.activity_id)"
-          >
+          <form method="dialog" class="space-y-3 sm:space-y-4" @submit.prevent="editActivitySubmit(formEditActivity.activity_id)">
             <div class="grid grid-cols-2 lg:grid-cols-1 gap-2">
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   {{ $t("activity.activity_name") }}
                 </label>
                 <input
                   required
                   v-model="formEditActivity.activity_name"
-                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
+                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                   :placeholder="$t('activity.activity_name')"
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   {{ $t("activity.activity_description") }}
                 </label>
                 <textarea
                   type="text"
                   v-model="formEditActivity.activity_description"
-                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
+                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                   :placeholder="$t('activity.activity_description')"
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   {{ $t("activity.activity_location") }}
                 </label>
                 <input
                   v-model="formEditActivity.activity_location"
-                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
+                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                   :placeholder="$t('activity.activity_location')"
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   {{ $t("activity.activity_organization") }}
                 </label>
                 <input
                   v-model="formEditActivity.activity_organization"
-                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
+                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                   :placeholder="$t('activity.activity_organization')"
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   {{ $t("activity.activity_certificate") }}
                 </label>
                 <input
                   type="file"
                   @change="handlelCertImageChange"
-                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
+                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                   :placeholder="$t('activity.activity_certificate')"
                   name="edit_cert_image"
                 />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   {{ $t("activity.activity_start_date") }}
                 </label>
-                <input
-                  type="date"
-                  v-model="formEditActivity.activity_start_date"
-                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                />
+                <input type="date" v-model="formEditActivity.activity_start_date" class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base" />
               </div>
               <div>
-                <label
-                  class="block text-xs sm:text-sm font-medium text-gray-700 mb-1"
-                >
+                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
                   {{ $t("activity.activity_end_date") }}
                 </label>
-                <input
-                  type="date"
-                  v-model="formEditActivity.activity_end_date"
-                  class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm sm:text-base"
-                />
+                <input type="date" v-model="formEditActivity.activity_end_date" class="w-full px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base" />
               </div>
             </div>
             <div class="flex justify-end space-x-2 sm:space-x-3 pt-3 sm:pt-4">
               <button
-                class="px-3 sm:px-4 py-1.5 sm:py-2 bg-amber-600 rounded-lg text-white hover:bg-amber-700 transition duration-200 text-sm sm:text-base cursor-pointer"
-                @click.prevent="
-                  (editActivityModalShow = false), (viewActivityData = [])
-                "
+                class="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-500 hover:bg-gray-600 rounded-lg text-white transition duration-200 text-sm sm:text-base cursor-pointer"
+                @click.prevent="(editActivityModalShow = false), (viewActivityData = [])"
               >
                 {{ $t("activity.close") }}
               </button>
-              <button
-                type="submit"
-                class="px-3 sm:px-4 py-1.5 sm:py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer"
-              >
+              <button type="submit" class="px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition duration-200 text-sm sm:text-base cursor-pointer">
                 {{ $t("activity.save") }}
               </button>
             </div>
@@ -1152,99 +905,60 @@ watch(certNotExistTableCheckbox, (value) => {
         viewActivityModalShow = false;
       "
     >
-      <div
-        class="bg-white rounded-lg shadow-lg w-full max-w-4xl mx-2 sm:mx-auto h-[90vh] overflow-y-auto relative flex flex-col"
-        @click.stop
-      >
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-4xl mx-2 sm:mx-auto h-[90vh] overflow-y-auto relative flex flex-col" @click.stop>
         <div class="p-4 sm:p-6 flex-1 flex flex-col">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="text-lg sm:text-xl font-semibold text-gray-800">
+            <span class="text-lg sm:text-xl font-normal text-gray-800">
               {{ viewActivityData.activity_name }}
-            </h3>
+            </span>
           </div>
           <div class="overflow-x-auto">
-            <div
-              class="bg-white rounded-lg shadow mx-0 sm:mx-2 mb-4 p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6"
-            >
+            <div class="bg-white rounded-lg shadow mx-0 sm:mx-2 mb-4 p-4 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h5 class="text-md sm:text-lg font-semibold text-gray-800 mb-1">
+                <span class="text-md sm:text-lg font-normal text-gray-800 mb-1">
                   {{ $t("activity.detail") }}
-                </h5>
-                <p
-                  class="text-sm sm:text-base font-normal text-gray-600 break-words"
-                >
+                </span>
+                <p class="text-sm sm:text-base font-normal text-gray-600 break-words">
                   {{ viewActivityData.activity_description }}
                 </p>
                 <div class="mt-4">
-                  <h5
-                    class="text-md sm:text-lg font-semibold text-gray-800 mb-1"
-                  >
+                  <span class="text-md sm:text-lg font-normal text-gray-800 mb-1">
                     {{ $t("activity.activity_location") }}
-                  </h5>
+                  </span>
                   <p class="text-sm sm:text-base font-normal text-gray-600">
-                    {{
-                      viewActivityData.activity_location ||
-                      $t("activity.not_specified")
-                    }}
+                    {{ viewActivityData.activity_location || $t("activity.not_specified") }}
                   </p>
                 </div>
                 <div class="mt-4">
-                  <h5
-                    class="text-md sm:text-lg font-semibold text-gray-800 mb-1"
-                  >
+                  <span class="text-md sm:text-lg font-normal text-gray-800 mb-1">
                     {{ $t("activity.activity_organization") }}
-                  </h5>
+                  </span>
                   <p class="text-sm sm:text-base font-normal text-gray-600">
-                    {{
-                      viewActivityData.activity_organization ||
-                      $t("activity.not_specified")
-                    }}
+                    {{ viewActivityData.activity_organization || $t("activity.not_specified") }}
                   </p>
                 </div>
                 <div class="flex flex-col gap-2 mt-4">
                   <p class="text-xs sm:text-sm text-green-600">
                     {{ $t("activity.activity_start_date") }} :
                     <span class="font-medium">
-                      {{
-                        viewActivityData.activity_start_date ||
-                        $t("activity.not_specified")
-                      }}
+                      {{ viewActivityData.activity_start_date || $t("activity.not_specified") }}
                     </span>
                   </p>
                   <p class="text-xs sm:text-sm text-yellow-600">
                     {{ $t("activity.activity_end_date") }} :
                     <span class="font-medium">
-                      {{
-                        viewActivityData.activity_end_date ||
-                        $t("activity.not_specified")
-                      }}
+                      {{ viewActivityData.activity_end_date || $t("activity.not_specified") }}
                     </span>
                   </p>
                 </div>
               </div>
               <div>
-                <h5 class="text-md sm:text-lg font-semibold text-gray-800 mb-1">
+                <h5 class="text-md sm:text-lg font-normal text-gray-800 mb-1">
                   {{ $t("activity.cert_example") }}
                 </h5>
-                <div
-                  v-if="viewActivityData.activity_certificate_file"
-                  class="mb-2"
-                >
-                  <div
-                    ref="canvasWrapper"
-                    class="canvas-wrapper flex justify-center items-center bg-gray-50 rounded shadow"
-                    style="min-height: 180px; max-width: 100%; width: 100%"
-                  >
-                    <canvas
-                      ref="certCanvas"
-                      style="
-                        max-width: 100%;
-                        width: 100%;
-                        height: auto;
-                        border-radius: 8px;
-                        background: #fff;
-                      "
-                    ></canvas>
+                <div v-if="viewActivityData.activity_certificate_file" class="mb-2">
+                  <div ref="canvasWrapper" class="canvas-wrapper flex justify-center items-center bg-gray-50 rounded shadow" style="min-height: 180px; max-width: 100%; width: 100%">
+                    <canvas ref="certCanvas" style="max-width: 100%; width: 100%; height: auto; border-radius: 8px; background: #fff"></canvas>
                   </div>
                   <div class="text-xs text-gray-500 mt-2 text-center">
                     {{ $t("activity.cert_drag_hint") }}
@@ -1262,148 +976,96 @@ watch(certNotExistTableCheckbox, (value) => {
                 <div class="md:col-span-1">
                   <div class="flex flex-col space-y-2">
                     <span>{{ $t("activity.manage_students") }}</span>
-                    <button
-                      type="button"
-                      class="px-4 py-2 text-white hover:bg-yellow-800 rounded transition duration-300 text-xs text-nowrap"
-                      :class="[
-                        notCheckedinTab
-                          ? 'bg-yellow-700  outline-gray-400 outline-1 outline-offset-2'
-                          : 'bg-yellow-500',
-                      ]"
-                      @click="changeViewActivityTab('not_checked_in')"
-                    >
-                      {{ $t("activity.students_not_checked_in") }}
-                    </button>
+                    <div class="flex-1">
+                      <span v-if="notCheckedinTab" class="text-xs text-green-500"> {{ " (" }} {{ $t("activity.in_active") }} {{ " )" }} </span>
+                      <button
+                        type="button"
+                        class="w-full px-4 py-2 hover:cursor-pointer border border-gray-400 text-black rounded transition duration-300 text-xs text-nowrap"
+                        :class="[notCheckedinTab ? 'bg-gray-200 outline-gray-400' : 'bg-gray-300']"
+                        @click="changeViewActivityTab('not_checked_in')"
+                      >
+                        {{ $t("activity.not_checked_in") }}
+                      </button>
+                    </div>
+
                     <span>{{ $t("activity.manage_certificate") }}</span>
-                    <button
-                      type="button"
-                      class="px-4 py-2 hover:bg-green-800 text-white rounded transition duration-300 text-xs text-nowrap"
-                      :class="[
-                        assignCertTab
-                          ? 'bg-green-700  outline-gray-400 outline-1 outline-offset-2'
-                          : 'bg-green-500',
-                      ]"
-                      @click="changeViewActivityTab('assign_certificate')"
-                    >
-                      {{ $t("activity.assign_certificate") }}
-                    </button>
-                    <button
-                      type="button"
-                      class="px-4 py-2 hover:bg-indigo-800 text-white rounded transition duration-300 text-xs text-nowrap"
-                      :class="[
-                        checkCertificateTab
-                          ? 'bg-indigo-700  outline-gray-400 outline-1 outline-offset-2'
-                          : 'bg-indigo-600',
-                      ]"
-                      @click="changeViewActivityTab('check_certificate')"
-                    >
-                      {{ $t("activity.check_certificate") }}
-                    </button>
+                    <div class="flex-1">
+                      <span v-if="assignCertTab" class="text-xs text-green-500"> {{ " (" }} {{ $t("activity.in_active") }} {{ " )" }} </span>
+                      <button
+                        type="button"
+                        class="w-full px-4 py-2 hover:cursor-pointer border border-gray-400 text-black rounded transition duration-300 text-xs text-nowrap"
+                        :class="[assignCertTab ? 'bg-gray-200 outline-gray-400' : 'bg-gray-300']"
+                        @click="changeViewActivityTab('assign_certificate')"
+                      >
+                        {{ $t("activity.assign_certificate") }}
+                      </button>
+                    </div>
+                    <div class="flex-1">
+                      <span v-if="checkCertificateTab" class="text-xs text-green-500"> {{ " (" }} {{ $t("activity.in_active") }} {{ " )" }} </span>
+                      <button
+                        type="button"
+                        class="w-full px-4 py-2 hover:cursor-pointer border border-gray-400 text-gray-800 rounded transition duration-300 text-xs text-nowrap"
+                        :class="[checkCertificateTab ? 'bg-gray-200 outline-gray-400' : 'bg-gray-300']"
+                        @click="changeViewActivityTab('check_certificate')"
+                      >
+                        {{ $t("activity.check_certificate") }}
+                      </button>
+                    </div>
                   </div>
                 </div>
 
                 <!-- เนื้อหาหลักด้านขวา -->
                 <div class="md:col-span-3">
-                  <div
-                    v-if="notCheckedinTab"
-                    class="p-4 bg-gray-100 rounded shadow my-2"
-                  >
-                    <div
-                      class="flex flex-col md:flex-row justify-between items-center"
-                    >
-                      <h5
-                        class="text-lg sm:text-lg font-semibold text-indigo-800"
-                      >
+                  <div v-if="notCheckedinTab" class="border border-gray-200 p-2 rounded-lg my-2">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                      <h5 class="text-lg sm:text-lg font-semibold text-blue-400">
                         {{ $t("activity.manage_not_checkedin_students") }}
                       </h5>
-                      <p
-                        :class="
-                          type_modal_alert === 'success'
-                            ? 'text-green-600'
-                            : 'text-red-600'
-                        "
-                        class="border-1 text-xs p-1 animate-bounce"
-                        v-if="
-                          message_modal_alert.length > 0 &&
-                          position_modal_alert == 'checkin'
-                        "
-                      >
+                      <p :class="type_modal_alert === 'success' ? 'text-green-600' : 'text-red-600'" class="border-1 text-xs p-1 animate-bounce" v-if="message_modal_alert.length > 0 && position_modal_alert == 'checkin'">
                         {{ message_modal_alert }}
                       </p>
                     </div>
                     <div class="my-4">
-                      <p class="text-gray-800">
+                      <p class="text-gray-800 text-sm">
                         {{ $t("activity.students_not_checked_in") }}
                       </p>
 
-                      <div class="overflow-x-auto">
-                        <table
-                          class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base md:my-4 sm:my-2"
-                        >
+                      <div class="overflow-x-auto border border-gray-200 rounded-lg p-1">
+                        <table class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base">
                           <thead class="bg-gray-100 text-gray-700">
                             <tr>
-                              <th
-                                class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap font-normal"
-                              >
+                              <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap font-normal">
                                 {{ $t("activity.student_id") }}
                               </th>
-                              <th
-                                class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap font-normal"
-                              >
+                              <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap font-normal">
                                 {{ $t("activity.student_name") }}
                               </th>
-                              <th
-                                class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap font-normal"
-                              >
-                                <div
-                                  class="flex justify-center items-center space-x-1 sm:space-x-2"
-                                >
-                                  <input
-                                    type="checkbox"
-                                    v-model="notCheckedinStudentTableSelectAll"
-                                    id="notCheckedinStudentTableSelectAll"
-                                  />
-                                  <label
-                                    class="text-gray-800 whitespace-nowrap text-xs sm:text-sm"
-                                    for="notCheckedinStudentTableSelectAll"
-                                    >{{ $t("activity.select_all") }}</label
-                                  >
+                              <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap font-normal">
+                                <div class="flex justify-center items-center space-x-1 sm:space-x-2">
+                                  <input type="checkbox" v-model="notCheckedinStudentTableSelectAll" id="notCheckedinStudentTableSelectAll" class="w-2 h-2 sm:w-4 sm:h-4" />
+                                  <label class="text-gray-800 whitespace-nowrap text-xs sm:text-sm" for="notCheckedinStudentTableSelectAll">{{ $t("activity.select_all") }}</label>
                                 </div>
                               </th>
                             </tr>
                           </thead>
-                          <tbody
-                            v-if="notCheckinStudentData.length > 0"
-                            class="divide-y divide-gray-200"
-                          >
-                            <tr
-                              v-for="(item, index) in notCheckinStudentData"
-                              :key="index + 1"
-                              class="hover:bg-gray-50 transition-all duration-200"
-                            >
+                          <tbody v-if="notCheckinStudentData.length > 0" class="divide-y divide-gray-200">
+                            <tr v-for="(item, index) in notCheckinStudentData" :key="index + 1" class="hover:bg-gray-50 transition-all duration-200">
                               <td class="py-2 sm:py-3 px-2 sm:px-4 truncate">
                                 {{ item.student_main_id }}
                               </td>
                               <td class="py-2 sm:py-3 px-2 sm:px-4 truncate">
-                                {{ item.student_name_thai }}
+                                {{ item.student_name_thai || item.student_name || $t("activity.no_student_name") }}
                               </td>
                               <td class="py-2 sm:py-3 px-2 sm:px-4 text-center">
                                 <div class="flex justify-center items-center">
-                                  <input
-                                    type="checkbox"
-                                    v-model="notCheckedinStudentCheckbox"
-                                    :value="item.resume_id"
-                                  />
+                                  <input type="checkbox" v-model="notCheckedinStudentCheckbox" :value="item.resume_id" class="w-2 h-2 sm:w-4 sm:h-4" />
                                 </div>
                               </td>
                             </tr>
                           </tbody>
                           <tbody v-else class="divide-y divide-gray-200">
                             <tr>
-                              <td
-                                class="py-2 sm:py-3 px-2 sm:px-4 text-center"
-                                colspan="3"
-                              >
+                              <td class="py-2 sm:py-3 px-2 sm:px-4 text-center" colspan="3">
                                 {{ $t("activity.no_data") }}
                               </td>
                             </tr>
@@ -1413,7 +1075,9 @@ watch(certNotExistTableCheckbox, (value) => {
                       <div class="flex justify-end mt-2">
                         <button
                           @click="checkInSubmit"
-                          class="px-2 text-xs py-2 md:text-sm text-white rounded bg-indigo-500 hover:bg-indigo-800"
+                          :disabled="notCheckedinStudentCheckbox.length === 0"
+                          :class="notCheckedinStudentCheckbox.length === 0 ? 'bg-gray-300 ' : 'bg-blue-500 hover:bg-blue-600 hover:cursor-pointer'"
+                          class="px-6 text-xs py-2 md:text-sm text-white rounded"
                         >
                           {{ $t("activity.add") }}
                         </button>
@@ -1421,113 +1085,60 @@ watch(certNotExistTableCheckbox, (value) => {
                     </div>
                   </div>
 
-                  <div
-                    v-if="assignCertTab || checkCertificateTab"
-                    class="p-4 bg-gray-100 rounded shadow my-2"
-                  >
-                    <div
-                      class="flex flex-col md:flex-row justify-between items-center"
-                    >
-                      <h5
-                        class="text-lg sm:text-lg font-semibold text-indigo-800"
-                      >
+                  <div v-if="assignCertTab || checkCertificateTab" class="border border-gray-200 rounded-lg p-2 shadow my-2">
+                    <div class="flex flex-col md:flex-row justify-between items-center">
+                      <h5 class="text-lg sm:text-lg font-semibold text-blue-400">
                         {{ $t("activity.manage_checkedin_students") }}
                       </h5>
-                      <p
-                        :class="
-                          type_modal_alert === 'success'
-                            ? 'text-green-600'
-                            : 'text-red-600'
-                        "
-                        class="border-1 text-xs p-1 animate-bounce"
-                        v-if="
-                          message_modal_alert.length > 0 &&
-                          position_modal_alert == 'assign'
-                        "
-                      >
+                      <p :class="type_modal_alert === 'success' ? 'text-green-600' : 'text-red-600'" class="border-1 text-xs p-1 animate-bounce" v-if="message_modal_alert.length > 0 && position_modal_alert == 'assign'">
                         {{ message_modal_alert }}
                       </p>
                     </div>
                     <div v-if="assignCertTab">
                       <div class="my-4">
-                        <p class="text-gray-800">
+                        <p class="text-sm text-gray-800">
                           {{ $t("activity.not_received") }}
                         </p>
-                        <div class="overflow-x-auto">
-                          <table
-                            class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base md:my-4 sm:my-2"
-                          >
+                        <div class="overflow-x-auto border border-gray-200 rounded-lg p-1">
+                          <table class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base">
                             <thead class="bg-gray-100 text-gray-700">
                               <tr>
-                                <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium font-normal sm:font-semibold"
-                                >
+                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium font-normal sm:font-semibold">
                                   <span class="block sm:inline">
                                     {{ $t("activity.student_id") }}
                                   </span>
                                 </th>
-                                <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium font-normal sm:font-semibold"
-                                >
+                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium font-normal sm:font-semibold">
                                   <span class="block sm:inline">
                                     {{ $t("activity.student_name") }}
                                   </span>
                                 </th>
-                                <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium font-normal sm:font-semibold"
-                                >
-                                  <div
-                                    class="flex justify-center items-center space-x-1 sm:space-x-2"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      v-model="certNotExistTableSelectAll"
-                                      id="certNotExistTableSelectAll"
-                                      class="w-4 h-4 sm:w-5 sm:h-5"
-                                    />
-                                    <label
-                                      class="text-gray-800 text-xs text-nowrap sm:text-sm font-normal"
-                                      for="certNotExistTableSelectAll"
-                                      >{{ $t("activity.select_all") }}</label
-                                    >
+                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm whitespace-nowrap font-normal">
+                                  <div class="flex justify-center items-center space-x-1 sm:space-x-2">
+                                    <input type="checkbox" v-model="certNotExistTableSelectAll" id="certNotExistTableSelectAll" class="w-2 h-2 sm:w-4 sm:h-4" />
+                                    <label class="text-gray-800 text-xs text-nowrap sm:text-sm font-normal" for="certNotExistTableSelectAll">{{ $t("activity.select_all") }}</label>
                                   </div>
                                 </th>
                               </tr>
                             </thead>
-                            <tbody
-                              v-if="certNotExistStudent.length > 0"
-                              class="divide-y divide-gray-200"
-                            >
-                              <tr
-                                v-for="(item, index) in certNotExistStudent"
-                                :key="index + 1"
-                                class="hover:bg-gray-50 transition-all duration-200"
-                              >
+                            <tbody v-if="certNotExistStudent.length > 0" class="divide-y divide-gray-200">
+                              <tr v-for="(item, index) in certNotExistStudent" :key="index + 1" class="hover:bg-gray-50 transition-all duration-200">
                                 <td class="py-2 sm:py-3 px-2 sm:px-4 truncate">
                                   {{ item.student_main_id }}
                                 </td>
                                 <td class="py-2 sm:py-3 px-2 sm:px-4 truncate">
-                                  {{ item.student_name_thai }}
+                                  {{ item.student_name_thai || item.student_name || $t("activity.no_student_name") }}
                                 </td>
-                                <td
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-center"
-                                >
+                                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center">
                                   <div class="flex justify-center items-center">
-                                    <input
-                                      type="checkbox"
-                                      v-model="certNotExistTableCheckbox"
-                                      :value="item.resume_id"
-                                    />
+                                    <input type="checkbox" v-model="certNotExistTableCheckbox" :value="item.resume_id" class="w-2 h-2 sm:w-4 sm:h-4" />
                                   </div>
                                 </td>
                               </tr>
                             </tbody>
                             <tbody v-else class="divide-y divide-gray-200">
                               <tr>
-                                <td
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-center"
-                                  colspan="3"
-                                >
+                                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center" colspan="3">
                                   {{ $t("activity.assign_cert_empty") }}
                                 </td>
                               </tr>
@@ -1537,11 +1148,7 @@ watch(certNotExistTableCheckbox, (value) => {
                         <div class="flex justify-end mt-2">
                           <button
                             @click="assignCertBtn"
-                            :class="
-                              certNotExistTableCheckbox.length === 0
-                                ? 'bg-green-800'
-                                : 'bg-green-500'
-                            "
+                            :class="certNotExistTableCheckbox.length === 0 ? 'bg-gray-300' : 'bg-blue-500 hover:bg-blue-600 hover:cursor-pointer'"
                             :disabled="certNotExistTableCheckbox.length === 0"
                             class="px-2 py-2 text-xs font-normal md:text-md mx-2 text-white rounded"
                           >
@@ -1550,11 +1157,7 @@ watch(certNotExistTableCheckbox, (value) => {
                           <button
                             @click="removeCheckinStudentsBtn"
                             :disabled="certNotExistTableCheckbox.length === 0"
-                            :class="
-                              certNotExistTableCheckbox.length === 0
-                                ? 'bg-red-800'
-                                : 'bg-red-500'
-                            "
+                            :class="certNotExistTableCheckbox.length === 0 ? 'bg-gray-300' : 'bg-red-500 hover:bg-red-600 hover:cursor-pointer'"
                             class="px-2 py-2 text-xs font-normal md:text-md mx-2 text-white rounded"
                           >
                             {{ $t("activity.remove") }}
@@ -1563,104 +1166,54 @@ watch(certNotExistTableCheckbox, (value) => {
                       </div>
                     </div>
                     <div v-if="checkCertificateTab">
-                      <div
-                        class="flex flex-col md:flex-row justify-between items-center"
-                      >
-                        <h5
-                          class="text-lg sm:text-lg font-semibold text-indigo-800"
-                        >
+                      <div class="flex flex-col md:flex-row justify-between items-center">
+                        <h5 class="text-lg sm:text-lg font-semibold text-blue-800">
                           <!-- สามารถใส่หัวข้อได้ เช่น {{ $t('activity.checked_in_students') }} -->
                         </h5>
-                        <p
-                          :class="
-                            type_modal_alert === 'success'
-                              ? 'text-green-600'
-                              : 'text-red-600'
-                          "
-                          class="border-1 text-xs p-1 animate-bounce"
-                          v-if="
-                            message_modal_alert.length > 0 &&
-                            position_modal_alert == 'checkcert'
-                          "
-                        >
+                        <p :class="type_modal_alert === 'success' ? 'text-green-600' : 'text-red-600'" class="border-1 text-xs p-1 animate-bounce" v-if="message_modal_alert.length > 0 && position_modal_alert == 'checkcert'">
                           {{ message_modal_alert }}
                         </p>
                       </div>
                       <div class="my-4">
-                        <p class="text-gray-800">
+                        <p class="text-gray-800 text-sm">
                           {{ $t("activity.received") }}
                         </p>
-                        <div class="overflow-x-auto">
-                          <table
-                            class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base md:my-4 sm:my-2"
-                          >
+                        <div class="overflow-x-auto border border-gray-200 rounded-lg p-1">
+                          <table class="min-w-full bg-white rounded-lg overflow-hidden text-sm sm:text-base">
                             <thead class="bg-gray-100 text-gray-700">
                               <tr>
-                                <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-normal sm:font-semibold"
-                                >
+                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-normal sm:font-semibold">
                                   {{ $t("activity.student_id") }}
                                 </th>
-                                <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-normal sm:font-semibold"
-                                >
+                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-normal sm:font-semibold">
                                   {{ $t("activity.student_name") }}
                                 </th>
-                                <th
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-normal sm:font-semibold"
-                                >
-                                  <div
-                                    class="flex justify-center items-center space-x-1 sm:space-x-2"
-                                  >
-                                    <input
-                                      type="checkbox"
-                                      v-model="certExistStudentTableSelectAll"
-                                      id="certExistStudentTableSelectAll"
-                                      class="w-4 h-4 sm:w-5 sm:h-5"
-                                    />
-                                    <label
-                                      class="text-gray-800 text-xs text-nowrap sm:text-sm font-normal"
-                                      for="certExistStudentTableSelectAll"
-                                      >{{ $t("activity.select_all") }}</label
-                                    >
+                                <th class="py-2 sm:py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-normal sm:font-semibold">
+                                  <div class="flex justify-center items-center space-x-1 sm:space-x-2">
+                                    <input type="checkbox" v-model="certExistStudentTableSelectAll" id="certExistStudentTableSelectAll" class="w-2 h-2 sm:w-4 sm:h-4" />
+                                    <label class="text-gray-800 text-xs text-nowrap sm:text-sm font-normal" for="certExistStudentTableSelectAll">{{ $t("activity.select_all") }}</label>
                                   </div>
                                 </th>
                               </tr>
                             </thead>
-                            <tbody
-                              v-if="certExistStudent.length > 0"
-                              class="divide-y divide-gray-200"
-                            >
-                              <tr
-                                v-for="(item, index) in certExistStudent"
-                                :key="index + 1"
-                                class="hover:bg-gray-50 transition-all duration-200"
-                              >
+                            <tbody v-if="certExistStudent.length > 0" class="divide-y divide-gray-200">
+                              <tr v-for="(item, index) in certExistStudent" :key="index + 1" class="hover:bg-gray-50 transition-all duration-200">
                                 <td class="py-2 sm:py-3 px-2 sm:px-4 truncate">
                                   {{ item.student_main_id }}
                                 </td>
                                 <td class="py-2 sm:py-3 px-2 sm:px-4 truncate">
-                                  {{ item.student_name_thai }}
+                                  {{ item.student_name_thai || item.student_name || $t("activity.no_student_name") }}
                                 </td>
-                                <td
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-center"
-                                >
+                                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center">
                                   <div class="flex justify-center items-center">
-                                    <input
-                                      type="checkbox"
-                                      v-model="removeStudentCertCheckbox"
-                                      :value="item.resume_id"
-                                    />
+                                    <input type="checkbox" v-model="removeStudentCertCheckbox" :value="item.resume_id" class="w-2 h-2 sm:w-4 sm:h-4" />
                                   </div>
                                 </td>
                               </tr>
                             </tbody>
                             <tbody v-else class="divide-y divide-gray-200">
                               <tr>
-                                <td
-                                  class="py-2 sm:py-3 px-2 sm:px-4 text-center"
-                                  colspan="3"
-                                >
+                                <td class="py-2 sm:py-3 px-2 sm:px-4 text-center" colspan="3">
                                   {{ $t("activity.checked_in_empty") }}
                                 </td>
                               </tr>
@@ -1671,11 +1224,7 @@ watch(certNotExistTableCheckbox, (value) => {
                           <button
                             @click="removeCertBtn"
                             :disabled="removeStudentCertCheckbox.length === 0"
-                            :class="
-                              removeStudentCertCheckbox.length === 0
-                                ? 'bg-red-800'
-                                : 'bg-red-500'
-                            "
+                            :class="removeStudentCertCheckbox.length === 0 ? 'bg-gray-300' : 'bg-red-500 hover:bg-red-600 hover:cursor-pointer'"
                             class="px-2 py-2 text-xs font-normal mx-2 text-white rounded"
                           >
                             {{ $t("activity.remove_cert") }}
@@ -1692,33 +1241,16 @@ watch(certNotExistTableCheckbox, (value) => {
       </div>
     </dialog>
     <!-- Confirm Delete Dialog -->
-    <dialog
-      v-if="showModalConfirm"
-      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full"
-      open
-    >
-      <div
-        class="bg-white rounded-lg shadow-lg w-full max-w-xs mx-4 sm:mx-auto p-6"
-      >
+    <dialog v-if="showModalConfirm" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 w-full h-full" open>
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-xs mx-4 sm:mx-auto p-6">
         <div class="flex flex-col items-center">
-          <Icon
-            name="material-symbols:warning"
-            style="width: 40px; height: 40px; color: #f59e42"
-          />
-          <h3 class="text-lg font-semibold text-gray-800 mt-2 mb-4 text-center">
-            ยืนยันการลบข้อมูลกิจกรรมที่จัด
-          </h3>
+          <Icon name="material-symbols:warning" style="width: 40px; height: 40px; color: #f59e42" />
+          <h3 class="text-lg font-semibold text-gray-800 mt-2 mb-4 text-center">{{ $t("activity.confirm_delete_title") }}</h3>
           <p class="text-gray-600 text-sm mb-6 text-center">
-            คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลนี้?
-            <br />การดำเนินการนี้ไม่สามารถย้อนกลับได้
+            {{ $t("activity.confirm_delete_text") }}
           </p>
           <div class="flex justify-center gap-3 w-full">
-            <button
-              class="px-4 py-2 bg-gray-300 rounded-lg text-gray-700 hover:bg-gray-400 transition duration-200 text-sm w-1/2"
-              @click="showModalConfirm = false"
-            >
-              ยกเลิก
-            </button>
+            <button class="px-4 py-2 bg-gray-300 rounded-lg text-gray-700 hover:bg-gray-400 transition duration-200 text-sm w-1/2" @click="showModalConfirm = false">{{ $t("activity.cancel") }}</button>
             <button
               class="px-4 py-2 bg-red-600 rounded-lg text-white hover:bg-red-700 transition duration-200 text-sm w-1/2"
               @click="
@@ -1726,7 +1258,7 @@ watch(certNotExistTableCheckbox, (value) => {
                 showModalConfirm = false;
               "
             >
-              ลบ
+              {{ $t("activity.delete") }}
             </button>
           </div>
         </div>
